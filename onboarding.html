@@ -525,7 +525,7 @@
                   className={`price-option flex items-center justify-center py-6 ${selected === value ? 'selected' : ''}`}
                   onClick={() => setSelected(value)}
                 >
-                  <span className="font-black text-3xl text-white">€{value}</span>
+                  <span className="font-black text-3xl text-white">${value}</span>
                 </div>
               ))}
             </div>
@@ -599,7 +599,7 @@
        STEP 5 — SUCCESS / LIVE
     ════════════════════════════ */
     function StepSuccess({ onNext, userData, flowData, setToast }) {
-      const link = `dealgate.ai/${userData?.username || 'yourname'}`;
+      const link = `godealgate.com/${userData?.username || 'yourname'}`;
       const fullLink = `https://${link}`;
       const shareMessage = `Before we talk — fill this out so we don't waste each other's time: ${fullLink}`;
       const [copied, setCopied] = useState(false);
@@ -733,7 +733,7 @@
        STEP 6 — INSTRUCTIONS
     ════════════════════════════ */
     function StepInstruction({ onNext, userData, flowData }) {
-      const link = `dealgate.ai/${userData?.username || 'yourname'}`;
+      const link = `godealgate.com/${userData?.username || 'yourname'}`;
 
       return (
         <Shell hideProgress>
@@ -770,7 +770,7 @@
        DASHBOARD
     ════════════════════════════ */
     function Dashboard({ userData, flowData }) {
-      const link = `dealgate.ai/${userData?.username || 'yourname'}`;
+      const link = `godealgate.com/${userData?.username || 'yourname'}`;
       const fullLink = `https://${link}`;
       const shareMessage = `Before we talk — fill this out so we don't waste each other's time: ${fullLink}`;
       const leads = [];
@@ -986,5 +986,13 @@
       to { transform: rotate(360deg); }
     }
   </style>
+
+  <!-- Legal footer (outside React) -->
+  <div style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:10px;font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,0.2);background:linear-gradient(transparent,rgba(0,0,0,0.8));pointer-events:none;z-index:50;">
+    By signing up you agree to our
+    <a href="/terms.html" style="color:rgba(255,255,255,0.4);pointer-events:all;" target="_blank">Terms of Service</a>
+    and
+    <a href="/privacy.html" style="color:rgba(255,255,255,0.4);pointer-events:all;" target="_blank">Privacy Policy</a>
+  </div>
 </body>
 </html>

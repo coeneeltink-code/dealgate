@@ -255,7 +255,7 @@
               <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
             </div>
             <a
-              href="#signup"
+              href="/onboarding.html"
               className="bg-accent hover:bg-accent-dark text-white text-sm font-black px-5 py-2.5 rounded-lg transition-all hover:scale-105 active:scale-95 glow-red"
             >
               Get paid before you talk →
@@ -325,7 +325,7 @@
 
             {/* Sub — money + pain */}
             <p className="animate-fade-up text-2xl md:text-3xl text-white font-bold max-w-3xl mx-auto leading-tight mb-5" style={{animationDelay: '200ms'}}>
-              You're losing <span className="text-accent">€500+ per week</span> on bad clients.
+              You're losing <span className="text-accent">$500+ per week</span> on bad clients.
             </p>
             <p className="animate-fade-up text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed" style={{animationDelay: '280ms'}}>
               DealGate makes clients <strong className="text-white">pay before they talk to you.</strong><br />
@@ -335,7 +335,7 @@
             {/* CTAs — outcome-driven */}
             <div className="animate-fade-up flex flex-col sm:flex-row gap-4 justify-center items-center mb-6" style={{animationDelay: '360ms'}}>
               <a
-                href="#signup"
+                href="/onboarding.html"
                 className="group bg-accent text-white font-black text-xl sm:text-2xl px-12 py-5 rounded-xl w-full sm:w-auto animate-pulse-red transition-all hover:scale-105 active:scale-95 hover:bg-accent-dark uppercase tracking-tight"
               >
                 Get paid before you talk
@@ -409,7 +409,7 @@
     function CostOfNothing() {
       const costs = [
         { big: 10, suffix: '+', label: 'hours wasted', sub: 'Every. Single. Week.', detail: 'On calls, quotes, and follow-ups that go nowhere.' },
-        { big: 500, suffix: '+', prefix: '€', label: 'lost income', sub: 'Per week. Gone.', detail: 'That\'s €26,000 a year walking out the door.' },
+        { big: 500, suffix: '+', prefix: '$', label: 'lost income', sub: 'Per week. Gone.', detail: 'That\'s $26,000 a year walking out the door.' },
         { big: 80, suffix: '%', label: 'of leads never convert', sub: '8 out of 10 ghost you.', detail: 'You spent real time on every one of them.' },
       ];
       return (
@@ -456,7 +456,7 @@
                   <span className="text-accent">for pennies.</span>
                 </p>
                 <a
-                  href="#signup"
+                  href="/onboarding.html"
                   className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-black text-lg px-10 py-4 rounded-xl animate-pulse-red hover:scale-105 transition-all uppercase tracking-tight"
                 >
                   Get paid before you talk →
@@ -669,7 +669,7 @@
       const statuses = [
         { name: 'Marcus K.', status: 'Applied', amount: null, color: 'yellow', progress: 33 },
         { name: 'Sarah L.', status: 'Qualified', amount: null, color: 'blue', progress: 66 },
-        { name: 'David H.', status: 'Paid', amount: '€1,250', color: 'green', progress: 100 },
+        { name: 'David H.', status: 'Paid', amount: '$1,250', color: 'green', progress: 100 },
       ];
 
       return (
@@ -718,7 +718,7 @@
                         <div key={item} className={`px-3 py-2 rounded-lg text-sm flex items-center justify-between ${i === 0 ? 'bg-accent/10 text-accent border border-accent/20' : 'text-white/50 hover:bg-white/5'}`}>
                           <span className="font-semibold">{item}</span>
                           {i === 0 && <span className="text-xs bg-accent text-white rounded-full px-2 py-0.5 text-mono font-black">3</span>}
-                          {i === 2 && <span className="text-xs text-green-400 text-mono">€3.7k</span>}
+                          {i === 2 && <span className="text-xs text-green-400 text-mono">$3.7k</span>}
                         </div>
                       ))}
                       <div className="pt-4 mt-4 border-t border-white/5">
@@ -776,6 +776,7 @@
                                 </div>
                                 {s.amount && (
                                   <div className="text-accent font-black text-mono text-lg">{s.amount}</div>
+
                                 )}
                               </div>
                             </div>
@@ -790,7 +791,7 @@
                           <span className="uppercase tracking-wider">Live activity</span>
                         </div>
                         <div className="text-mono text-xs space-y-1 text-white/50">
-                          <div><span className="text-accent">→</span> David H. paid €1,250 <span className="text-white/30">2s ago</span></div>
+                          <div><span className="text-accent">→</span> David H. paid $1,250 <span className="text-white/30">2s ago</span></div>
                           <div><span className="text-white/30">→</span> Sarah L. completed qualification <span className="text-white/30">18s ago</span></div>
                           <div><span className="text-white/30">→</span> 3 low-value leads filtered <span className="text-white/30">1m ago</span></div>
                         </div>
@@ -996,12 +997,12 @@
               legend: { position: 'top', align: 'end', labels: { color: 'rgba(255,255,255,0.7)', font: { family: 'Inter', size: 12, weight: 600 }, usePointStyle: true, padding: 16 } },
               tooltip: {
                 backgroundColor: '#000', borderColor: 'rgba(255,59,59,0.4)', borderWidth: 1, padding: 12,
-                callbacks: { label: (c) => `${c.dataset.label}: €${c.parsed.y.toLocaleString()}` },
+                callbacks: { label: (c) => `${c.dataset.label}: $${c.parsed.y.toLocaleString()}` },
               },
             },
             scales: {
               x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 11 } } },
-              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 11 }, callback: v => '€' + (v / 1000) + 'k' } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 11 }, callback: v => '$' + (v / 1000) + 'k' } },
             },
           },
         });
@@ -1215,7 +1216,7 @@
 
               <div>
                 <a
-                  href="#signup"
+                  href="/onboarding.html"
                   className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-black text-xl px-12 py-5 rounded-xl animate-pulse-red hover:scale-105 transition-all uppercase tracking-tight"
                 >
                   Get paid before you talk →
@@ -1307,7 +1308,7 @@
                           </>
                         ) : (
                           <>
-                            <span className="text-5xl font-black text-white">€{p.price}</span>
+                            <span className="text-5xl font-black text-white">${p.price}</span>
                             <span className="text-white/40 text-base">/mo</span>
                           </>
                         )}
@@ -1327,7 +1328,7 @@
                       ))}
                     </ul>
                     <a
-                      href="#signup"
+                      href="/onboarding.html"
                       className={`block text-center font-black py-3.5 rounded-xl transition-all ${p.featured ? 'bg-accent text-white hover:bg-accent-dark animate-pulse-red' : 'bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20'}`}
                     >
                       {p.cta} →
@@ -1366,7 +1367,7 @@
         { q: 'What if a client pays but I don\'t want to work with them?', a: 'You set your own refund terms. Reject any client with one click — they get auto-refunded per your policy. You\'re always in control.' },
         { q: 'Do I need to already have leads?', a: 'Yes. DealGate is a filtering and conversion system, not a lead-gen tool. If you already get leads but waste time on bad ones, this solves it.' },
         { q: 'How long does setup take?', a: 'Under 10 minutes. Plug in Stripe, write your qualification questions, embed the DealGate link anywhere (your website, DMs, email signature) and you\'re live.' },
-        { q: 'Is this really worth €79/month?', a: 'A single unpaid 30-min call costs you more than a month of DealGate. Users save on average 18 hours / week and triple their revenue in 60 days. The math is brutal in your favor.' },
+        { q: 'Is this really worth it?', a: 'A single unpaid 30-min call costs you more than a month of DealGate. Users save on average 18 hours / week and triple their revenue in 60 days. The math is brutal in your favor.' },
         { q: 'What if I need to cancel?', a: 'One click, no questions asked, no long-term contracts. 30-day money-back guarantee on all plans.' },
       ];
       return (
@@ -1416,7 +1417,7 @@
                 <span className="text-accent">everything changes.</span>
               </p>
               <a
-                href="#signup"
+                href="/onboarding.html"
                 className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-black text-xl px-12 py-5 rounded-xl animate-pulse-red hover:scale-105 transition-all uppercase tracking-tight"
               >
                 Get paid before you talk →
@@ -1456,7 +1457,7 @@
                 Stop giving your time away. Start getting paid for calls today.
               </p>
               <a
-                href="#"
+                href="/onboarding.html"
                 className="group inline-flex items-center gap-3 bg-accent text-white font-black text-2xl sm:text-3xl px-14 py-6 rounded-2xl animate-pulse-red hover:scale-105 active:scale-95 hover:bg-accent-dark transition-all uppercase tracking-tight"
               >
                 Get paid before you talk
@@ -1493,15 +1494,15 @@
                 <p className="text-white/40 text-sm leading-relaxed">The system that makes clients pay before they get your time.</p>
               </div>
               {[
-                { title: 'Product', links: ['Features', 'Pricing', 'Demo', 'Changelog'] },
-                { title: 'Company', links: ['About', 'Blog', 'Careers', 'Contact'] },
-                { title: 'Legal', links: ['Privacy', 'Terms', 'Refunds', 'Security'] },
+                { title: 'Product', links: [{ label: 'How it works', href: '#how-it-works' }, { label: 'Pricing', href: '#pricing' }, { label: 'Demo', href: '#demo' }, { label: 'FAQ', href: '#faq' }] },
+                { title: 'Get started', links: [{ label: 'Sign up free', href: '/onboarding.html' }, { label: 'Sign in', href: '/login.html' }, { label: 'Get paid before you talk', href: '/onboarding.html' }] },
+                { title: 'Legal', links: [{ label: 'Privacy Policy', href: '/privacy.html' }, { label: 'Terms of Service', href: '/terms.html' }, { label: 'Refund Policy', href: '/terms.html#refunds' }] },
               ].map((col) => (
                 <div key={col.title}>
                   <h4 className="text-white font-black text-sm uppercase tracking-widest mb-4">{col.title}</h4>
                   <ul className="space-y-2">
                     {col.links.map(l => (
-                      <li key={l}><a href="#" className="text-white/50 hover:text-white text-sm transition-colors">{l}</a></li>
+                      <li key={l.label}><a href={l.href} className="text-white/50 hover:text-white text-sm transition-colors">{l.label}</a></li>
                     ))}
                   </ul>
                 </div>
@@ -1519,10 +1520,10 @@
     /* ════════ LIVE NOTIFICATIONS ════════ */
     function LiveFeed() {
       const feed = [
-        { name: 'David H.', action: 'just paid €1,250', time: '2m ago' },
-        { name: 'Maria F.', action: 'qualified and paid €890', time: '5m ago' },
+        { name: 'David H.', action: 'just paid $1,250', time: '2m ago' },
+        { name: 'Maria F.', action: 'qualified and paid $890', time: '5m ago' },
         { name: 'Alex K.', action: 'filtered 4 bad leads', time: '8m ago' },
-        { name: 'Lena M.', action: 'just paid €2,100', time: '12m ago' },
+        { name: 'Lena M.', action: 'just paid $2,100', time: '12m ago' },
         { name: 'Yuki T.', action: 'signed up for Pro', time: '15m ago' },
       ];
       const [idx, setIdx] = useState(0);
@@ -1582,10 +1583,10 @@
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <div className="hidden sm:block">
               <div className="text-white font-black text-sm">You just lost another hour.</div>
-              <div className="text-white/50 text-xs">That's €75 to €200 — gone. Stop the bleeding.</div>
+              <div className="text-white/50 text-xs">That's $75 to $200 — gone. Stop the bleeding.</div>
             </div>
             <a
-              href="#signup"
+              href="/onboarding.html"
               className="bg-accent hover:bg-accent-dark text-white font-black px-6 py-3 rounded-xl transition-all hover:scale-105 text-sm sm:ml-auto animate-pulse-red uppercase tracking-tight"
             >
               Get paid before you talk →
