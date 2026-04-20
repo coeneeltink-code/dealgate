@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DealGate — Get started</title>
+  <title>DealGate â Get started</title>
 
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -257,7 +257,7 @@
   <script type="text/babel">
     const { useState, useEffect, useRef, useCallback } = React;
 
-    /* ── Logo ── */
+    /* ââ Logo ââ */
     function Logo() {
       return (
         <div className="flex items-center gap-2">
@@ -274,7 +274,7 @@
       );
     }
 
-    /* ── Step dots ── */
+    /* ââ Step dots ââ */
     function StepDots({ current, total }) {
       return (
         <div className="flex items-center gap-1.5">
@@ -288,7 +288,7 @@
       );
     }
 
-    /* ── Shell ── */
+    /* ââ Shell ââ */
     function Shell({ step, totalSteps, children, hideProgress }) {
       return (
         <div className="grain relative min-h-screen flex flex-col overflow-hidden">
@@ -328,18 +328,18 @@
       );
     }
 
-    /* ── Toast ── */
+    /* ââ Toast ââ */
     function Toast({ message, onDone }) {
       useEffect(() => {
         const t = setTimeout(onDone, 2200);
         return () => clearTimeout(t);
       }, []);
-      return <div className="toast">✓ {message}</div>;
+      return <div className="toast">â {message}</div>;
     }
 
-    /* ════════════════════════════
-       STEP 1 — SIGNUP
-    ════════════════════════════ */
+    /* ââââââââââââââââââââââââââââ
+       STEP 1 â SIGNUP
+    ââââââââââââââââââââââââââââ */
     function StepSignup({ onNext, setUserData }) {
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
@@ -362,7 +362,7 @@
             <div className="text-center mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-[11px] font-black text-accent uppercase tracking-widest">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse-red inline-block" />
-                Step 1 of 5 — 90 seconds to paid
+                Step 1 of 5 â 90 seconds to paid
               </div>
             </div>
             <h1 className="text-4xl font-black tracking-tight text-center mb-3 leading-tight">
@@ -405,7 +405,7 @@
                   className="btn-primary animate-pulse-red"
                   disabled={loading || !email || password.length < 8}
                 >
-                  {loading ? 'Creating account…' : 'Start getting paid →'}
+                  {loading ? 'Creating accountâ¦' : 'Start getting paid â'}
                 </button>
               </div>
             </form>
@@ -415,9 +415,9 @@
       );
     }
 
-    /* ════════════════════════════
-       STEP 2 — WELCOME
-    ════════════════════════════ */
+    /* ââââââââââââââââââââââââââââ
+       STEP 2 â WELCOME
+    ââââââââââââââââââââââââââââ */
     function StepWelcome({ onNext, userData }) {
       return (
         <Shell step={1} totalSteps={5}>
@@ -448,16 +448,16 @@
             </p>
 
             <button className="btn-primary" onClick={onNext}>
-              Set it up now →
+              Set it up now â
             </button>
           </div>
         </Shell>
       );
     }
 
-    /* ════════════════════════════
-       STEP 3 — SET PRICE
-    ════════════════════════════ */
+    /* ââââââââââââââââââââââââââââ
+       STEP 3 â SET PRICE
+    ââââââââââââââââââââââââââââ */
     function StepPrice({ onNext, setFlowData }) {
       const [selected, setSelected] = useState(null);
       const prices = [25, 50, 100];
@@ -491,22 +491,22 @@
                   className={`price-option flex items-center justify-center py-6 ${selected === value ? 'selected' : ''}`}
                   onClick={() => setSelected(value)}
                 >
-                  <span className="font-black text-3xl text-white">€{value}</span>
+                  <span className="font-black text-3xl text-white">â¬{value}</span>
                 </div>
               ))}
             </div>
 
             <button className="btn-primary" onClick={handleContinue} disabled={!selected}>
-              Continue →
+              Continue â
             </button>
           </div>
         </Shell>
       );
     }
 
-    /* ════════════════════════════
-       STEP 4 — ADD QUESTIONS
-    ════════════════════════════ */
+    /* ââââââââââââââââââââââââââââ
+       STEP 4 â ADD QUESTIONS
+    ââââââââââââââââââââââââââââ */
     function StepQuestions({ onNext, setFlowData }) {
       const [answers, setAnswers] = useState(['', '', '']);
       const defaults = [
@@ -527,7 +527,7 @@
           <div className="w-full max-w-sm animate-fade-up">
             <div className="flex justify-center mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-[11px] font-black text-accent uppercase tracking-widest">
-                Step 4 of 5 — almost done
+                Step 4 of 5 â almost done
               </div>
             </div>
             <h1 className="text-3xl font-black tracking-tight leading-tight text-center mb-3">
@@ -552,27 +552,27 @@
             </div>
 
             <button className="btn-primary" onClick={handleContinue}>
-              You're 1 step away from getting paid →
+              You're 1 step away from getting paid â
             </button>
           </div>
         </Shell>
       );
     }
 
-    /* ════════════════════════════
-       STEP 5 — SUCCESS / LIVE
-    ════════════════════════════ */
+    /* ââââââââââââââââââââââââââââ
+       STEP 5 â SUCCESS / LIVE
+    ââââââââââââââââââââââââââââ */
     function StepSuccess({ onNext, userData, flowData, setToast }) {
       const link = `dealgate.ai/${userData?.username || 'yourname'}`;
       const fullLink = `https://${link}`;
-      const shareMessage = `Before we talk — fill this out so we don't waste each other's time: ${fullLink}`;
+      const shareMessage = `Before we talk â fill this out so we don't waste each other's time: ${fullLink}`;
       const [copied, setCopied] = useState(false);
 
       const handleCopy = () => {
         if (copied) { onNext(); return; }
         navigator.clipboard.writeText(shareMessage).catch(() => {});
         setCopied(true);
-        setToast('Message copied — now paste it to a lead');
+        setToast('Message copied â now paste it to a lead');
       };
 
       const handleWhatsApp = () => {
@@ -626,7 +626,7 @@
               onClick={handleCopy}
               style={copied ? { background: '#1a7a3c', animation: 'none' } : {}}
             >
-              {copied ? '✓ Copied — paste this to a lead now, then tap to continue →' : 'Copy & send to first lead →'}
+              {copied ? 'â Copied â paste this to a lead now, then tap to continue â' : 'Copy & send to first lead â'}
             </button>
             <p className="text-center text-accent text-xs font-black uppercase tracking-widest mb-4">
               Do this now or nothing changes.
@@ -639,22 +639,22 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.768.966-.941 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.464 3.488"/>
               </svg>
-              Send to a lead on WhatsApp →
+              Send to a lead on WhatsApp â
             </button>
             <button
               className="btn-secondary"
               onClick={() => window.open(fullLink, '_blank')}
             >
-              Preview link ↗
+              Preview link â
             </button>
           </div>
         </Shell>
       );
     }
 
-    /* ════════════════════════════
-       STEP 6 — INSTRUCTIONS
-    ════════════════════════════ */
+    /* ââââââââââââââââââââââââââââ
+       STEP 6 â INSTRUCTIONS
+    ââââââââââââââââââââââââââââ */
     function StepInstruction({ onNext, userData, flowData }) {
       const link = `dealgate.ai/${userData?.username || 'yourname'}`;
 
@@ -674,28 +674,28 @@
 
             <div className="gradient-border rounded-2xl p-5 mb-8">
               <p className="text-base text-white leading-relaxed font-bold">
-                If they're serious — they will pay.
+                If they're serious â they will pay.
               </p>
               <p className="text-base text-white/50 leading-relaxed mt-2">
-                If they don't — they were never going to buy.
+                If they don't â they were never going to buy.
               </p>
             </div>
 
             <button className="btn-primary" onClick={onNext}>
-              Done. Show me the money →
+              Done. Show me the money â
             </button>
           </div>
         </Shell>
       );
     }
 
-    /* ════════════════════════════
+    /* ââââââââââââââââââââââââââââ
        DASHBOARD
-    ════════════════════════════ */
+    ââââââââââââââââââââââââââââ */
     function Dashboard({ userData, flowData }) {
       const link = `dealgate.ai/${userData?.username || 'yourname'}`;
       const fullLink = `https://${link}`;
-      const shareMessage = `Before we talk — fill this out so we don't waste each other's time: ${fullLink}`;
+      const shareMessage = `Before we talk â fill this out so we don't waste each other's time: ${fullLink}`;
       const leads = []; // real state: empty until first payment
       const paidLeads = leads.filter(l => l.status === 'paid');
       const totalEarned = paidLeads.reduce((sum, l) => sum + l.amount, 0);
@@ -703,7 +703,7 @@
 
       const handleCopy = () => {
         navigator.clipboard.writeText(shareMessage).catch(() => {});
-        setToast('Message copied — paste it to a lead');
+        setToast('Message copied â paste it to a lead');
       };
 
       const handleWhatsApp = () => {
@@ -753,14 +753,14 @@
                   <div className="flex-1">
                     <h2 className="text-xl font-black text-white mb-1">No payments yet.</h2>
                     <p className="text-white/60 text-sm mb-4">
-                      Send your link now — every hour you wait is unpaid work.
+                      Send your link now â every hour you wait is unpaid work.
                     </p>
                     <div className="flex gap-2 flex-wrap">
                       <button
                         className="bg-accent hover:bg-accent-dark text-white text-sm font-black px-4 py-2.5 rounded-lg transition-all hover:scale-105 active:scale-95 glow-red-sm"
                         onClick={handleCopy}
                       >
-                        Copy & send now →
+                        Copy & send now â
                       </button>
                       <button
                         className="flex items-center gap-2 text-sm font-bold rounded-lg px-4 py-2.5 transition-all hover:brightness-110 active:scale-95"
@@ -781,13 +781,13 @@
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-8">
               {[
-                { label: 'Earned',    value: `€${totalEarned}`,   sub: 'Total received' },
+                { label: 'Earned',    value: `â¬${totalEarned}`,   sub: 'Total received' },
                 { label: 'Leads',     value: leads.length,         sub: 'All time' },
-                { label: 'Paid',      value: paidLeads.length,     sub: leads.length ? `${Math.round(paidLeads.length / leads.length * 100)}% conversion` : '—' },
+                { label: 'Paid',      value: paidLeads.length,     sub: leads.length ? `${Math.round(paidLeads.length / leads.length * 100)}% conversion` : 'â' },
               ].map(({ label, value, sub }) => (
                 <div key={label} className="gradient-border rounded-xl p-4">
                   <div className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-1">{label}</div>
-                  <div className={`text-3xl font-black ${value === 0 || value === '€0' ? 'text-white/30' : 'text-white'}`}>{value}</div>
+                  <div className={`text-3xl font-black ${value === 0 || value === 'â¬0' ? 'text-white/30' : 'text-white'}`}>{value}</div>
                   <div className="text-xs text-white/30 mt-1">{sub}</div>
                 </div>
               ))}
@@ -838,7 +838,7 @@
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm font-black text-white">€{lead.amount}</span>
+                      <span className="text-sm font-black text-white">â¬{lead.amount}</span>
                       <span
                         className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                           lead.status === 'paid'
@@ -846,7 +846,7 @@
                             : 'bg-white/5 text-white/40 border border-white/10'
                         }`}
                       >
-                        {lead.status === 'paid' ? '✓ Paid' : 'Pending'}
+                        {lead.status === 'paid' ? 'â Paid' : 'Pending'}
                       </span>
                     </div>
                   </div>
@@ -855,16 +855,16 @@
             </div>
 
             <p className="text-center text-white/20 text-xs mt-8">
-              DealGate — Serious clients pay first.
+              DealGate â Serious clients pay first.
             </p>
           </div>
         </Shell>
       );
     }
 
-    /* ════════════════════════════
+    /* ââââââââââââââââââââââââââââ
        APP ROOT
-    ════════════════════════════ */
+    ââââââââââââââââââââââââââââ */
     const STEPS = ['signup', 'welcome', 'price', 'questions', 'success', 'instruction', 'dashboard'];
 
     function App() {
