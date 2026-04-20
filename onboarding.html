@@ -373,12 +373,20 @@
           .maybeSingle();
 
         if (existing) {
-          setError('This email is already registered.');
+          setError('This email is already registered. Sign in instead.');
           setLoading(false);
           return;
         }
 
-        setUserData({ email, username });
+        // Maak Supabase Auth account aan
+        const { data: authData, error: authError } = await db.auth.signUp({ email, password });
+        if (authError) {
+          setError(authError.message);
+          setLoading(false);
+          return;
+        }
+
+        setUserData({ email, username, userId: authData.user?.id });
         onNext();
       };
 
@@ -425,7 +433,7 @@
                 />
               </div>
 
-              {error && <p className="dg-error">{error}</p>}
+              {error && <p className="dg-error">{error} {error.includes('Sign in') && <a href="/login.html" style={{color:'#FF3B3B',textDecoration:'underline'}}>Sign in →</a>}</p>}
 
               <div className="mt-2">
                 <button
@@ -614,6 +622,7 @@
                 username: userData.username,
                 price: flowData.price || 50,
                 questions: flowData.questions || ['What do you need help with?', 'What is your budget?', 'What is your timeline?'],
+                ...(userData.userId ? { user_id: userData.userId } : {}),
               }, { onConflict: 'email' })
               .select();
 
