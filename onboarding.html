@@ -24,9 +24,9 @@
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            accent: '#FF3B3B',
-            'accent-dark': '#CC2E2E',
-            'accent-bright': '#FF5C5C',
+            accent: '#10B981',
+            'accent-dark': '#059669',
+            'accent-bright': '#34D399',
           },
         },
       },
@@ -36,7 +36,7 @@
   <style>
     * { box-sizing: border-box; }
     body {
-      background: #000;
+      background: #0A0B10;
       color: #fff;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -44,7 +44,7 @@
       overflow-x: hidden;
       min-height: 100vh;
     }
-    ::selection { background: #FF3B3B; color: #fff; }
+    ::selection { background: #10B981; color: #fff; }
 
     .bg-card { background: rgba(255,255,255,0.025); }
     .bg-card-hover { background: rgba(255,255,255,0.045); }
@@ -59,17 +59,17 @@
 
     .gradient-border {
       position: relative;
-      background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
-                  linear-gradient(135deg, rgba(255,59,59,0.4), rgba(255,59,59,0.05) 40%, rgba(255,255,255,0.05)) border-box;
+      background: linear-gradient(#11141D, #11141D) padding-box,
+                  linear-gradient(135deg, rgba(16,185,129,0.4), rgba(16,185,129,0.05) 40%, rgba(255,255,255,0.05)) border-box;
       border: 1px solid transparent;
     }
 
     .glow-red {
-      box-shadow: 0 0 60px -10px rgba(255,59,59,0.5), 0 0 120px -20px rgba(255,59,59,0.3);
+      box-shadow: 0 0 60px -10px rgba(16,185,129,0.5), 0 0 120px -20px rgba(16,185,129,0.3);
     }
 
     .glow-red-sm {
-      box-shadow: 0 0 30px -5px rgba(255,59,59,0.4);
+      box-shadow: 0 0 30px -5px rgba(16,185,129,0.4);
     }
 
     .grain::before {
@@ -92,8 +92,8 @@
       to   { opacity: 1; transform: scale(1); }
     }
     @keyframes pulseRed {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255,59,59,0.5), 0 10px 40px -10px rgba(255,59,59,0.5); }
-      50%       { box-shadow: 0 0 0 14px rgba(255,59,59,0), 0 10px 40px -10px rgba(255,59,59,0.3); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5), 0 10px 40px -10px rgba(16,185,129,0.5); }
+      50%       { box-shadow: 0 0 0 14px rgba(16,185,129,0), 0 10px 40px -10px rgba(16,185,129,0.3); }
     }
     @keyframes shimmer {
       0%   { background-position: -200% 0; }
@@ -115,7 +115,7 @@
     .animate-check-pop { animation: checkPop 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
 
     .shimmer-text {
-      background: linear-gradient(90deg, #fff 0%, #fff 40%, #FF3B3B 50%, #fff 60%, #fff 100%);
+      background: linear-gradient(90deg, #fff 0%, #fff 40%, #10B981 50%, #fff 60%, #fff 100%);
       background-size: 200% auto;
       -webkit-background-clip: text;
       background-clip: text;
@@ -138,7 +138,7 @@
     }
     .dg-input::placeholder { color: rgba(255,255,255,0.3); }
     .dg-input:focus {
-      border-color: rgba(255,59,59,0.5);
+      border-color: rgba(16,185,129,0.5);
       background: rgba(255,255,255,0.06);
     }
 
@@ -152,17 +152,17 @@
       user-select: none;
     }
     .price-option:hover {
-      border-color: rgba(255,59,59,0.3);
+      border-color: rgba(16,185,129,0.3);
       background: rgba(255,255,255,0.05);
     }
     .price-option.selected {
-      border-color: #FF3B3B;
-      background: rgba(255,59,59,0.08);
+      border-color: #10B981;
+      background: rgba(16,185,129,0.08);
     }
 
     /* Primary button */
     .btn-primary {
-      background: #FF3B3B;
+      background: #10B981;
       color: #fff;
       font-weight: 800;
       font-size: 16px;
@@ -175,7 +175,7 @@
       font-family: 'Inter', sans-serif;
       letter-spacing: -0.01em;
     }
-    .btn-primary:hover { background: #CC2E2E; transform: translateY(-1px); }
+    .btn-primary:hover { background: #059669; transform: translateY(-1px); }
     .btn-primary:active { transform: scale(0.98); }
     .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
@@ -203,21 +203,21 @@
       transition: background 0.3s, width 0.3s;
     }
     .step-dot.active {
-      background: #FF3B3B;
+      background: #10B981;
       width: 20px;
       border-radius: 3px;
     }
-    .step-dot.done { background: rgba(255,59,59,0.4); }
+    .step-dot.done { background: rgba(16,185,129,0.4); }
 
     /* Link display */
     .link-display {
       font-family: 'JetBrains Mono', monospace;
-      background: rgba(255,59,59,0.07);
-      border: 1px solid rgba(255,59,59,0.25);
+      background: rgba(16,185,129,0.07);
+      border: 1px solid rgba(16,185,129,0.25);
       border-radius: 10px;
       padding: 14px 18px;
       font-size: 15px;
-      color: #FF3B3B;
+      color: #10B981;
       letter-spacing: -0.01em;
     }
 
@@ -253,7 +253,7 @@
 
     /* Error message */
     .dg-error {
-      color: #FF3B3B;
+      color: #10B981;
       font-size: 13px;
       font-weight: 600;
       margin-top: 8px;
@@ -322,7 +322,7 @@
             style={{
               top: '20%', left: '50%', transform: 'translateX(-50%)',
               width: '600px', height: '300px',
-              background: 'rgba(255,59,59,0.1)',
+              background: 'rgba(16,185,129,0.1)',
               filter: 'blur(120px)',
             }}
           />
@@ -433,7 +433,7 @@
                 />
               </div>
 
-              {error && <p className="dg-error">{error} {error.includes('Sign in') && <a href="/login.html" style={{color:'#FF3B3B',textDecoration:'underline'}}>Sign in →</a>}</p>}
+              {error && <p className="dg-error">{error} {error.includes('Sign in') && <a href="/login.html" style={{color:'#10B981',textDecoration:'underline'}}>Sign in →</a>}</p>}
 
               <div className="mt-2">
                 <button
@@ -460,12 +460,12 @@
             <div className="flex justify-center mb-8">
               <div
                 className="w-20 h-20 rounded-2xl bg-accent flex items-center justify-center"
-                style={{ boxShadow: '0 0 60px -8px rgba(255,59,59,0.7)' }}
+                style={{ boxShadow: '0 0 60px -8px rgba(16,185,129,0.7)' }}
               >
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                   <path d="M7 7h22v22H7z" stroke="white" strokeWidth="2.5"/>
                   <path d="M15 13v10M19 13v10" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-                  <circle cx="27" cy="9" r="4" fill="#FF3B3B" stroke="white" strokeWidth="2"/>
+                  <circle cx="27" cy="9" r="4" fill="#10B981" stroke="white" strokeWidth="2"/>
                 </svg>
               </div>
             </div>
@@ -661,18 +661,18 @@
               <div
                 className="w-24 h-24 rounded-full flex items-center justify-center"
                 style={{
-                  background: 'radial-gradient(circle, rgba(255,59,59,0.2) 0%, rgba(255,59,59,0.05) 70%)',
-                  boxShadow: '0 0 80px -10px rgba(255,59,59,0.6)',
-                  border: '1px solid rgba(255,59,59,0.3)',
+                  background: 'radial-gradient(circle, rgba(16,185,129,0.2) 0%, rgba(16,185,129,0.05) 70%)',
+                  boxShadow: '0 0 80px -10px rgba(16,185,129,0.6)',
+                  border: '1px solid rgba(16,185,129,0.3)',
                 }}
               >
                 {saving ? (
-                  <div style={{ width: 20, height: 20, border: '2px solid #FF3B3B', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                  <div style={{ width: 20, height: 20, border: '2px solid #10B981', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                 ) : (
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
                     <path
                       d="M10 20L16 27L30 13"
-                      stroke="#FF3B3B"
+                      stroke="#10B981"
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -694,7 +694,7 @@
             <div className="link-display flex items-center justify-between mb-6">
               <span>{link}</span>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="opacity-50 flex-shrink-0 ml-2">
-                <path d="M3 3h4v4H3zM7 7h4v4H7z" stroke="#FF3B3B" strokeWidth="1.4"/>
+                <path d="M3 3h4v4H3zM7 7h4v4H7z" stroke="#10B981" strokeWidth="1.4"/>
               </svg>
             </div>
 
@@ -818,7 +818,7 @@
             {isEmpty && (
               <div
                 className="gradient-border rounded-2xl p-6 mb-8 relative overflow-hidden"
-                style={{ boxShadow: '0 0 60px -20px rgba(255,59,59,0.4)' }}
+                style={{ boxShadow: '0 0 60px -20px rgba(16,185,129,0.4)' }}
               >
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-full bg-accent/15 border border-accent/40 flex items-center justify-center flex-shrink-0 animate-pulse-red">

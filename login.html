@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DealGate — Sign In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0A0B10" />
+  <title>DealGate — Sign in</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310B981'/%3E%3Cpath d='M10 16l4 4 8-8' stroke='%23062017' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
 
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -13,67 +15,105 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 
   <style>
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
     body {
-      background: #000;
-      color: #fff;
+      background: #0A0B10;
+      color: #E6E9F0;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
       margin: 0;
       min-height: 100vh;
+      line-height: 1.55;
     }
+    ::selection { background: #10B981; color: #06241A; }
+
+    .h-display { font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; }
+    .h-serif-italic { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+
+    .text-gradient-brand {
+      background: linear-gradient(180deg, #34D399, #10B981 60%, #059669);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .aurora {
+      background:
+        radial-gradient(60% 45% at 50% 0%, rgba(16,185,129,0.14) 0%, rgba(16,185,129,0) 60%),
+        radial-gradient(35% 35% at 15% 50%, rgba(52,211,153,0.06) 0%, rgba(52,211,153,0) 60%),
+        radial-gradient(35% 35% at 85% 50%, rgba(5,150,105,0.06) 0%, rgba(5,150,105,0) 60%);
+    }
+    .dots {
+      background-image: radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, #000 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, #000 30%, transparent 80%);
+    }
+
     .dg-input {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #fff;
-      border-radius: 10px;
+      background: #0E1017;
+      border: 1px solid #1E2230;
+      color: #E6E9F0;
+      border-radius: 12px;
       padding: 14px 16px;
       font-size: 15px;
-      font-family: 'Inter', sans-serif;
       width: 100%;
       outline: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .dg-input::placeholder { color: rgba(255,255,255,0.3); }
-    .dg-input:focus {
-      border-color: rgba(255,59,59,0.5);
-      background: rgba(255,255,255,0.06);
-    }
-    .btn-primary {
-      background: #FF3B3B;
-      color: #fff;
-      font-weight: 800;
-      font-size: 16px;
-      border-radius: 10px;
-      padding: 15px 28px;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.2s, transform 0.15s;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
       font-family: 'Inter', sans-serif;
     }
-    .btn-primary:hover { background: #CC2E2E; transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-    .dg-error { color: #FF3B3B; font-size: 13px; font-weight: 600; margin-top: 8px; text-align: center; }
-    .grid-pattern {
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
+    .dg-input::placeholder { color: #6B7387; }
+    .dg-input:focus {
+      border-color: rgba(16,185,129,0.55);
+      background: #11141D;
+      box-shadow: 0 0 0 4px rgba(16,185,129,0.1);
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+
+    .btn-brand {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: linear-gradient(180deg, #1FD19B 0%, #10B981 100%);
+      color: #06241A;
+      font-weight: 600;
+      font-size: 15px;
+      border: none; cursor: pointer;
+      border-radius: 12px;
+      padding: 14px 22px;
+      width: 100%;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.25) inset,
+        0 0 0 1px rgba(16,185,129,0.35),
+        0 10px 28px -10px rgba(16,185,129,0.6);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      font-family: 'Inter', sans-serif;
     }
-    .animate-fade-up { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
-    @keyframes pulseRed {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255,59,59,0.5); }
-      50%       { box-shadow: 0 0 0 14px rgba(255,59,59,0); }
+    .btn-brand:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.3) inset,
+        0 0 0 1px rgba(16,185,129,0.5),
+        0 16px 36px -12px rgba(16,185,129,0.75);
     }
-    .animate-pulse-red { animation: pulseRed 2.5s infinite; }
+    .btn-brand:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .dg-error {
+      color: #F87171;
+      font-size: 13px;
+      background: rgba(248,113,113,0.08);
+      border: 1px solid rgba(248,113,113,0.25);
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-up { animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
+
+    button:focus-visible, a:focus-visible, input:focus-visible {
+      outline: 2px solid rgba(16,185,129,0.6);
+      outline-offset: 3px;
+    }
   </style>
 </head>
 <body>
@@ -95,7 +135,6 @@
       const [error, setError] = useState('');
       const [checking, setChecking] = useState(true);
 
-      // Check of al ingelogd
       useEffect(() => {
         db.auth.getSession().then(({ data: { session } }) => {
           if (session) window.location.href = '/dashboard.html';
@@ -108,9 +147,7 @@
         if (!email || !password) return;
         setLoading(true);
         setError('');
-
         const { data, error: signInError } = await db.auth.signInWithPassword({ email, password });
-
         if (signInError) {
           setError(signInError.message === 'Invalid login credentials'
             ? 'Wrong email or password.'
@@ -118,7 +155,6 @@
           setLoading(false);
           return;
         }
-
         window.location.href = '/dashboard.html';
       };
 
@@ -126,74 +162,57 @@
 
       return (
         <div className="relative min-h-screen flex flex-col overflow-hidden">
-          <div className="absolute inset-0 grid-pattern" style={{ opacity: 0.35, maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)' }} />
-          <div className="absolute pointer-events-none" style={{ top: '20%', left: '50%', transform: 'translateX(-50%)', width: '500px', height: '250px', background: 'rgba(255,59,59,0.1)', filter: 'blur(100px)' }} />
+          <div className="absolute inset-0 aurora pointer-events-none" />
+          <div className="absolute inset-0 dots pointer-events-none" />
 
-          <header className="relative z-10 flex items-center px-6 py-5">
-            <a href="/" className="flex items-center gap-2 no-underline">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#FF3B3B' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 3h10v10H3z" stroke="white" strokeWidth="1.8"/>
-                  <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
+          <header className="relative z-10 px-5 sm:px-6 py-5">
+            <a href="/" className="inline-flex items-center gap-2.5 no-underline">
+              <div className="w-8 h-8 rounded-lg grid place-items-center" style={{ background: 'linear-gradient(135deg,#34D399,#059669)' }}>
+                <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#052619" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
-              <span className="text-white font-black text-xl tracking-tight">Deal<span style={{ color: '#FF3B3B' }}>Gate</span></span>
+              <span className="font-semibold text-[15px] tracking-tight" style={{ color: '#E6E9F0' }}>DealGate</span>
             </a>
           </header>
 
-          <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
+          <main className="relative z-10 flex-1 flex items-center justify-center px-5 py-8">
             <div className="w-full max-w-sm animate-fade-up">
               <div className="text-center mb-8">
-                <h1 className="text-4xl font-black tracking-tight mb-3">Welcome back</h1>
-                <p className="text-white/50 text-sm">Sign in to your DealGate account</p>
+                <h1 className="h-display text-[40px] sm:text-[44px] text-white mb-3">
+                  Welcome <span className="h-serif-italic text-gradient-brand">back</span>
+                </h1>
+                <p className="text-[14px]" style={{ color: '#8A93A6' }}>Sign in to your DealGate account</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
-                  <label className="text-xs font-semibold text-white/40 uppercase tracking-widest block mb-1.5">Email</label>
-                  <input
-                    className="dg-input"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    autoFocus
-                    required
-                  />
+                  <label className="block mb-1.5 text-[11px] font-semibold uppercase tracking-widest" style={{ color: '#6B7387' }}>Email</label>
+                  <input className="dg-input" type="email" placeholder="you@example.com" value={email}
+                    onChange={e => setEmail(e.target.value)} autoFocus required autoComplete="email" />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-white/40 uppercase tracking-widest block mb-1.5">Password</label>
-                  <input
-                    className="dg-input"
-                    type="password"
-                    placeholder="Your password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                  />
+                  <label className="block mb-1.5 text-[11px] font-semibold uppercase tracking-widest" style={{ color: '#6B7387' }}>Password</label>
+                  <input className="dg-input" type="password" placeholder="Your password" value={password}
+                    onChange={e => setPassword(e.target.value)} required autoComplete="current-password" />
                 </div>
-
-                {error && <p className="dg-error">{error}</p>}
-
-                <div className="mt-2">
-                  <button
-                    type="submit"
-                    className="btn-primary animate-pulse-red"
-                    disabled={loading || !email || !password}
-                  >
-                    {loading ? 'Signing in…' : 'Sign in →'}
-                  </button>
-                </div>
+                {error && <div className="dg-error">{error}</div>}
+                <button type="submit" className="btn-brand mt-1" disabled={loading || !email || !password}>
+                  {loading ? 'Signing in…' : 'Sign in'}
+                  {!loading && <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M3 7h8m-3-3l3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </button>
               </form>
 
-              <p className="text-center text-white/30 text-sm mt-6">
+              <p className="text-center text-[13.5px] mt-6" style={{ color: '#6B7387' }}>
                 No account yet?{' '}
-                <a href="/onboarding.html" style={{ color: '#FF3B3B', textDecoration: 'underline' }}>
-                  Get started free →
-                </a>
+                <a href="/onboarding.html" className="underline" style={{ color: '#34D399' }}>Get started free →</a>
               </p>
             </div>
           </main>
+
+          <footer className="relative z-10 px-5 sm:px-6 py-6 text-[11px] text-center" style={{ color: '#6B7387' }}>
+            © 2026 DealGate ·{' '}
+            <a href="/privacy.html" className="hover:underline">Privacy</a>{' · '}
+            <a href="/terms.html" className="hover:underline">Terms</a>
+          </footer>
         </div>
       );
     }
