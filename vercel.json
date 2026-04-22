@@ -1,6 +1,11 @@
 {
-  "cleanUrls": true,
   "rewrites": [
+    { "source": "/onboarding", "destination": "/onboarding.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/intake-success", "destination": "/intake-success.html" },
     { "source": "/:username", "destination": "/client.html" }
   ]
 }
