@@ -1,4 +1,6 @@
 {
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/intake-success", "destination": "/intake-success.html" },
-    { "source": "/onboarding"
+    { "source": "/:username", "destination": "/client.html" }
+  ]
+}
