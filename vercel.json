@@ -1,5 +1,4 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
   "rewrites": [
-    { "source": "/intake-success", "destination": "/intake
+    { "source": "/intake-success", "destination": "/intake-success.html" },
+    { "source": "/onboarding"
