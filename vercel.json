@@ -1,9 +1,5 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/:username",
-      "destination": "/client.html"
-    }
-  ]
-}
+    { "source": "/intake-success", "destination": "/intake
