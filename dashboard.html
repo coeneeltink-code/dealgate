@@ -1,273 +1,766 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DealGate — Dashboard</title>
+  <title>Dashboard — DealGate</title>
+  <meta name="robots" content="noindex, nofollow" />
 
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: '#10B981',
+            'accent-dark': '#059669',
+            'accent-bright': '#34D399',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <style>
-    * { box-sizing: border-box; }
-    body {
-      background: #0A0B10;
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      margin: 0;
-      min-height: 100vh;
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+
+    /* Stat card */
+    .stat-card {
+      background: #0d0d0d;
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: border-color 0.2s;
     }
-    .grid-pattern {
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-    .card {
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 24px;
-    }
-    .link-box {
+    .stat-card:hover { border-color: rgba(16,185,129,0.2); }
+
+    /* Table rows */
+    .lead-row { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    .lead-row:hover { background: rgba(255,255,255,0.02); }
+    .lead-row:last-child { border-bottom: none; }
+
+    /* Status badges */
+    .badge-pending  { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.12); }
+    .badge-accepted { background: rgba(16,185,129,0.12); color: #34D399; border: 1px solid rgba(16,185,129,0.2); }
+    .badge-rejected { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.08); }
+    .badge-paid     { background: rgba(16,185,129,0.18);  color: #6EE7B7; border: 1px solid rgba(16,185,129,0.35); }
+
+    /* Link display */
+    .link-display {
+      background: rgba(16,185,129,0.06);
+      border: 1px solid rgba(16,185,129,0.15);
       font-family: 'JetBrains Mono', monospace;
-      background: rgba(16,185,129,0.07);
-      border: 1px solid rgba(16,185,129,0.25);
-      border-radius: 10px;
-      padding: 14px 18px;
-      font-size: 14px;
-      color: #10B981;
-      word-break: break-all;
+      font-size: 13px;
     }
-    .btn-primary {
-      background: #10B981;
+
+    /* Copy button */
+    .copy-btn { transition: background 0.2s, color 0.2s; }
+    .copy-btn:hover { background: rgba(16,185,129,0.2); }
+
+    /* Input */
+    .dg-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
       color: #fff;
-      font-weight: 700;
-      font-size: 14px;
-      border-radius: 10px;
-      padding: 12px 20px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .btn-primary:hover { background: #059669; transform: translateY(-1px); }
-    .btn-ghost {
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.7);
-      font-weight: 600;
-      font-size: 14px;
-      border-radius: 10px;
-      padding: 10px 18px;
-      border: 1px solid rgba(255,255,255,0.1);
-      cursor: pointer;
-      transition: background 0.2s;
-      font-family: 'Inter', sans-serif;
-    }
-    .btn-ghost:hover { background: rgba(255,255,255,0.1); }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      border-radius: 100px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .badge-live {
-      background: rgba(16,185,129,0.1);
-      border: 1px solid rgba(16,185,129,0.3);
-      color: #10B981;
-    }
+    .dg-input:focus { outline: none; border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.12); }
+    .dg-input::placeholder { color: rgba(255,255,255,0.25); }
+
+    /* Sidebar nav */
+    .nav-item { transition: background 0.15s, color 0.15s; }
+    .nav-item:hover { background: rgba(255,255,255,0.04); }
+    .nav-item.active { background: rgba(16,185,129,0.1); color: #34D399; }
+
+    /* Fade in */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .animate-fade-up { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
-    .toast {
-      position: fixed;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 12px 20px;
-      border-radius: 100px;
-      z-index: 9999;
-      white-space: nowrap;
+    .fade-up { animation: fadeUp 0.35s ease both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
-    @keyframes pulseRed {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
-      50%       { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid rgba(16,185,129,0.7);
+      outline-offset: 2px;
+      border-radius: 8px;
     }
-    .dot-live { width: 8px; height: 8px; border-radius: 50%; background: #10B981; animation: pulseRed 2s infinite; display: inline-block; }
+
+    /* Expanding row animation */
+    @keyframes expandRow {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .expand-row { animation: expandRow 0.25s cubic-bezier(0.22,1,0.36,1) both; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-2px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
   </style>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2310B981'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-weight='900' font-size='18' fill='white'>D</text></svg>" />
 </head>
 <body>
-  <div id="root"></div>
+<div id="root"></div>
 
-  <script>
-    var SUPABASE_URL = 'https://pokgkdxuxwipoawviecs.supabase.co';
-    var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBva2drZHh1eHdpcG9hd3ZpZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NTQyODQsImV4cCI6MjA5MjIzMDI4NH0.E-wkO-cUsG4yTKtjaCMiyNFOXEaoWnFvElod4-n9lwA';
-    var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  </script>
+<script type="text/babel">
+const { useState, useCallback } = React;
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+/* ═══════════ MOCK DATA ═══════════ */
+const MOCK_USER = {
+  name: 'Alex van der Berg',
+  email: 'alex@alexvanderberg.com',
+  slug: 'alex-vdb',
+  price: 49,
+  currency: '€',
+};
 
-    function Dashboard() {
-      const [freelancer, setFreelancer] = useState(null);
-      const [loading, setLoading] = useState(true);
-      const [toast, setToast] = useState('');
+const MOCK_LEADS = [
+  { id: 1, name: 'Sophie Martin',    email: 'sophie@agencia.nl',    project: 'Brand identity / logo',     budget: '€1,000 – €3,000', submitted: '2 hours ago',   status: 'pending'  },
+  { id: 2, name: 'Thomas Bakker',    email: 'thomas@bakker.io',     project: 'Website design',            budget: '€3,000 – €8,000', submitted: '5 hours ago',   status: 'accepted' },
+  { id: 3, name: 'Lena Fischer',     email: 'lena@designstudio.de', project: 'Full brand strategy',       budget: '€8,000+',          submitted: 'Yesterday',     status: 'paid'     },
+  { id: 4, name: 'Marco Rossi',      email: 'm.rossi@startup.it',   project: 'Marketing materials',       budget: 'Under €1,000',    submitted: '2 days ago',    status: 'rejected' },
+  { id: 5, name: 'Emma Johansson',   email: 'emma@nordic.se',       project: 'Website design',            budget: '€1,000 – €3,000', submitted: '3 days ago',    status: 'accepted' },
+  { id: 6, name: 'Pieter de Vries',  email: 'pieter@startup.nl',    project: 'Brand identity / logo',     budget: '€3,000 – €8,000', submitted: '4 days ago',    status: 'paid'     },
+  { id: 7, name: 'Sarah O\'Brien',   email: 'sarah@dublintech.ie',  project: 'Something else',            budget: 'Not sure yet',    submitted: '5 days ago',    status: 'pending'  },
+  { id: 8, name: 'Jonas Müller',     email: 'jonas@muller.de',      project: 'Full brand strategy',       budget: '€8,000+',          submitted: '1 week ago',    status: 'accepted' },
+];
 
-      useEffect(() => {
-        const init = async () => {
-          const { data: { session } } = await db.auth.getSession();
-          if (!session) {
-            window.location.href = '/login.html';
-            return;
-          }
+/* ═══════════ UTILS ═══════════ */
+const STATUS_LABELS = { pending: 'Pending', accepted: 'Accepted', rejected: 'Rejected', paid: 'Paid' };
+const STATUS_CLASSES = {
+  pending:  'badge-pending',
+  accepted: 'badge-accepted',
+  rejected: 'badge-rejected',
+  paid:     'badge-paid',
+};
 
-          const { data } = await db
-            .from('freelancers')
-            .select('*')
-            .eq('email', session.user.email)
-            .maybeSingle();
+/* ═══════════ STATS ═══════════ */
+function StatsRow({ leads }) {
+  const earned   = leads.filter(l => l.status === 'paid' || l.status === 'accepted').length * MOCK_USER.price;
+  const pending  = leads.filter(l => l.status === 'pending').length;
+  const accepted = leads.filter(l => l.status === 'accepted').length;
+  const convRate = leads.length > 0 ? Math.round((accepted / leads.length) * 100) : 0;
 
-          if (!data) {
-            window.location.href = '/onboarding.html';
-            return;
-          }
+  const stats = [
+    { label: 'Total earned',      value: `${MOCK_USER.currency}${earned.toLocaleString()}`, sub: 'from intake fees', color: '#10B981' },
+    { label: 'Pending review',    value: pending,   sub: pending === 1 ? 'application' : 'applications', color: 'rgba(255,255,255,0.9)' },
+    { label: 'Accepted',          value: accepted,  sub: 'this month',   color: '#34D399' },
+    { label: 'Conversion rate',   value: `${convRate}%`, sub: 'serious leads',  color: '#10B981' },
+  ];
 
-          setFreelancer(data);
-          setLoading(false);
-        };
-        init();
-      }, []);
-
-      const handleSignOut = async () => {
-        await db.auth.signOut();
-        window.location.href = '/login.html';
-      };
-
-      const showToast = (msg) => {
-        setToast(msg);
-        setTimeout(() => setToast(''), 2500);
-      };
-
-      const copyLink = () => {
-        const link = `https://godealgate.com/${freelancer.username}`;
-        navigator.clipboard.writeText(link).catch(() => {});
-        showToast('Link copied!');
-      };
-
-      const copyMessage = () => {
-        const link = `https://godealgate.com/${freelancer.username}`;
-        const msg = `Before we talk — fill this out so we don't waste each other's time: ${link}`;
-        navigator.clipboard.writeText(msg).catch(() => {});
-        showToast('Message copied — paste it to a lead!');
-      };
-
-      if (loading) return (
-        <div className="flex items-center justify-center min-h-screen">
-          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>Loading…</div>
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      {stats.map((s, i) => (
+        <div key={i} className="stat-card rounded-2xl p-5 fade-up" style={{ animationDelay: `${i * 60}ms` }}>
+          <p className="text-xs text-white/35 font-medium mb-3">{s.label}</p>
+          <p className="text-3xl font-black mb-1" style={{ color: s.color, fontFamily: "'JetBrains Mono', monospace", letterSpacing: '-0.02em' }}>
+            {s.value}
+          </p>
+          <p className="text-xs text-white/25">{s.sub}</p>
         </div>
-      );
+      ))}
+    </div>
+  );
+}
 
-      const link = `https://godealgate.com/${freelancer.username}`;
+/* ═══════════ COPY LINK ═══════════ */
+function CopyLink({ slug }) {
+  const [copied, setCopied] = useState(false);
+  const url = `https://dealgate.app/c/${slug}`;
 
-      return (
-        <div className="relative min-h-screen">
-          <div className="absolute inset-0 grid-pattern" style={{ opacity: 0.3, maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)' }} />
+  function copy() {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
-          {/* Header */}
-          <header className="relative z-10 flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#10B981' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 3h10v10H3z" stroke="white" strokeWidth="1.8"/>
-                  <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <span className="text-white font-black text-xl tracking-tight">Deal<span style={{ color: '#10B981' }}>Gate</span></span>
+  return (
+    <div className="mb-8 fade-up" style={{ animationDelay: '80ms' }}>
+      <p className="text-xs text-white/35 font-medium mb-3 uppercase tracking-widest">Your intake link</p>
+      <div className="link-display flex items-center gap-3 rounded-xl px-5 py-4">
+        <span className="flex-1 text-accent/80 truncate">{url}</span>
+        <button
+          onClick={copy}
+          className="copy-btn flex items-center gap-2 bg-accent/10 text-accent rounded-lg px-4 py-2 text-xs font-semibold flex-shrink-0"
+        >
+          {copied
+            ? <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>Copied!</>
+            : <><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="4" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M4 4V2.5A1.5 1.5 0 015.5 1H9.5A1.5 1.5 0 0111 2.5v4A1.5 1.5 0 019.5 8H8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>Copy link</>
+          }
+        </button>
+      </div>
+      <p className="mt-2 text-xs text-white/20">Share this link with potential clients. Only paid applications come through.</p>
+    </div>
+  );
+}
+
+/* ═══════════ FILTER TABS ═══════════ */
+function FilterTabs({ active, onChange, counts }) {
+  const tabs = [
+    { key: 'all',      label: 'All',      count: counts.all },
+    { key: 'pending',  label: 'Pending',  count: counts.pending },
+    { key: 'accepted', label: 'Accepted', count: counts.accepted },
+    { key: 'paid',     label: 'Paid',     count: counts.paid },
+    { key: 'rejected', label: 'Rejected', count: counts.rejected },
+  ];
+
+  return (
+    <div className="flex items-center gap-1 mb-5 overflow-x-auto">
+      {tabs.map(t => (
+        <button
+          key={t.key}
+          onClick={() => onChange(t.key)}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-150 ${
+            active === t.key
+              ? 'bg-accent/15 text-accent border border-accent/25'
+              : 'text-white/40 border border-transparent hover:text-white/60 hover:bg-white/[0.04]'
+          }`}
+        >
+          {t.label}
+          <span className={`rounded-full px-1.5 py-0.5 text-[10px] ${active === t.key ? 'bg-accent/20 text-accent' : 'bg-white/[0.08] text-white/30'}`}>
+            {t.count}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/* ═══════════ LEAD ROW ═══════════ */
+function LeadRow({ lead, onStatusChange, selected, onToggleSelect }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <tr className="lead-row cursor-pointer" onClick={() => setOpen(!open)}>
+        <td className="pl-5 pr-1 py-4 w-10" onClick={e => e.stopPropagation()}>
+          <label className="flex items-center justify-center cursor-pointer select-none" aria-label={`Select ${lead.name}`}>
+            <input
+              type="checkbox"
+              checked={selected}
+              onChange={() => onToggleSelect(lead.id)}
+              className="sr-only peer"
+            />
+            <span className="w-4 h-4 rounded border border-white/15 bg-white/[0.03] peer-checked:bg-accent peer-checked:border-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent/50 flex items-center justify-center transition-colors">
+              {selected && (
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              )}
+            </span>
+          </label>
+        </td>
+        <td className="px-5 py-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black flex-shrink-0"
+                 style={{ background: 'rgba(16,185,129,0.12)', color: '#10B981' }}>
+              {lead.name.split(' ').map(n => n[0]).join('').slice(0,2)}
             </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/40 text-sm hidden sm:block">{freelancer.email}</span>
-              <button className="btn-ghost" onClick={handleSignOut}>Sign out</button>
+            <div>
+              <p className="text-white/85 font-semibold text-sm">{lead.name}</p>
+              <p className="text-white/30 text-xs">{lead.email}</p>
             </div>
-          </header>
+          </div>
+        </td>
+        <td className="px-5 py-4 hidden md:table-cell">
+          <p className="text-white/55 text-xs">{lead.project}</p>
+        </td>
+        <td className="px-5 py-4 hidden lg:table-cell">
+          <p className="text-white/40 text-xs font-mono">{lead.budget}</p>
+        </td>
+        <td className="px-5 py-4 hidden sm:table-cell">
+          <p className="text-white/25 text-xs">{lead.submitted}</p>
+        </td>
+        <td className="px-5 py-4">
+          <span className={`${STATUS_CLASSES[lead.status]} text-[11px] font-semibold px-2.5 py-1 rounded-full`}>
+            {STATUS_LABELS[lead.status]}
+          </span>
+        </td>
+        <td className="px-5 py-4 text-right">
+          <svg className={`text-white/20 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+               width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+            <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+          </svg>
+        </td>
+      </tr>
 
-          <main className="relative z-10 max-w-2xl mx-auto px-4 py-10 animate-fade-up">
-
-            {/* Welcome */}
-            <div className="mb-8">
-              <div className="badge badge-live mb-3">
-                <span className="dot-live" />
-                Live
-              </div>
-              <h1 className="text-3xl font-black tracking-tight">Your intake is live</h1>
-              <p className="text-white/40 text-sm mt-1">Share your link — clients pay before they talk to you.</p>
-            </div>
-
-            {/* Link card */}
-            <div className="card mb-4">
-              <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Your DealGate link</p>
-              <div className="link-box mb-4">{link}</div>
-              <div className="flex gap-2">
-                <button className="btn-primary" onClick={copyLink}>Copy link</button>
-                <button className="btn-ghost" onClick={copyMessage}>Copy message</button>
-                <button className="btn-ghost" onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent('Before we talk — fill this out: ' + link)}`, '_blank')}>WhatsApp</button>
-              </div>
-            </div>
-
-            {/* Settings card */}
-            <div className="card mb-4">
-              <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-4">Your setup</p>
-              <div className="flex items-center justify-between mb-3 pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <span className="text-white/60 text-sm">Intake fee</span>
-                <span className="font-bold text-white">${freelancer.price}</span>
-              </div>
-              <div>
-                <span className="text-white/60 text-sm block mb-2">Questions</span>
-                <div className="flex flex-col gap-2">
-                  {(freelancer.questions || []).map((q, i) => (
-                    <div key={i} className="text-sm text-white/80 flex gap-2">
-                      <span style={{ color: '#10B981', fontWeight: 700 }}>{i + 1}.</span>
-                      {q}
-                    </div>
-                  ))}
+      {open && (
+        <tr>
+          <td colSpan="7" className="bg-white/[0.01]">
+            <div className="expand-row px-5 py-5 border-b border-white/5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-white/25 mb-1">Email</p>
+                  <p className="text-white/75 text-sm">{lead.email}</p>
+                </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-white/25 mb-1">Project type</p>
+                  <p className="text-white/75 text-sm">{lead.project}</p>
+                </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-white/25 mb-1">Budget range</p>
+                  <p className="text-white/75 text-sm font-mono">{lead.budget}</p>
+                </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-white/25 mb-1">Submitted</p>
+                  <p className="text-white/75 text-sm">{lead.submitted}</p>
                 </div>
               </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {lead.status === 'pending' && (
+                  <>
+                    <button
+                      onClick={e => { e.stopPropagation(); onStatusChange(lead.id, 'accepted'); }}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[36px] rounded-lg text-xs font-semibold bg-accent/15 text-accent border border-accent/25 hover:bg-accent/25 transition-colors"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      Accept
+                    </button>
+                    <button
+                      onClick={e => { e.stopPropagation(); onStatusChange(lead.id, 'rejected'); }}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[36px] rounded-lg text-xs font-semibold bg-white/[0.04] text-white/40 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white/60 transition-colors"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+                      Reject & refund
+                    </button>
+                  </>
+                )}
+                <a
+                  href={`mailto:${lead.email}`}
+                  onClick={e => e.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[36px] rounded-lg text-xs font-semibold bg-white/[0.04] text-white/40 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white/60 transition-colors"
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 3l5 4 5-4M1 3v7h10V3M1 3h10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  Email {lead.name.split(' ')[0]}
+                </a>
+              </div>
             </div>
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
 
-            {/* Coming soon */}
-            <div className="card" style={{ opacity: 0.5 }}>
-              <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-2">Payments</p>
-              <p className="text-white/40 text-sm">Client payments will appear here once Stripe is connected. Coming soon.</p>
-            </div>
+/* ═══════════ LEADS TABLE ═══════════ */
+function LeadsTable({ leads, onStatusChange }) {
+  const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
+  const [sortKey, setSortKey] = useState('submitted');
+  const [sortDir, setSortDir] = useState('desc');
+  const [selected, setSelected] = useState(() => new Set());
+  const headerCheckboxRef = React.useRef(null);
 
-          </main>
+  const toggleSelect = (id) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+  const clearSelection = () => setSelected(new Set());
+  const bulkApply = (status, ids) => {
+    (ids || [...selected]).forEach(id => onStatusChange(id, status));
+    clearSelection();
+  };
 
-          {toast && <div className="toast">✓ {toast}</div>}
-        </div>
-      );
+  const counts = {
+    all:      leads.length,
+    pending:  leads.filter(l => l.status === 'pending').length,
+    accepted: leads.filter(l => l.status === 'accepted').length,
+    paid:     leads.filter(l => l.status === 'paid').length,
+    rejected: leads.filter(l => l.status === 'rejected').length,
+  };
+
+  const q = search.trim().toLowerCase();
+  let filtered = filter === 'all' ? leads : leads.filter(l => l.status === filter);
+  if (q) filtered = filtered.filter(l =>
+    l.name.toLowerCase().includes(q) ||
+    l.email.toLowerCase().includes(q) ||
+    l.project.toLowerCase().includes(q) ||
+    l.budget.toLowerCase().includes(q)
+  );
+
+  // Sort
+  filtered = [...filtered].sort((a, b) => {
+    const av = a[sortKey] ?? '';
+    const bv = b[sortKey] ?? '';
+    if (av < bv) return sortDir === 'asc' ? -1 : 1;
+    if (av > bv) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  // Selection derived state (only count visible rows)
+  const visibleIds = filtered.map(l => l.id);
+  const visibleSelectedCount = visibleIds.filter(id => selected.has(id)).length;
+  const allVisibleSelected = filtered.length > 0 && visibleSelectedCount === filtered.length;
+  const someVisibleSelected = visibleSelectedCount > 0 && !allVisibleSelected;
+
+  React.useEffect(() => {
+    if (headerCheckboxRef.current) {
+      headerCheckboxRef.current.indeterminate = someVisibleSelected;
     }
+  }, [someVisibleSelected]);
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard />);
-  </script>
+  function toggleSort(k) {
+    if (sortKey === k) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+    else { setSortKey(k); setSortDir('asc'); }
+  }
+
+  const SortHead = ({ k, children, className = '' }) => (
+    <th className={`px-5 py-3 text-left text-[11px] text-white/30 hover:text-white/60 font-semibold uppercase tracking-widest cursor-pointer select-none transition-colors ${className}`}
+        onClick={() => toggleSort(k)}>
+      <span className="inline-flex items-center gap-1">
+        {children}
+        {sortKey === k && (
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className={sortDir === 'desc' ? 'rotate-180' : ''}>
+            <path d="M2 6l3-3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+      </span>
+    </th>
+  );
+
+  return (
+    <div className="fade-up" style={{ animationDelay: '120ms' }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <h2 className="text-base font-bold text-white/80">Submissions</h2>
+
+        {/* Search */}
+        <div className="relative sm:w-64">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
+            <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+          <input
+            type="search"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search name, email, project…"
+            className="dg-input w-full rounded-lg pl-9 pr-3 py-2 text-xs"
+          />
+        </div>
+      </div>
+
+      <FilterTabs active={filter} onChange={setFilter} counts={counts} />
+
+      {/* Bulk action bar */}
+      {visibleSelectedCount > 0 && (
+        <div className="mb-3 bg-accent/[0.08] border border-accent/25 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3 flex-wrap"
+             style={{ animation: 'fadeIn 0.2s ease' }}>
+          <div className="flex items-center gap-2 text-sm">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs font-black">{visibleSelectedCount}</span>
+            <span className="text-white/75 font-semibold">selected</span>
+            {selected.size > visibleSelectedCount && (
+              <span className="text-white/35 text-xs">({selected.size - visibleSelectedCount} hidden by filter)</span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => bulkApply('accepted', visibleIds.filter(id => selected.has(id)))}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[32px] rounded-lg text-xs font-semibold bg-accent text-white hover:bg-accent-dark transition-colors"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Accept all
+            </button>
+            <button
+              onClick={() => bulkApply('rejected', visibleIds.filter(id => selected.has(id)))}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[32px] rounded-lg text-xs font-semibold bg-white/[0.06] text-white/60 border border-white/[0.1] hover:bg-white/[0.1] hover:text-white transition-colors"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+              Reject &amp; refund all
+            </button>
+            <button onClick={clearSelection} className="text-xs text-white/40 hover:text-white/70 px-2 py-1 transition-colors">
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl overflow-hidden">
+        {filtered.length === 0 ? (
+          <div className="py-16 text-center">
+            <p className="text-white/25 text-sm mb-1">No submissions match your filter.</p>
+            {search && <button onClick={() => setSearch('')} className="text-xs text-accent/70 hover:text-accent">Clear search</button>}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[580px]">
+              <thead>
+                <tr className="border-b border-white/5">
+                  <th className="pl-5 pr-1 py-3 w-10">
+                    <label className="flex items-center justify-center cursor-pointer select-none" aria-label="Select all visible">
+                      <input
+                        ref={headerCheckboxRef}
+                        type="checkbox"
+                        checked={allVisibleSelected}
+                        onChange={e => {
+                          if (e.target.checked) setSelected(new Set(visibleIds));
+                          else clearSelection();
+                        }}
+                        className="sr-only peer"
+                      />
+                      <span className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${allVisibleSelected || someVisibleSelected ? 'bg-accent border-accent' : 'border-white/15 bg-white/[0.03]'} peer-focus-visible:ring-2 peer-focus-visible:ring-accent/50`}>
+                        {allVisibleSelected ? (
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        ) : someVisibleSelected ? (
+                          <span className="block w-2 h-0.5 bg-white rounded" />
+                        ) : null}
+                      </span>
+                    </label>
+                  </th>
+                  <SortHead k="name">Lead</SortHead>
+                  <SortHead k="project" className="hidden md:table-cell">Project</SortHead>
+                  <SortHead k="budget"  className="hidden lg:table-cell">Budget</SortHead>
+                  <SortHead k="submitted" className="hidden sm:table-cell">When</SortHead>
+                  <SortHead k="status">Status</SortHead>
+                  <th className="px-5 py-3" />
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map(lead => (
+                  <LeadRow
+                    key={lead.id}
+                    lead={lead}
+                    onStatusChange={onStatusChange}
+                    selected={selected.has(lead.id)}
+                    onToggleSelect={toggleSelect}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <p className="mt-3 text-xs text-white/25 font-mono text-right">
+        Showing {filtered.length} of {leads.length}
+      </p>
+    </div>
+  );
+}
+
+/* ═══════════ SETTINGS PANEL ═══════════ */
+function SettingsPanel() {
+  const [price, setPrice] = useState(String(MOCK_USER.price));
+  const [saved, setSaved] = useState(false);
+
+  function save() {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
+
+  return (
+    <div className="fade-up max-w-xl">
+      <h2 className="text-base font-bold text-white/80 mb-6">Settings</h2>
+
+      <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-6 flex flex-col gap-6">
+        <div>
+          <label className="block text-xs text-white/40 font-medium mb-2 uppercase tracking-widest">Intake fee ({MOCK_USER.currency})</label>
+          <div className="flex items-center gap-3">
+            <span className="text-white/40 font-mono">{MOCK_USER.currency}</span>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value={price}
+              onChange={e => setPrice(e.target.value)}
+              className="dg-input rounded-xl px-4 py-3 w-32 font-mono text-lg font-bold text-white"
+            />
+          </div>
+          <p className="mt-2 text-xs text-white/20">This is what every lead pays to submit their application.</p>
+        </div>
+
+        <div>
+          <label className="block text-xs text-white/40 font-medium mb-2 uppercase tracking-widest">Your intake URL</label>
+          <div className="link-display rounded-xl px-4 py-3 text-accent/70 text-sm truncate">
+            https://dealgate.app/c/{MOCK_USER.slug}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-xs text-white/40 font-medium mb-2 uppercase tracking-widest">Display name</label>
+          <input
+            type="text"
+            defaultValue={MOCK_USER.name}
+            className="dg-input rounded-xl px-4 py-3 w-full text-sm font-medium"
+          />
+        </div>
+
+        <button
+          onClick={save}
+          className="self-start px-8 py-3 rounded-xl font-bold text-sm text-white transition-all duration-200"
+          style={{ background: 'linear-gradient(135deg, #059669, #10B981)' }}
+        >
+          {saved ? '✓ Saved!' : 'Save changes'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════ SIDEBAR ═══════════ */
+function Sidebar({ activePage, onChange }) {
+  const iconDashboard = (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="3" width="7" height="9"  rx="1.5" stroke="currentColor" strokeWidth="1.8"/>
+      <rect x="14" y="3" width="7" height="5"  rx="1.5" stroke="currentColor" strokeWidth="1.8"/>
+      <rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.8"/>
+      <rect x="3" y="16" width="7" height="5"  rx="1.5" stroke="currentColor" strokeWidth="1.8"/>
+    </svg>
+  );
+  const iconSettings = (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8"/>
+      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+  const navItems = [
+    { key: 'dashboard', icon: iconDashboard, label: 'Dashboard' },
+    { key: 'settings',  icon: iconSettings,  label: 'Settings'  },
+  ];
+
+  return (
+    <aside className="w-56 flex-shrink-0 border-r border-white/5 h-screen sticky top-0 flex flex-col pt-6 pb-6 px-4">
+      {/* Logo */}
+      <div className="flex items-center gap-2 mb-10 px-2">
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#10B981' }}>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <rect x="3" y="3" width="10" height="10" rx="1" stroke="white" strokeWidth="1.8"/>
+            <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <span className="font-black text-white tracking-tight" style={{ letterSpacing: '-0.02em' }}>
+          Deal<span className="text-accent">Gate</span>
+        </span>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex flex-col gap-1 flex-1">
+        {navItems.map(item => (
+          <button
+            key={item.key}
+            onClick={() => onChange(item.key)}
+            className={`nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-left ${activePage === item.key ? 'active' : 'text-white/50'}`}
+          >
+            {item.icon}
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* User */}
+      <div className="flex items-center gap-3 px-2 pt-4 border-t border-white/5">
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black flex-shrink-0"
+             style={{ background: 'rgba(16,185,129,0.15)', color: '#10B981' }}>
+          {MOCK_USER.name.split(' ').map(n => n[0]).join('').slice(0,2)}
+        </div>
+        <div className="overflow-hidden">
+          <p className="text-xs font-semibold text-white/70 truncate">{MOCK_USER.name}</p>
+          <a href="login.html" className="text-[10px] text-white/25 hover:text-accent/60 transition-colors">Sign out</a>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+/* ═══════════ MAIN APP ═══════════ */
+function App() {
+  const [page, setPage] = useState('dashboard');
+  const [leads, setLeads] = useState(MOCK_LEADS);
+
+  function handleStatusChange(id, newStatus) {
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, status: newStatus } : l));
+  }
+
+  return (
+    <div className="min-h-screen bg-black text-white flex">
+      {/* Sidebar — hidden on mobile */}
+      <div className="hidden md:flex">
+        <Sidebar activePage={page} onChange={setPage} />
+      </div>
+
+      {/* Main content */}
+      <main className="flex-1 overflow-auto">
+        {/* Mobile top bar */}
+        <div className="md:hidden sticky top-0 z-30 flex items-center justify-between gap-2 px-4 py-3.5 border-b border-white/5 bg-black/80 backdrop-blur-lg">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-7 h-7 flex-shrink-0 rounded-lg flex items-center justify-center" style={{ background: '#10B981' }}>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="3" width="10" height="10" rx="1" stroke="white" strokeWidth="1.8"/>
+                <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <span className="font-black text-white truncate" style={{ letterSpacing: '-0.02em' }}>Deal<span className="text-accent">Gate</span></span>
+          </div>
+          <div className="flex items-center gap-0.5 flex-shrink-0">
+            <button onClick={() => setPage('dashboard')} className={`text-xs font-semibold px-2.5 py-2 rounded-lg transition-colors ${page === 'dashboard' ? 'bg-accent/15 text-accent' : 'text-white/50 hover:text-white/80'}`}>Inbox</button>
+            <button onClick={() => setPage('settings')}  className={`text-xs font-semibold px-2.5 py-2 rounded-lg transition-colors ${page === 'settings'  ? 'bg-accent/15 text-accent' : 'text-white/50 hover:text-white/80'}`}>Settings</button>
+            <a href="login.html" className="ml-0.5 p-2 rounded-lg text-white/40 hover:text-accent hover:bg-white/5 transition-colors" title="Sign out">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div className="px-6 md:px-10 py-8 max-w-5xl">
+          {page === 'dashboard' && (
+            <>
+              <div className="flex items-center justify-between mb-8 fade-up">
+                <div>
+                  <h1 className="text-2xl font-black text-white" style={{ letterSpacing: '-0.02em' }}>Good morning, {MOCK_USER.name.split(' ')[0]}.</h1>
+                  <p className="text-white/35 text-sm mt-1">Here's what's waiting for you.</p>
+                </div>
+                <a href="client.html" target="_blank"
+                   className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-accent border border-accent/25 hover:bg-accent/10 transition-colors">
+                  Preview intake →
+                </a>
+              </div>
+
+              <StatsRow leads={leads} />
+              <CopyLink slug={MOCK_USER.slug} />
+              <LeadsTable leads={leads} onStatusChange={handleStatusChange} />
+            </>
+          )}
+
+          {page === 'settings' && <SettingsPanel />}
+        </div>
+
+        <footer className="border-t border-white/5 py-8 px-6 text-center mt-12">
+          <p className="text-xs text-white/15">
+            © 2026 DealGate · <a href="privacy.html" className="hover:text-white/30 transition-colors">Privacy</a> · <a href="terms.html" className="hover:text-white/30 transition-colors">Terms</a>
+          </p>
+        </footer>
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>

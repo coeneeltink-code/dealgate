@@ -1,223 +1,252 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0A0B10" />
-  <title>DealGate — Sign in</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310B981'/%3E%3Cpath d='M10 16l4 4 8-8' stroke='%23062017' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in — DealGate</title>
 
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: '#10B981',
+            'accent-dark': '#059669',
+            'accent-bright': '#34D399',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- React + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      background: #0A0B10;
-      color: #E6E9F0;
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      margin: 0;
-      min-height: 100vh;
-      line-height: 1.55;
-    }
-    ::selection { background: #10B981; color: #06241A; }
-
-    .h-display { font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; }
-    .h-serif-italic { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
-
-    .text-gradient-brand {
-      background: linear-gradient(180deg, #34D399, #10B981 60%, #059669);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-
-    .aurora {
-      background:
-        radial-gradient(60% 45% at 50% 0%, rgba(16,185,129,0.14) 0%, rgba(16,185,129,0) 60%),
-        radial-gradient(35% 35% at 15% 50%, rgba(52,211,153,0.06) 0%, rgba(52,211,153,0) 60%),
-        radial-gradient(35% 35% at 85% 50%, rgba(5,150,105,0.06) 0%, rgba(5,150,105,0) 60%);
-    }
-    .dots {
-      background-image: radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px);
-      background-size: 24px 24px;
-      mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, #000 30%, transparent 80%);
-      -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, #000 30%, transparent 80%);
-    }
+    body { margin: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
 
     .dg-input {
-      background: #0E1017;
-      border: 1px solid #1E2230;
-      color: #E6E9F0;
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 15px;
-      width: 100%;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-      font-family: 'Inter', sans-serif;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .dg-input::placeholder { color: #6B7387; }
-    .dg-input:focus {
-      border-color: rgba(16,185,129,0.55);
-      background: #11141D;
-      box-shadow: 0 0 0 4px rgba(16,185,129,0.1);
+    .dg-input:focus { outline: none; border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
+    .dg-input::placeholder { color: rgba(255,255,255,0.3); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.4s ease both; }
+    .fade-up-2 { animation: fadeUp 0.4s 0.08s ease both; }
+    .fade-up-3 { animation: fadeUp 0.4s 0.16s ease both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
 
-    .btn-brand {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      background: linear-gradient(180deg, #1FD19B 0%, #10B981 100%);
-      color: #06241A;
-      font-weight: 600;
-      font-size: 15px;
-      border: none; cursor: pointer;
-      border-radius: 12px;
-      padding: 14px 22px;
-      width: 100%;
-      box-shadow:
-        0 1px 0 rgba(255,255,255,0.25) inset,
-        0 0 0 1px rgba(16,185,129,0.35),
-        0 10px 28px -10px rgba(16,185,129,0.6);
-      transition: transform 0.15s ease, box-shadow 0.2s ease;
-      font-family: 'Inter', sans-serif;
-    }
-    .btn-brand:hover {
-      transform: translateY(-1px);
-      box-shadow:
-        0 1px 0 rgba(255,255,255,0.3) inset,
-        0 0 0 1px rgba(16,185,129,0.5),
-        0 16px 36px -12px rgba(16,185,129,0.75);
-    }
-    .btn-brand:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    .dg-error {
-      color: #F87171;
-      font-size: 13px;
-      background: rgba(248,113,113,0.08);
-      border: 1px solid rgba(248,113,113,0.25);
-      padding: 10px 14px;
-      border-radius: 10px;
-      text-align: left;
-    }
-
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fade-up { animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
-
-    button:focus-visible, a:focus-visible, input:focus-visible {
-      outline: 2px solid rgba(16,185,129,0.6);
-      outline-offset: 3px;
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid rgba(16,185,129,0.7);
+      outline-offset: 2px;
+      border-radius: 8px;
     }
   </style>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2310B981'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-weight='900' font-size='18' fill='white'>D</text></svg>" />
 </head>
 <body>
-  <div id="root"></div>
+<div id="root"></div>
 
-  <script>
-    var SUPABASE_URL = 'https://pokgkdxuxwipoawviecs.supabase.co';
-    var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBva2drZHh1eHdpcG9hd3ZpZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NTQyODQsImV4cCI6MjA5MjIzMDI4NH0.E-wkO-cUsG4yTKtjaCMiyNFOXEaoWnFvElod4-n9lwA';
-    var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  </script>
+<script type="text/babel">
+const { useState } = React;
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+function App() {
+  const [mode, setMode] = useState('login'); // 'login' | 'magic' | 'sent'
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-    function LoginPage() {
-      const [email, setEmail] = useState('');
-      const [password, setPassword] = useState('');
-      const [loading, setLoading] = useState(false);
-      const [error, setError] = useState('');
-      const [checking, setChecking] = useState(true);
+  function handleLogin(e) {
+    e.preventDefault();
+    if (!email || !password) { setError('Please fill in all fields.'); return; }
+    setLoading(true);
+    setError('');
+    // In production: Supabase auth call here (db.auth.signInWithPassword)
+    setTimeout(() => {
+      window.location.href = 'dashboard.html';
+    }, 1000);
+  }
 
-      useEffect(() => {
-        db.auth.getSession().then(({ data: { session } }) => {
-          if (session) window.location.href = '/dashboard.html';
-          else setChecking(false);
-        });
-      }, []);
+  function handleMagicLink(e) {
+    e.preventDefault();
+    if (!email) { setError('Enter your email to continue.'); return; }
+    setLoading(true);
+    setError('');
+    // In production: db.auth.signInWithOtp({ email })
+    setTimeout(() => {
+      setLoading(false);
+      setMode('sent');
+    }, 1000);
+  }
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!email || !password) return;
-        setLoading(true);
-        setError('');
-        const { data, error: signInError } = await db.auth.signInWithPassword({ email, password });
-        if (signInError) {
-          setError(signInError.message === 'Invalid login credentials'
-            ? 'Wrong email or password.'
-            : signInError.message);
-          setLoading(false);
-          return;
-        }
-        window.location.href = '/dashboard.html';
-      };
+  return (
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-6">
 
-      if (checking) return null;
+      {/* Ambient glow */}
+      <div className="fixed inset-0 pointer-events-none"
+           style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(16,185,129,0.06) 0%, transparent 60%)' }} />
 
-      return (
-        <div className="relative min-h-screen flex flex-col overflow-hidden">
-          <div className="absolute inset-0 aurora pointer-events-none" />
-          <div className="absolute inset-0 dots pointer-events-none" />
+      <div className="relative z-10 w-full max-w-sm">
 
-          <header className="relative z-10 px-5 sm:px-6 py-5">
-            <a href="/" className="inline-flex items-center gap-2.5 no-underline">
-              <div className="w-8 h-8 rounded-lg grid place-items-center" style={{ background: 'linear-gradient(135deg,#34D399,#059669)' }}>
-                <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#052619" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        {/* Logo */}
+        <div className="text-center mb-10 fade-up">
+          <a href="index.html" className="inline-flex items-center gap-2">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-base" style={{ background: '#10B981', color: '#fff' }}>D</div>
+            <span className="font-black text-2xl text-white" style={{ letterSpacing: '-0.03em' }}>
+              Deal<span className="text-accent">Gate</span>
+            </span>
+          </a>
+        </div>
+
+        {/* Card */}
+        <div className="bg-[#0d0d0d] border border-white/[0.07] rounded-2xl p-8 fade-up-2">
+
+          {mode === 'sent' ? (
+            <div className="text-center py-4">
+              <div className="mx-auto mb-5 w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)' }}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" className="text-accent">
+                  <path d="M3 6l9 7 9-7M3 6v12a1 1 0 001 1h16a1 1 0 001-1V6M3 6h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </div>
-              <span className="font-semibold text-[15px] tracking-tight" style={{ color: '#E6E9F0' }}>DealGate</span>
-            </a>
-          </header>
+              <h2 className="text-xl font-black text-white mb-2" style={{ letterSpacing: '-0.02em' }}>Check your inbox</h2>
+              <p className="text-white/40 text-sm leading-relaxed mb-6">
+                We sent a magic link to <strong className="text-white/60">{email}</strong>. Click it to sign in instantly.
+              </p>
+              <button onClick={() => { setMode('login'); setEmail(''); }} className="text-sm text-accent/70 hover:text-accent transition-colors">
+                ← Try a different email
+              </button>
+            </div>
+          ) : (
+            <>
+              <h2 className="text-xl font-black text-white mb-1" style={{ letterSpacing: '-0.02em' }}>
+                {mode === 'login' ? 'Welcome back' : 'Sign in with email'}
+              </h2>
+              <p className="text-white/35 text-sm mb-7">
+                {mode === 'login' ? 'Sign in to your DealGate dashboard.' : 'We\'ll send a one-click magic link.'}
+              </p>
 
-          <main className="relative z-10 flex-1 flex items-center justify-center px-5 py-8">
-            <div className="w-full max-w-sm animate-fade-up">
-              <div className="text-center mb-8">
-                <h1 className="h-display text-[40px] sm:text-[44px] text-white mb-3">
-                  Welcome <span className="h-serif-italic text-gradient-brand">back</span>
-                </h1>
-                <p className="text-[14px]" style={{ color: '#8A93A6' }}>Sign in to your DealGate account</p>
-              </div>
+              {error && (
+                <div className="bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3 mb-5 flex items-start gap-2.5">
+                  <svg className="flex-shrink-0 mt-0.5 text-accent-bright" width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M8 5v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <circle cx="8" cy="11.5" r="0.8" fill="currentColor"/>
+                  </svg>
+                  <p className="text-white/80 text-xs font-medium">{error}</p>
+                </div>
+              )}
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <form onSubmit={mode === 'login' ? handleLogin : handleMagicLink} className="flex flex-col gap-4">
                 <div>
-                  <label className="block mb-1.5 text-[11px] font-semibold uppercase tracking-widest" style={{ color: '#6B7387' }}>Email</label>
-                  <input className="dg-input" type="email" placeholder="you@example.com" value={email}
-                    onChange={e => setEmail(e.target.value)} autoFocus required autoComplete="email" />
+                  <label htmlFor="email" className="block text-xs text-white/35 font-medium mb-2">Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    className="dg-input w-full rounded-xl px-4 py-3 text-sm font-medium min-h-[48px]"
+                    placeholder="you@company.com"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="email"
+                    autoFocus
+                  />
                 </div>
-                <div>
-                  <label className="block mb-1.5 text-[11px] font-semibold uppercase tracking-widest" style={{ color: '#6B7387' }}>Password</label>
-                  <input className="dg-input" type="password" placeholder="Your password" value={password}
-                    onChange={e => setPassword(e.target.value)} required autoComplete="current-password" />
-                </div>
-                {error && <div className="dg-error">{error}</div>}
-                <button type="submit" className="btn-brand mt-1" disabled={loading || !email || !password}>
-                  {loading ? 'Signing in…' : 'Sign in'}
-                  {!loading && <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M3 7h8m-3-3l3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+
+                {mode === 'login' && (
+                  <div>
+                    <label htmlFor="password" className="block text-xs text-white/35 font-medium mb-2">Password</label>
+                    <input
+                      id="password"
+                      type="password"
+                      className="dg-input w-full rounded-xl px-4 py-3 text-sm font-medium min-h-[48px]"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      autoComplete="current-password"
+                    />
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full min-h-[48px] py-4 rounded-xl font-black text-sm text-white transition-all duration-200 disabled:opacity-50 mt-1"
+                  style={{ background: 'linear-gradient(135deg, #059669, #10B981)' }}
+                >
+                  {loading
+                    ? <span className="flex items-center justify-center gap-2">
+                        <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.2)" strokeWidth="3"/>
+                          <path d="M12 2a10 10 0 0110 10" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+                        </svg>
+                        {mode === 'login' ? 'Signing in...' : 'Sending link...'}
+                      </span>
+                    : mode === 'login' ? 'Sign in →' : 'Send magic link →'
+                  }
                 </button>
               </form>
 
-              <p className="text-center text-[13.5px] mt-6" style={{ color: '#6B7387' }}>
-                No account yet?{' '}
-                <a href="/onboarding.html" className="underline" style={{ color: '#34D399' }}>Get started free →</a>
-              </p>
-            </div>
-          </main>
-
-          <footer className="relative z-10 px-5 sm:px-6 py-6 text-[11px] text-center" style={{ color: '#6B7387' }}>
-            © 2026 DealGate ·{' '}
-            <a href="/privacy.html" className="hover:underline">Privacy</a>{' · '}
-            <a href="/terms.html" className="hover:underline">Terms</a>
-          </footer>
+              {/* Toggle mode */}
+              <div className="mt-5 pt-5 border-t border-white/5 text-center">
+                {mode === 'login' ? (
+                  <button onClick={() => { setMode('magic'); setError(''); }} className="text-xs text-white/30 hover:text-accent/70 transition-colors">
+                    Forgot password? Use magic link instead →
+                  </button>
+                ) : (
+                  <button onClick={() => { setMode('login'); setError(''); }} className="text-xs text-white/30 hover:text-accent/70 transition-colors">
+                    ← Back to password sign in
+                  </button>
+                )}
+              </div>
+            </>
+          )}
         </div>
-      );
-    }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<LoginPage />);
-  </script>
+        {/* Sign up link */}
+        <p className="fade-up-3 text-center mt-6 text-xs text-white/20">
+          Don't have an account?{' '}
+          <a href="onboarding.html" className="text-accent/60 hover:text-accent transition-colors font-medium">
+            Start for free →
+          </a>
+        </p>
+      </div>
+
+      {/* Footer */}
+      <footer className="absolute bottom-6 text-center">
+        <p className="text-xs text-white/15">
+          © 2026 DealGate · <a href="privacy.html" className="hover:text-white/30 transition-colors">Privacy</a> · <a href="terms.html" className="hover:text-white/30 transition-colors">Terms</a>
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>

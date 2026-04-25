@@ -1,407 +1,692 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DealGate — Book a call</title>
+  <title>Book a consultation — DealGate</title>
+  <meta name="description" content="Answer a few questions and secure your spot. Serious inquiries only." />
+  <meta name="robots" content="noindex, nofollow" />
 
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: '#10B981',
+            'accent-dark': '#059669',
+            'accent-bright': '#34D399',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            serif: ['Instrument Serif', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <!-- React + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
   <style>
-    * { box-sizing: border-box; }
-    body {
-      background: #000;
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      margin: 0;
-      min-height: 100vh;
-    }
-    .grid-pattern {
-      background-image:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-    .gradient-border {
-      position: relative;
-      background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
-                  linear-gradient(135deg, rgba(255,59,59,0.4), rgba(255,59,59,0.05) 40%, rgba(255,255,255,0.05)) border-box;
-      border: 1px solid transparent;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    /* Glow */
+    .glow-accent { box-shadow: 0 0 40px rgba(16,185,129,0.25), 0 0 80px rgba(16,185,129,0.1); }
+    .glow-accent-sm { box-shadow: 0 0 20px rgba(16,185,129,0.2); }
+
+    /* Progress bar */
+    .progress-fill { transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+    /* Input focus */
     .dg-input {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.1);
       color: #fff;
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 15px;
-      font-family: 'Inter', sans-serif;
-      width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .dg-input:focus {
       outline: none;
-      transition: border-color 0.2s, background 0.2s;
-      resize: vertical;
+      border-color: #10B981;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
     }
     .dg-input::placeholder { color: rgba(255,255,255,0.3); }
-    .dg-input:focus {
-      border-color: rgba(255,59,59,0.5);
-      background: rgba(255,255,255,0.06);
-    }
-    .btn-primary {
-      background: #FF3B3B;
-      color: #fff;
-      font-weight: 800;
-      font-size: 16px;
-      border-radius: 10px;
-      padding: 15px 28px;
-      border: none;
+
+    /* Radio option cards */
+    .option-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
       cursor: pointer;
-      width: 100%;
-      transition: background 0.2s, transform 0.15s;
-      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, background 0.2s;
     }
-    .btn-primary:hover { background: #CC2E2E; transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-    .dg-error { color: #FF3B3B; font-size: 13px; font-weight: 600; margin-top: 8px; text-align: center; }
+    .option-card:hover { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.05); }
+    .option-card.selected {
+      border-color: #10B981;
+      background: rgba(16,185,129,0.08);
+    }
+    .option-card.selected .option-dot { background: #10B981; border-color: #10B981; }
+    .option-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      flex-shrink: 0; transition: background 0.2s, border-color 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .option-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: 0; transition: opacity 0.2s; }
+    .option-card.selected .option-dot::after { opacity: 1; }
+
+    /* Checkout card */
+    .checkout-card {
+      background: rgba(16,185,129,0.06);
+      border: 1px solid rgba(16,185,129,0.2);
+    }
+
+    /* Stripe badge */
+    .stripe-badge {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Fade-in animation */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .animate-fade-up { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
-    @keyframes pulseRed {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255,59,59,0.5), 0 10px 40px -10px rgba(255,59,59,0.5); }
-      50%       { box-shadow: 0 0 0 14px rgba(255,59,59,0), 0 10px 40px -10px rgba(255,59,59,0.3); }
+    .fade-up { animation: fadeUp 0.4s ease both; }
+
+    /* Step transitions */
+    .step-enter { animation: fadeUp 0.35s ease both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
-    .animate-pulse-red { animation: pulseRed 2.5s infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .spinner {
-      width: 20px; height: 20px;
-      border: 2px solid rgba(255,255,255,0.2);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: inline-block;
+
+    /* Focus ring — accessibility + premium feel */
+    .focus-ring:focus { outline: none; }
+    .focus-ring:focus-visible {
+      outline: 2px solid rgba(16,185,129,0.7);
+      outline-offset: 2px;
     }
-    .step-circle {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: rgba(255,59,59,0.1);
-      border: 1px solid rgba(255,59,59,0.3);
-      color: #FF3B3B;
-      font-weight: 800;
-      font-size: 13px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid rgba(16,185,129,0.7);
+      outline-offset: 2px;
     }
-    .lock-icon { font-size: 18px; }
   </style>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2310B981'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-weight='900' font-size='18' fill='white'>D</text></svg>" />
 </head>
 <body>
-  <div id="root"></div>
+<div id="root"></div>
 
-  <script>
-    var SUPABASE_URL = 'https://pokgkdxuxwipoawviecs.supabase.co';
-    var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBva2drZHh1eHdpcG9hd3ZpZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NTQyODQsImV4cCI6MjA5MjIzMDI4NH0.E-wkO-cUsG4yTKtjaCMiyNFOXEaoWnFvElod4-n9lwA';
-    var db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  </script>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+/* ══════════════════════════════════════
+   CONFIGURATION — freelancer fills this
+   (in production this comes from the URL slug / DB)
+   ══════════════════════════════════════ */
+const FREELANCER = {
+  name: 'Alex van der Berg',
+  role: 'Brand Identity Designer',
+  avatar: null, // URL or null for initials
+  price: 49,    // intake fee in EUR
+  currency: '€',
+  paymentRationale: 'This covers the preparation time I invest before every first conversation.',
+  refundPolicy: 'If we\'re not a fit, you get a full refund within 24 hours — no questions asked.',
+  questions: [
+    {
+      id: 'project_type',
+      label: 'What kind of project do you need help with?',
+      type: 'radio',
+      required: true,
+      options: [
+        'Brand identity / logo',
+        'Website design',
+        'Marketing materials',
+        'Full brand strategy',
+        'Something else',
+      ],
+    },
+    {
+      id: 'budget',
+      label: 'What\'s your budget range for this project?',
+      type: 'radio',
+      required: true,
+      options: [
+        'Under €1,000',
+        '€1,000 – €3,000',
+        '€3,000 – €8,000',
+        '€8,000+',
+        'Not sure yet',
+      ],
+    },
+    {
+      id: 'timeline',
+      label: 'When do you need this done?',
+      type: 'radio',
+      required: true,
+      options: [
+        'ASAP (within 2 weeks)',
+        '1–2 months',
+        '3–6 months',
+        'No hard deadline',
+      ],
+    },
+    {
+      id: 'description',
+      label: 'Briefly describe what you\'re trying to achieve.',
+      type: 'textarea',
+      required: true,
+      placeholder: 'Tell me about your project, your goals, and any context that would help me understand your needs...',
+    },
+    {
+      id: 'name',
+      label: 'Your name',
+      type: 'text',
+      required: true,
+      placeholder: 'First and last name',
+    },
+    {
+      id: 'email',
+      label: 'Your email address',
+      type: 'email',
+      required: true,
+      placeholder: 'you@company.com',
+    },
+    {
+      id: 'company',
+      label: 'Company or website (optional)',
+      type: 'text',
+      required: false,
+      placeholder: 'yourcompany.com',
+    },
+  ],
+};
 
-    function ClientPage() {
-      // Get username from URL path: /john → "john"
-      const username = window.location.pathname.replace(/^\//, '').split('/')[0];
+/* ══════════════════════════════════════
+   HEADER — freelancer identity
+   ══════════════════════════════════════ */
+function FreelancerHeader() {
+  const initials = FREELANCER.name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
 
-      const [freelancer, setFreelancer] = useState(null);
-      const [loading, setLoading] = useState(true);
-      const [notFound, setNotFound] = useState(false);
+  return (
+    <header className="pb-8 text-center lg:text-left fade-up">
+      {/* Avatar */}
+      <div className="mx-auto lg:mx-0 mb-5 lg:mb-6 w-20 h-20 lg:w-24 lg:h-24 rounded-2xl flex items-center justify-center font-black text-2xl lg:text-3xl glow-accent-sm"
+           style={{ background: 'linear-gradient(135deg, #059669, #10B981)', color: '#fff', letterSpacing: '-0.02em' }}>
+        {FREELANCER.avatar
+          ? <img src={FREELANCER.avatar} alt={FREELANCER.name} className="w-full h-full object-cover rounded-2xl" />
+          : initials}
+      </div>
 
-      // Form state
-      const [clientName, setClientName] = useState('');
-      const [clientEmail, setClientEmail] = useState('');
-      const [answers, setAnswers] = useState([]);
-      const [step, setStep] = useState('form'); // 'form' | 'submitted'
-      const [submitting, setSubmitting] = useState(false);
-      const [error, setError] = useState('');
+      {/* Name + role */}
+      <h1 className="text-2xl lg:text-3xl font-black text-white mb-1" style={{ letterSpacing: '-0.02em' }}>
+        {FREELANCER.name}
+      </h1>
+      <p className="text-white/50 text-sm lg:text-base font-medium">{FREELANCER.role}</p>
 
-      useEffect(() => {
-        if (!username) { setNotFound(true); setLoading(false); return; }
-        db.from('freelancers')
-          .select('*')
-          .eq('username', username)
-          .maybeSingle()
-          .then(({ data, error }) => {
-            if (error || !data) { setNotFound(true); }
-            else {
-              setFreelancer(data);
-              setAnswers(new Array(data.questions?.length || 0).fill(''));
-            }
-            setLoading(false);
-          });
-      }, []);
+      {/* DealGate watermark */}
+      <div className="mt-6 flex items-center justify-center lg:justify-start gap-1.5">
+        <div className="w-1 h-1 rounded-full bg-accent/60" />
+        <p className="text-xs text-white/25 font-medium">Powered by <span className="text-white/40">DealGate</span></p>
+        <div className="w-1 h-1 rounded-full bg-accent/60" />
+      </div>
+    </header>
+  );
+}
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!clientName.trim() || !clientEmail.trim()) return;
-        const allAnswered = answers.every(a => a.trim().length > 0);
-        if (!allAnswered) { setError('Please answer all questions.'); return; }
-        setError('');
-        setSubmitting(true);
+/* ══════════════════════════════════════
+   PROGRESS BAR
+   ══════════════════════════════════════ */
+function ProgressBar({ current, total }) {
+  const pct = Math.round((current / total) * 100);
+  return (
+    <div className="w-full h-0.5 bg-white/5 rounded-full overflow-hidden mb-10">
+      <div className="progress-fill h-full rounded-full bg-accent" style={{ width: `${pct}%` }} />
+    </div>
+  );
+}
 
-        try {
-          const response = await fetch(
-            `${SUPABASE_URL}/functions/v1/create-checkout-session`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${SUPABASE_ANON}`,
-                'apikey': SUPABASE_ANON,
-              },
-              body: JSON.stringify({
-                freelancer_username: username,
-                client_email: clientEmail.trim(),
-                client_name: clientName.trim(),
-                answers: answers,
-              }),
-            }
-          );
+/* ══════════════════════════════════════
+   SINGLE QUESTION STEP
+   ══════════════════════════════════════ */
+function QuestionStep({ question, value, onChange, onNext, onBack, stepIndex, totalSteps }) {
+  const canContinue = !question.required || (value !== '' && value !== undefined && value !== null);
+  const inputRef = React.useRef(null);
 
-          if (!response.ok) {
-            const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.error || `Payment initialization failed (${response.status})`);
-          }
-
-          const data = await response.json();
-          if (!data.url) throw new Error('No checkout URL returned.');
-
-          // Redirect to Stripe Checkout — page unloads here
-          window.location.href = data.url;
-        } catch (err) {
-          console.error('Checkout error:', err);
-          setError(err.message || 'Something went wrong. Please try again.');
-          setSubmitting(false);
-        }
-      };
-
-      if (loading) return (
-        <div className="flex items-center justify-center min-h-screen">
-          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14 }}>Loading…</div>
-        </div>
-      );
-
-      if (notFound) return (
-        <div className="relative min-h-screen flex flex-col">
-          <div className="absolute inset-0 grid-pattern" style={{ opacity: 0.3, maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)' }} />
-          <header className="relative z-10 px-6 py-5">
-            <a href="/" className="flex items-center gap-2 no-underline w-fit">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#FF3B3B' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 3h10v10H3z" stroke="white" strokeWidth="1.8"/>
-                  <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <span className="text-white font-black text-xl tracking-tight">Deal<span style={{ color: '#FF3B3B' }}>Gate</span></span>
-            </a>
-          </header>
-          <main className="relative z-10 flex-1 flex items-center justify-center px-4 text-center">
-            <div>
-              <div className="text-6xl mb-6">🔍</div>
-              <h1 className="text-3xl font-black mb-3">Page not found</h1>
-              <p className="text-white/50 mb-8">This DealGate link doesn't exist or has been removed.</p>
-              <a href="/" className="inline-block bg-white/5 border border-white/10 text-white font-bold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors">← Back to DealGate</a>
-            </div>
-          </main>
-        </div>
-      );
-
-      if (step === 'submitted') return (
-        <div className="relative min-h-screen flex flex-col">
-          <div className="absolute inset-0 grid-pattern" style={{ opacity: 0.25, maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)' }} />
-          <div className="absolute pointer-events-none" style={{ top: '20%', left: '50%', transform: 'translateX(-50%)', width: '500px', height: '300px', background: 'rgba(255,59,59,0.1)', filter: 'blur(120px)' }} />
-          <header className="relative z-10 px-6 py-5">
-            <a href="/" className="flex items-center gap-2 no-underline w-fit">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#FF3B3B' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 3h10v10H3z" stroke="white" strokeWidth="1.8"/>
-                  <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <span className="text-white font-black text-xl tracking-tight">Deal<span style={{ color: '#FF3B3B' }}>Gate</span></span>
-            </a>
-          </header>
-          <main className="relative z-10 flex-1 flex items-center justify-center px-4">
-            <div className="w-full max-w-md text-center animate-fade-up">
-              <div className="w-20 h-20 rounded-full mx-auto mb-8 flex items-center justify-center" style={{ background: 'rgba(255,59,59,0.1)', border: '1px solid rgba(255,59,59,0.3)', boxShadow: '0 0 60px -10px rgba(255,59,59,0.5)' }}>
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                  <path d="M8 18l7 7 13-13" stroke="#FF3B3B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <h1 className="text-3xl font-black mb-3">You're in the queue.</h1>
-              <p className="text-white/60 mb-6">
-                Your intake has been received. <strong className="text-white">{freelancer.username}</strong> will review your answers and follow up with payment details.
-              </p>
-              <div className="gradient-border rounded-xl p-5 text-left mb-8">
-                <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">What happens next</p>
-                <div className="space-y-3">
-                  {[
-                    'Your answers are reviewed',
-                    `You'll receive a payment link for $${freelancer.price}`,
-                    'After payment, you get access to a call',
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 text-sm text-white/70">
-                      <div className="step-circle">{i + 1}</div>
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <p className="text-white/30 text-xs">Check your inbox at <strong className="text-white/50">{clientEmail}</strong> for a confirmation.</p>
-            </div>
-          </main>
-        </div>
-      );
-
-      return (
-        <div className="relative min-h-screen flex flex-col">
-          <div className="absolute inset-0 grid-pattern" style={{ opacity: 0.25, maskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 50%, transparent 85%)' }} />
-          <div className="absolute pointer-events-none" style={{ top: '15%', left: '50%', transform: 'translateX(-50%)', width: '500px', height: '250px', background: 'rgba(255,59,59,0.08)', filter: 'blur(100px)' }} />
-
-          {/* Header */}
-          <header className="relative z-10 px-6 py-5">
-            <a href="/" className="flex items-center gap-2 no-underline w-fit">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#FF3B3B' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 3h10v10H3z" stroke="white" strokeWidth="1.8"/>
-                  <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <span className="text-white font-black text-xl tracking-tight">Deal<span style={{ color: '#FF3B3B' }}>Gate</span></span>
-            </a>
-          </header>
-
-          <main className="relative z-10 flex-1 flex items-start justify-center px-4 py-8">
-            <div className="w-full max-w-lg animate-fade-up">
-
-              {/* Freelancer badge */}
-              <div className="flex items-center gap-4 mb-8 p-5 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <div className="w-14 h-14 rounded-full flex items-center justify-center font-black text-xl text-white flex-shrink-0" style={{ background: '#FF3B3B', boxShadow: '0 0 30px -5px rgba(255,59,59,0.6)' }}>
-                  {freelancer.username[0].toUpperCase()}
-                </div>
-                <div>
-                  <div className="text-white font-black text-lg">@{freelancer.username}</div>
-                  <div className="text-white/50 text-sm">wants to know you're serious before booking a call</div>
-                </div>
-                <div className="ml-auto text-right flex-shrink-0">
-                  <div className="text-white font-black text-2xl">${freelancer.price}</div>
-                  <div className="text-white/40 text-xs">intake fee</div>
-                </div>
-              </div>
-
-              {/* How it works */}
-              <div className="flex items-center gap-4 justify-center mb-8 text-xs text-white/50 font-semibold uppercase tracking-wider">
-                <span className="flex items-center gap-1.5"><span style={{ color: '#FF3B3B' }}>1.</span> Answer questions</span>
-                <span style={{ color: 'rgba(255,255,255,0.2)' }}>→</span>
-                <span className="flex items-center gap-1.5"><span style={{ color: '#FF3B3B' }}>2.</span> Pay ${freelancer.price}</span>
-                <span style={{ color: 'rgba(255,255,255,0.2)' }}>→</span>
-                <span className="flex items-center gap-1.5"><span style={{ color: '#FF3B3B' }}>3.</span> Get access</span>
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Name + email */}
-                <div className="gradient-border rounded-2xl p-6 space-y-4">
-                  <p className="text-xs font-semibold text-white/40 uppercase tracking-widest">Your info</p>
-                  <div>
-                    <label className="text-xs font-semibold text-white/50 uppercase tracking-widest block mb-1.5">Your name</label>
-                    <input
-                      className="dg-input"
-                      type="text"
-                      placeholder="John Smith"
-                      value={clientName}
-                      onChange={e => setClientName(e.target.value)}
-                      required
-                      autoFocus
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-white/50 uppercase tracking-widest block mb-1.5">Your email</label>
-                    <input
-                      className="dg-input"
-                      type="email"
-                      placeholder="you@company.com"
-                      value={clientEmail}
-                      onChange={e => setClientEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Questions */}
-                {freelancer.questions && freelancer.questions.length > 0 && (
-                  <div className="gradient-border rounded-2xl p-6 space-y-5">
-                    <p className="text-xs font-semibold text-white/40 uppercase tracking-widest">Answer these first</p>
-                    {freelancer.questions.map((q, i) => (
-                      <div key={i}>
-                        <label className="text-sm font-semibold text-white block mb-2">
-                          <span style={{ color: '#FF3B3B', fontWeight: 800 }}>{i + 1}. </span>{q}
-                        </label>
-                        <textarea
-                          className="dg-input"
-                          rows={3}
-                          placeholder="Your answer…"
-                          value={answers[i] || ''}
-                          onChange={e => {
-                            const next = [...answers];
-                            next[i] = e.target.value;
-                            setAnswers(next);
-                          }}
-                          required
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {error && <p className="dg-error">{error}</p>}
-
-                {/* Submit */}
-                <button
-                  type="submit"
-                  className="btn-primary animate-pulse-red"
-                  disabled={submitting || !clientName.trim() || !clientEmail.trim()}
-                >
-                  {submitting
-                    ? <span className="flex items-center justify-center gap-2"><span className="spinner" /> Redirecting to secure checkout…</span>
-                    : `Pay $${freelancer.price} & book →`
-                  }
-                </button>
-
-                {/* Trust signals */}
-                <div className="flex items-center justify-center gap-6 text-xs text-white/30 pt-1">
-                  <span className="flex items-center gap-1.5">🔒 Secure checkout via Stripe</span>
-                  <span className="flex items-center gap-1.5">✓ Money-back if rejected</span>
-                </div>
-              </form>
-
-              {/* Footer note */}
-              <p className="text-center text-white/20 text-xs mt-8">
-                Powered by <a href="/" style={{ color: 'rgba(255,59,59,0.6)' }}>DealGate</a> · <a href="/privacy.html" style={{ color: 'rgba(255,255,255,0.3)' }}>Privacy</a> · <a href="/terms.html" style={{ color: 'rgba(255,255,255,0.3)' }}>Terms</a>
-              </p>
-            </div>
-          </main>
-        </div>
-      );
+  React.useEffect(() => {
+    // Focus the input on mount without scrolling the page — avoids jump-to-top jank
+    // when navigating between steps.
+    if (inputRef.current) {
+      inputRef.current.focus({ preventScroll: true });
+      // Move cursor to end so back-nav doesn't highlight existing text.
+      const v = inputRef.current.value;
+      if (typeof inputRef.current.setSelectionRange === 'function' && v) {
+        try { inputRef.current.setSelectionRange(v.length, v.length); } catch (e) {}
+      }
     }
+  }, [question.id]);
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<ClientPage />);
-  </script>
+  function handleKey(e) {
+    if (e.key === 'Enter' && question.type !== 'textarea' && canContinue) onNext();
+  }
+
+  return (
+    <div className="step-enter" key={question.id}>
+      {/* Step counter */}
+      <p className="text-xs uppercase tracking-widest text-white/30 mb-4 font-mono">
+        {stepIndex + 1} / {totalSteps}
+      </p>
+
+      {/* Question */}
+      <h2 id={`q-${question.id}-label`} className="text-2xl sm:text-3xl font-black text-white mb-6 leading-tight" style={{ letterSpacing: '-0.02em' }}>
+        {question.label}
+        {!question.required && <span className="ml-2 text-base font-medium text-white/30">(optional)</span>}
+      </h2>
+
+      {/* Inputs */}
+      {question.type === 'radio' && (
+        <div role="radiogroup" aria-labelledby={`q-${question.id}-label`} className="flex flex-col gap-2.5">
+          {question.options.map(opt => (
+            <button
+              key={opt}
+              type="button"
+              role="radio"
+              aria-checked={value === opt}
+              className={`option-card w-full text-left px-5 py-4 min-h-[56px] rounded-xl flex items-center gap-4 focus-ring ${value === opt ? 'selected' : ''}`}
+              onClick={() => onChange(opt)}
+            >
+              <span className="option-dot" />
+              <span className="text-white/85 font-medium text-[15px] leading-snug">{opt}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {question.type === 'textarea' && (
+        <textarea
+          ref={inputRef}
+          id={`q-${question.id}`}
+          aria-labelledby={`q-${question.id}-label`}
+          className="dg-input w-full rounded-xl px-5 py-4 text-sm font-medium resize-none leading-relaxed"
+          rows={5}
+          placeholder={question.placeholder}
+          value={value || ''}
+          onChange={e => onChange(e.target.value)}
+        />
+      )}
+
+      {(question.type === 'text' || question.type === 'email') && (
+        <input
+          ref={inputRef}
+          id={`q-${question.id}`}
+          aria-labelledby={`q-${question.id}-label`}
+          type={question.type}
+          className="dg-input w-full rounded-xl px-5 py-4 text-sm font-medium min-h-[48px]"
+          placeholder={question.placeholder}
+          value={value || ''}
+          onChange={e => onChange(e.target.value)}
+          onKeyDown={handleKey}
+          autoComplete={question.type === 'email' ? 'email' : 'name'}
+        />
+      )}
+
+      {/* Nav */}
+      <div className="flex items-center gap-3 mt-8">
+        {stepIndex > 0 && (
+          <button onClick={onBack} className="min-h-[48px] px-5 py-3 rounded-xl text-white/50 hover:text-white/80 hover:bg-white/5 text-sm font-semibold transition-colors focus-ring">
+            ← Back
+          </button>
+        )}
+        <button
+          onClick={onNext}
+          disabled={!canContinue}
+          className="flex-1 min-h-[56px] py-4 rounded-xl font-black text-base transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:scale-[1.01] active:scale-[0.99] focus-ring"
+          style={{ background: canContinue ? 'linear-gradient(135deg, #059669, #10B981)' : 'rgba(255,255,255,0.08)', color: '#fff', boxShadow: canContinue ? '0 10px 30px -12px rgba(16,185,129,0.5)' : 'none' }}
+        >
+          {stepIndex === totalSteps - 1 ? 'Review & pay →' : 'Continue →'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════
+   CHECKOUT STEP
+   ══════════════════════════════════════ */
+function CheckoutStep({ answers, onBack, onPay, paying }) {
+  const [agreed, setAgreed] = useState(false);
+
+  const nameQ  = FREELANCER.questions.find(q => q.id === 'name');
+  const emailQ = FREELANCER.questions.find(q => q.id === 'email');
+  const clientName  = answers[nameQ?.id]  || '';
+  const clientEmail = answers[emailQ?.id] || '';
+
+  return (
+    <div className="step-enter">
+      <h2 className="text-2xl sm:text-3xl font-black text-white mb-2" style={{ letterSpacing: '-0.02em' }}>
+        One last step.
+      </h2>
+      <p className="text-white/40 text-sm mb-8 leading-relaxed">
+        Secure your spot with a small qualification fee. It signals you're serious — and it's fully refundable if we're not a match.
+      </p>
+
+      {/* Summary card */}
+      <div className="checkout-card rounded-2xl p-6 mb-6">
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <p className="text-xs text-accent/70 uppercase tracking-widest font-mono mb-1">Consultation fee</p>
+            <p className="text-white/70 text-sm">Initial intake with {FREELANCER.name}</p>
+          </div>
+          <div className="text-3xl font-black text-accent font-mono" style={{fontFamily: "'JetBrains Mono', monospace"}}>
+            {FREELANCER.currency}{FREELANCER.price}
+          </div>
+        </div>
+
+        <p className="text-xs text-white/30 leading-relaxed border-t border-white/5 pt-4">
+          {FREELANCER.paymentRationale}
+        </p>
+      </div>
+
+      {/* Refund note */}
+      <div className="flex items-start gap-3 bg-white/[0.03] border border-white/[0.06] rounded-xl px-5 py-4 mb-6">
+        <svg className="flex-shrink-0 mt-0.5 text-accent" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.25 5.25L7 10.5 4.75 8.25l.5-.5L7 9.5l3.75-3.75.5.5z"/>
+        </svg>
+        <p className="text-xs text-white/40 leading-relaxed">{FREELANCER.refundPolicy}</p>
+      </div>
+
+      {/* Agree checkbox */}
+      <label className="flex items-start gap-3 cursor-pointer mb-8 select-none">
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={e => setAgreed(e.target.checked)}
+          className="sr-only peer"
+        />
+        <div
+          className="w-5 h-5 flex-shrink-0 rounded flex items-center justify-center mt-0.5 transition-all"
+          style={{ background: agreed ? '#10B981' : 'rgba(255,255,255,0.06)', border: `1px solid ${agreed ? '#10B981' : 'rgba(255,255,255,0.15)'}` }}
+        >
+          {agreed && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+        </div>
+        <span className="text-xs text-white/45 leading-relaxed">
+          I agree to the <a href="terms.html" target="_blank" className="text-accent/80 hover:text-accent underline">Terms of Service</a> and understand the refund policy.
+        </span>
+      </label>
+
+      {/* Pay button */}
+      <button
+        onClick={() => agreed && !paying && onPay()}
+        disabled={!agreed || paying}
+        className="w-full py-5 rounded-xl font-black text-white text-lg transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed glow-accent"
+        style={{ background: agreed ? 'linear-gradient(135deg, #059669, #10B981)' : 'rgba(255,255,255,0.08)' }}
+      >
+        {paying
+          ? <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.2)" strokeWidth="3"/>
+                <path d="M12 2a10 10 0 0110 10" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+              </svg>
+              Redirecting to payment...
+            </span>
+          : `Pay ${FREELANCER.currency}${FREELANCER.price} & submit`
+        }
+      </button>
+
+      {/* Stripe trust */}
+      <div className="mt-5 flex flex-col items-center gap-3">
+        <div className="stripe-badge rounded-lg px-4 py-2 flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#10B981">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          </svg>
+          <span className="text-xs text-white/30 font-medium">Secured by Stripe · 256-bit SSL</span>
+        </div>
+
+        {/* Payment method logos */}
+        <div className="flex items-center gap-2 flex-wrap justify-center" aria-label="Accepted payment methods">
+          {/* Visa */}
+          <div className="bg-white/[0.06] border border-white/[0.08] rounded-md px-2.5 py-1.5 flex items-center justify-center" style={{ minWidth: 44, height: 26 }} title="Visa">
+            <svg width="30" height="10" viewBox="0 0 48 16" fill="none">
+              <text x="0" y="13" fontFamily="Inter,sans-serif" fontSize="14" fontWeight="900" fill="#fff" fontStyle="italic" letterSpacing="-0.5">VISA</text>
+            </svg>
+          </div>
+          {/* Mastercard */}
+          <div className="bg-white/[0.06] border border-white/[0.08] rounded-md px-2.5 py-1.5 flex items-center justify-center" style={{ minWidth: 44, height: 26 }} title="Mastercard">
+            <svg width="26" height="16" viewBox="0 0 32 20" fill="none">
+              <circle cx="12" cy="10" r="7" fill="#EB001B"/>
+              <circle cx="20" cy="10" r="7" fill="#F79E1B"/>
+              <path d="M16 5.5a7 7 0 000 9 7 7 0 000-9z" fill="#FF5F00"/>
+            </svg>
+          </div>
+          {/* Amex */}
+          <div className="bg-white/[0.06] border border-white/[0.08] rounded-md px-2.5 py-1.5 flex items-center justify-center" style={{ minWidth: 44, height: 26 }} title="American Express">
+            <svg width="30" height="10" viewBox="0 0 48 16" fill="none">
+              <rect width="48" height="16" rx="2" fill="#2E77BC"/>
+              <text x="24" y="12" textAnchor="middle" fontFamily="Inter,sans-serif" fontSize="9" fontWeight="900" fill="#fff" letterSpacing="0.3">AMEX</text>
+            </svg>
+          </div>
+          {/* iDEAL */}
+          <div className="bg-white/[0.06] border border-white/[0.08] rounded-md px-2.5 py-1.5 flex items-center justify-center" style={{ minWidth: 44, height: 26 }} title="iDEAL">
+            <svg width="30" height="10" viewBox="0 0 48 16" fill="none">
+              <text x="0" y="13" fontFamily="Inter,sans-serif" fontSize="12" fontWeight="900" fill="#CD0067" fontStyle="italic" letterSpacing="-0.3">i</text>
+              <text x="7" y="13" fontFamily="Inter,sans-serif" fontSize="10" fontWeight="900" fill="#fff" letterSpacing="-0.2">DEAL</text>
+            </svg>
+          </div>
+          {/* Apple Pay */}
+          <div className="bg-white/[0.06] border border-white/[0.08] rounded-md px-2.5 py-1.5 flex items-center justify-center gap-1" style={{ minWidth: 44, height: 26 }} title="Apple Pay">
+            <svg width="10" height="12" viewBox="0 0 14 17" fill="#fff">
+              <path d="M11.5 8.9c0-2 1.6-3 1.7-3a3.6 3.6 0 00-2.8-1.5c-1.2-.1-2.3.7-2.9.7s-1.5-.7-2.5-.7A3.8 3.8 0 001.8 6.3c-1.4 2.4-.4 6 1 8 .7 1 1.5 2 2.6 2s1.4-.6 2.7-.6 1.6.6 2.7.6 1.9-1 2.5-2a8.7 8.7 0 001.2-2.4 3.6 3.6 0 01-1-3zM9.6 3.3A3.4 3.4 0 0010.5 1a3.7 3.7 0 00-2.4 1.2 3.2 3.2 0 00-.8 2.2 3 3 0 002.3-1.1z"/>
+            </svg>
+            <span className="text-[10px] font-semibold text-white">Pay</span>
+          </div>
+        </div>
+
+        <p className="text-xs text-white/20">Your card info never touches our servers.</p>
+      </div>
+
+      {/* Back link */}
+      <button onClick={onBack} className="w-full mt-6 text-center text-sm text-white/25 hover:text-white/50 transition-colors">
+        ← Edit my answers
+      </button>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════
+   REVIEW ANSWERS (pre-checkout summary)
+   ══════════════════════════════════════ */
+function ReviewStep({ answers, onBack, onContinue }) {
+  const displayQuestions = FREELANCER.questions.filter(q => answers[q.id]);
+  return (
+    <div className="step-enter">
+      <h2 className="text-2xl sm:text-3xl font-black text-white mb-2" style={{ letterSpacing: '-0.02em' }}>
+        Looks good?
+      </h2>
+      <p className="text-white/40 text-sm mb-8">Review your answers before we move to payment.</p>
+
+      <div className="flex flex-col gap-3 mb-8">
+        {displayQuestions.map(q => (
+          <div key={q.id} className="bg-white/[0.03] border border-white/[0.06] rounded-xl px-5 py-4">
+            <p className="text-xs text-white/30 mb-1">{q.label}</p>
+            <p className="text-white/80 text-sm font-medium leading-snug">{answers[q.id]}</p>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={onContinue}
+        className="w-full py-5 rounded-xl font-black text-white text-lg glow-accent transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+        style={{ background: 'linear-gradient(135deg, #059669, #10B981)' }}
+      >
+        Continue to payment →
+      </button>
+
+      <button onClick={onBack} className="w-full mt-5 text-center text-sm text-white/25 hover:text-white/50 transition-colors">
+        ← Edit answers
+      </button>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════
+   MAIN APP
+   ══════════════════════════════════════ */
+function App() {
+  const questions = FREELANCER.questions;
+  const totalSteps = questions.length;
+
+  // Stages: 'questions' | 'review' | 'checkout' | 'paying'
+  const [stage, setStage] = useState('questions');
+  const [stepIndex, setStepIndex] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [paying, setPaying] = useState(false);
+  const containerRef = useRef(null);
+
+  function scrollTop() {
+    containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function handleAnswer(val) {
+    setAnswers(prev => ({ ...prev, [questions[stepIndex].id]: val }));
+  }
+
+  function handleNext() {
+    const q = questions[stepIndex];
+    if (q.required && !answers[q.id]) return;
+    scrollTop();
+    if (stepIndex < totalSteps - 1) {
+      setStepIndex(i => i + 1);
+    } else {
+      setStage('review');
+    }
+  }
+
+  function handleBack() {
+    scrollTop();
+    if (stage === 'review') { setStage('questions'); setStepIndex(totalSteps - 1); return; }
+    if (stage === 'checkout') { setStage('review'); return; }
+    if (stepIndex > 0) setStepIndex(i => i - 1);
+  }
+
+  function handlePay() {
+    setPaying(true);
+    // In production: redirect to Stripe Checkout URL
+    // For now: simulate redirect after 1.5s
+    setTimeout(() => {
+      window.location.href = 'intake-success.html';
+    }, 1500);
+  }
+
+  const progress = stage === 'questions'
+    ? (stepIndex / totalSteps) * 85
+    : stage === 'review' ? 90
+    : 100;
+
+  return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      {/* Ambient emerald glow */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] pointer-events-none opacity-60"
+           style={{ background: 'radial-gradient(ellipse, rgba(16,185,129,0.08) 0%, transparent 70%)' }} />
+
+      <div className="relative z-10 flex-1 w-full flex flex-col lg:flex-row lg:gap-10 xl:gap-16 max-w-6xl mx-auto px-5 sm:px-6 lg:px-10 pb-24 lg:py-12">
+
+        {/* Left: trust panel (desktop only) */}
+        <aside className="hidden lg:flex flex-col w-[340px] xl:w-[380px] flex-shrink-0 pt-10 lg:sticky lg:top-12 self-start max-h-[calc(100vh-6rem)]">
+          <FreelancerHeader />
+          <div className="mt-4 p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02]">
+            <p className="text-[11px] uppercase tracking-widest text-accent/70 font-mono mb-3">Why the fee?</p>
+            <p className="text-white/60 text-sm leading-relaxed mb-5">
+              {FREELANCER.paymentRationale}
+            </p>
+            <div className="flex items-start gap-3 pt-5 border-t border-white/[0.06]">
+              <svg className="flex-shrink-0 mt-0.5 text-accent" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.25 5.25L7 10.5 4.75 8.25l.5-.5L7 9.5l3.75-3.75.5.5z"/>
+              </svg>
+              <p className="text-xs text-white/45 leading-relaxed">{FREELANCER.refundPolicy}</p>
+            </div>
+          </div>
+          <div className="mt-4 flex items-center gap-3 text-xs text-white/30">
+            <div className="flex items-center gap-1.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#10B981"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+              <span>Secured by Stripe</span>
+            </div>
+            <span className="w-1 h-1 rounded-full bg-white/20" />
+            <span>256-bit SSL</span>
+          </div>
+        </aside>
+
+        {/* Right: the form */}
+        <div className="flex-1 w-full max-w-xl lg:max-w-none mx-auto pt-10 lg:pt-10">
+          {/* Mobile header */}
+          <div className="lg:hidden">
+            <FreelancerHeader />
+          </div>
+
+          <div ref={containerRef} className="relative mt-2">
+            {/* Progress */}
+            <div className="w-full h-0.5 bg-white/[0.06] rounded-full overflow-hidden mb-8 lg:mb-10">
+              <div className="progress-fill h-full rounded-full bg-accent" style={{ width: `${progress}%`, boxShadow: '0 0 12px rgba(16,185,129,0.5)' }} />
+            </div>
+
+            {/* Stage: questions */}
+            {stage === 'questions' && (
+              <QuestionStep
+                key={stepIndex}
+                question={questions[stepIndex]}
+                value={answers[questions[stepIndex].id]}
+                onChange={handleAnswer}
+                onNext={handleNext}
+                onBack={handleBack}
+                stepIndex={stepIndex}
+                totalSteps={totalSteps}
+              />
+            )}
+
+            {/* Stage: review */}
+            {stage === 'review' && (
+              <ReviewStep
+                answers={answers}
+                onBack={handleBack}
+                onContinue={() => { scrollTop(); setStage('checkout'); }}
+              />
+            )}
+
+            {/* Stage: checkout */}
+            {stage === 'checkout' && (
+              <CheckoutStep
+                answers={answers}
+                onBack={handleBack}
+                onPay={handlePay}
+                paying={paying}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="w-full border-t border-white/5 py-8 px-6 text-center mt-auto">
+        <p className="text-xs text-white/15">
+          © 2026 DealGate · <a href="privacy.html" className="hover:text-white/30 transition-colors">Privacy</a> · <a href="terms.html" className="hover:text-white/30 transition-colors">Terms</a>
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>

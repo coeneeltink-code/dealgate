@@ -2,54 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0A0B10" />
-  <meta name="description" content="DealGate — Get paid before the first call. Clients prepay $25–$100 to book serious freelancers. Stripe-secured. Made for US freelancers." />
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="DealGate — Get paid before the first call." />
-  <meta property="og:description" content="Clients prepay to book you. Stop wasting time on tire-kickers. Built for US freelancers." />
-  <meta property="og:url" content="https://godealgate.com" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DealGate makes clients qualify and pay before they get access to you. Stop wasting time on bad leads — only talk to serious, paying clients." />
+  <meta property="og:title" content="DealGate — Serious clients pay first." />
+  <meta property="og:description" content="Stop working for free. DealGate filters bad leads so you only talk to clients who are serious — and have paid." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://godealgate.com/og.png" />
+  <meta property="og:url" content="https://dealgate.ai" />
+  <meta property="og:image" content="https://dealgate.ai/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
-
-  <title>DealGate — Get paid before the first call.</title>
-
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310B981'/%3E%3Cpath d='M10 16l4 4 8-8' stroke='%23062017' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
+  <meta name="twitter:title" content="DealGate — Serious clients pay first." />
+  <meta name="twitter:description" content="Stop working for free. Make clients qualify and pay before they get your time." />
+  <title>DealGate — Serious clients pay first.</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2310B981'/><rect x='7' y='7' width='18' height='18' rx='1' stroke='white' stroke-width='2' fill='none'/><line x1='13' y1='11' x2='13' y2='21' stroke='white' stroke-width='2' stroke-linecap='round'/><line x1='19' y1='11' x2='19' y2='21' stroke='white' stroke-width='2' stroke-linecap='round'/></svg>" />
 
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
             serif: ['"Instrument Serif"', 'serif'],
           },
           colors: {
-            bg:        '#0A0B10',
-            bg2:       '#0E1017',
-            panel:     '#11141D',
-            'panel-2': '#161A24',
-            line:      '#1E2230',
-            'line-2':  '#252A3A',
-            muted:     '#8A93A6',
-            'muted-2': '#6B7387',
-            ink:       '#E6E9F0',
-            'ink-2':   '#F7F9FC',
-            brand:     '#10B981',
-            'brand-2': '#34D399',
-            'brand-3': '#059669',
-            'brand-glow':'rgba(16,185,129,0.18)',
+            accent: '#10B981',
+            'accent-dark': '#059669',
+            'accent-bright': '#34D399',
+          },
+          screens: {
+            xs: '420px',
           },
         },
       },
@@ -57,542 +48,471 @@
   </script>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 80px;
-      -webkit-text-size-adjust: 100%;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
     body {
-      background: #0A0B10;
-      color: #E6E9F0;
-      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-feature-settings: "cv02","cv03","cv04","cv11";
       margin: 0;
       overflow-x: hidden;
-      line-height: 1.55;
     }
-    ::selection { background: #10B981; color: #06241A; }
+    ::selection { background: #10B981; color: #fff; }
 
-    /* Typography */
-    .h-display {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      letter-spacing: -0.035em;
-      line-height: 0.98;
-    }
-    .h-serif-italic {
-      font-family: 'Instrument Serif', serif;
-      font-style: italic;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-    }
-    .eyebrow {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #10B981;
-    }
+    /* Utility backgrounds */
+    .bg-card { background: rgba(255,255,255,0.025); }
+    .bg-card-hover { background: rgba(255,255,255,0.045); }
+    .border-subtle { border: 1px solid rgba(255,255,255,0.08); }
+    .text-mono { font-family: 'JetBrains Mono', monospace; }
 
-    /* Gradients & effects */
-    .text-gradient-brand {
-      background: linear-gradient(180deg, #34D399 0%, #10B981 60%, #059669 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .text-gradient-fade {
-      background: linear-gradient(180deg, #F7F9FC 0%, #E6E9F0 40%, #8A93A6 130%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    /* Reveal */
-    .reveal {
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* Hairline */
-    .hairline { border: 1px solid #1E2230; }
-    .hairline-t { border-top: 1px solid #1E2230; }
-    .hairline-b { border-bottom: 1px solid #1E2230; }
-
-    /* Noise + radial glow backgrounds */
-    .noise::before {
+    /* Grain texture */
+    .grain::before {
       content: '';
       position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
-      opacity: 0.035;
-      mix-blend-mode: overlay;
-      pointer-events: none;
-    }
-    .aurora {
-      background:
-        radial-gradient(60% 45% at 50% 0%, rgba(16,185,129,0.14) 0%, rgba(16,185,129,0) 60%),
-        radial-gradient(35% 35% at 15% 18%, rgba(52,211,153,0.08) 0%, rgba(52,211,153,0) 60%),
-        radial-gradient(35% 35% at 85% 28%, rgba(5,150,105,0.08) 0%, rgba(5,150,105,0) 60%);
-    }
-    .aurora-soft {
-      background:
-        radial-gradient(50% 30% at 50% 50%, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0) 70%);
-    }
-    .dots {
-      background-image: radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px);
-      background-size: 24px 24px;
-      mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 40%, transparent 85%);
-      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 40%, transparent 85%);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      opacity: 0.04; pointer-events: none; mix-blend-mode: overlay;
     }
 
-    /* Buttons */
-    .btn-brand {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      background: linear-gradient(180deg, #1FD19B 0%, #10B981 100%);
-      color: #06241A;
-      font-weight: 600;
-      box-shadow:
-        0 1px 0 rgba(255,255,255,0.25) inset,
-        0 0 0 1px rgba(16,185,129,0.35),
-        0 10px 28px -10px rgba(16,185,129,0.65);
-      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    /* Grid pattern */
+    .grid-pattern {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
     }
-    .btn-brand:hover {
-      transform: translateY(-1px);
-      box-shadow:
-        0 1px 0 rgba(255,255,255,0.3) inset,
-        0 0 0 1px rgba(16,185,129,0.5),
-        0 16px 36px -12px rgba(16,185,129,0.75);
-    }
-    .btn-brand:active { transform: translateY(0); }
 
-    .btn-ghost {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      color: #E6E9F0;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid #1E2230;
-      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
-    }
-    .btn-ghost:hover { background: rgba(255,255,255,0.04); border-color: #2A3040; }
-
-    /* Card */
-    .card {
+    /* Gradient border */
+    .gradient-border {
       position: relative;
-      background: linear-gradient(180deg, #12151E 0%, #0F131B 100%);
-      border: 1px solid #1E2230;
-      border-radius: 18px;
-      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .card:hover {
-      border-color: #2A3040;
-      transform: translateY(-2px);
-      box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6);
-    }
-    .card-featured {
-      background:
-        linear-gradient(180deg, rgba(16,185,129,0.08) 0%, rgba(16,185,129,0.02) 100%),
-        linear-gradient(180deg, #12151E 0%, #0F131B 100%);
-      border: 1px solid rgba(16,185,129,0.35);
-      box-shadow: 0 0 0 1px rgba(16,185,129,0.05), 0 30px 60px -30px rgba(16,185,129,0.35);
+      background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
+                  linear-gradient(135deg, rgba(16,185,129,0.4), rgba(16,185,129,0.05) 40%, rgba(255,255,255,0.05)) border-box;
+      border: 1px solid transparent;
     }
 
-    /* Mac window */
-    .mac {
-      background: #0C0F16;
-      border: 1px solid #1E2230;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow:
-        0 60px 120px -40px rgba(0,0,0,0.75),
-        0 0 0 1px rgba(255,255,255,0.02),
-        0 0 0 6px rgba(16,185,129,0.04);
-    }
-    .mac-bar {
-      display: flex; align-items: center; gap: 6px;
-      padding: 11px 14px;
-      background: #0A0C12;
-      border-bottom: 1px solid #1E2230;
-    }
-    .mac-dot { width: 11px; height: 11px; border-radius: 9999px; }
-    .mono { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace; }
-
-    /* FAQ */
-    details summary::-webkit-details-marker { display: none; }
-    details summary { list-style: none; }
-    details[open] .faq-plus { transform: rotate(45deg); }
-    details .faq-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-    details[open] .faq-body { max-height: 600px; }
-
-    /* Marquee */
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-    .marquee-track { animation: marquee 40s linear infinite; }
-
-    /* Subtle pulse */
-    @keyframes softPulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%     { opacity: 0.6; transform: scale(1.4); }
-    }
-    .dot-pulse { animation: softPulse 2s ease-in-out infinite; }
-
-    /* Mobile nav */
-    .mobile-nav {
-      position: fixed; inset: 0;
-      background: rgba(10,11,16,0.98);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      z-index: 60;
-      transform: translateY(-100%);
-      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
-    }
-    .mobile-nav.open { transform: translateY(0); }
-
-    /* Utility */
-    .divider-soft {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    /* Glow */
+    .glow-green {
+      box-shadow: 0 0 60px -10px rgba(16,185,129,0.5), 0 0 120px -20px rgba(16,185,129,0.3);
     }
 
-    /* Focus states (a11y) */
-    button:focus-visible, a:focus-visible, summary:focus-visible {
-      outline: 2px solid rgba(16,185,129,0.6);
-      outline-offset: 3px;
-      border-radius: 6px;
+    /* Animations */
+    @keyframes pulseAccent {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5), 0 10px 40px -10px rgba(16,185,129,0.5); }
+      50% { box-shadow: 0 0 0 20px rgba(16,185,129,0), 0 10px 40px -10px rgba(16,185,129,0.3); }
     }
-    details summary:focus-visible { outline-offset: 6px; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes blink { 0%,50%,100% { opacity: 1; } 25%,75% { opacity: 0; } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes pulseDot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } }
+    @keyframes scrollDot {
+      0%   { transform: translateY(0); opacity: 1; }
+      50%  { transform: translateY(8px); opacity: 0.3; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes typing { from { width: 0; } to { width: 100%; } }
+    @keyframes bounceIn {
+      0% { opacity: 0; transform: translate(-50%, 40px) scale(0.9); }
+      60% { opacity: 1; transform: translate(-50%, -8px) scale(1.02); }
+      100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    }
+    @keyframes slideInRight {
+      0% { opacity: 0; transform: translateX(40px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
 
-    /* Image-safe on mobile */
-    img { max-width: 100%; height: auto; display: block; }
+    .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
+    .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; }
+    .animate-float { animation: float 4s ease-in-out infinite; }
+    .animate-pulse-green { animation: pulseAccent 2.5s infinite; }
+    .animate-marquee { animation: marquee 40s linear infinite; }
+    .animate-blink { animation: blink 1.2s infinite; }
+    .animate-pulse-dot { animation: pulseDot 1.8s ease-in-out infinite; }
 
-    /* Hide scrollbar on marquee */
+    .shimmer-text {
+      background: linear-gradient(90deg, #fff 0%, #fff 40%, #10B981 50%, #fff 60%, #fff 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 4s linear infinite;
+    }
+
+    /* Chart container */
+    .chart-container { position: relative; height: 320px; }
+
+    /* Hide scrollbar but allow scroll */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Revealer (IntersectionObserver) */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Accordion */
+    details summary::-webkit-details-marker { display: none; }
+    details summary { list-style: none; }
+    details[open] .faq-icon { transform: rotate(45deg); }
+
+    /* Radio dots for comparison */
+    .check-bad { color: rgba(255,255,255,0.3); }
+    .check-good { color: #10B981; }
+
+    /* iOS safe area for sticky bar */
+    .sticky-bar { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+    /* Instrument Serif utility */
+    .font-serif-display { font-family: 'Instrument Serif', serif; font-style: italic; }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* Product demo blinking cursor */
+    .cursor-blink::after {
+      content: '|'; color: #10B981; animation: blink 1s infinite;
+    }
+
+    /* Accessible focus ring — emerald glow, visible only for keyboard */
+    .focus-ring:focus { outline: none; }
+    .focus-ring:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.45), 0 0 0 1px #10B981;
+      border-radius: inherit;
+    }
+    a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+      outline: 2px solid rgba(16,185,129,0.65);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+
+    /* Mobile typography guard — prevent oversized headlines on narrow screens */
+    @media (max-width: 380px) {
+      .hero-headline { font-size: clamp(2.5rem, 14vw, 3.25rem) !important; }
+    }
+
+    /* Subtle card hover lift */
+    .lift { transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s; }
+    .lift:hover { transform: translateY(-2px); }
+
+    /* Responsive padding utility */
+    .section-pad { padding-top: clamp(4rem, 10vw, 8rem); padding-bottom: clamp(4rem, 10vw, 8rem); }
   </style>
 </head>
 <body>
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect, useRef, useMemo } = React;
 
-    /* ═════════════ HELPERS ═════════════ */
-    const useInView = (threshold = 0.12) => {
+    /* ════════ HELPERS ════════ */
+    const useInView = (options = {}) => {
       const ref = useRef(null);
       const [inView, setInView] = useState(false);
       useEffect(() => {
         if (!ref.current) return;
-        const obs = new IntersectionObserver(([e]) => {
-          if (e.isIntersecting) { setInView(true); obs.disconnect(); }
-        }, { threshold });
+        const obs = new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting) {
+            setInView(true);
+            obs.disconnect();
+          }
+        }, { threshold: 0.2, ...options });
         obs.observe(ref.current);
         return () => obs.disconnect();
       }, []);
       return [ref, inView];
     };
+
+    const Counter = ({ to, duration = 1800, suffix = '', prefix = '', decimals = 0 }) => {
+      const [ref, inView] = useInView();
+      const [val, setVal] = useState(0);
+      useEffect(() => {
+        if (!inView) return;
+        let start = null;
+        const step = (ts) => {
+          if (!start) start = ts;
+          const p = Math.min((ts - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setVal(to * eased);
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }, [inView, to, duration]);
+      return <span ref={ref}>{prefix}{val.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{suffix}</span>;
+    };
+
     const Reveal = ({ children, delay = 0, className = '' }) => {
       const [ref, inView] = useInView();
       return (
-        <div ref={ref} className={`reveal ${inView ? 'visible' : ''} ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+        <div
+          ref={ref}
+          className={`reveal ${inView ? 'visible' : ''} ${className}`}
+          style={{ transitionDelay: `${delay}ms` }}
+        >
           {children}
         </div>
       );
     };
-    const Check = ({ size = 14, className = '' }) => (
-      <svg className={`text-brand flex-shrink-0 ${className}`} width={size} height={size} viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <path d="M2 7.5l3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    );
-    const Star = ({ size = 14 }) => (
-      <svg width={size} height={size} viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
-        <path d="M7 0.5l1.9 4.3 4.6.4-3.5 3 1.1 4.5L7 10.4 2.9 12.7 4 8.2 0.5 5.2l4.6-.4L7 .5z"/>
-      </svg>
-    );
 
-    /* ═════════════ NAV ═════════════ */
-    function Nav() {
+    /* ════════ SCROLL PROGRESS ════════ */
+    function ScrollProgress() {
+      const [w, setW] = useState(0);
+      useEffect(() => {
+        const h = () => {
+          const s = window.scrollY;
+          const d = document.documentElement.scrollHeight - window.innerHeight;
+          setW((s / d) * 100);
+        };
+        window.addEventListener('scroll', h, { passive: true });
+        return () => window.removeEventListener('scroll', h);
+      }, []);
+      return (
+        <div className="fixed top-0 left-0 right-0 h-0.5 z-[60]" style={{background: 'rgba(255,255,255,0.05)'}}>
+          <div className="h-full bg-accent transition-[width] duration-75" style={{width: `${w}%`}} />
+        </div>
+      );
+    }
+
+    /* ════════ NAVBAR (with mobile menu) ════════ */
+    function Navbar() {
       const [scrolled, setScrolled] = useState(false);
       const [open, setOpen] = useState(false);
       useEffect(() => {
-        const h = () => setScrolled(window.scrollY > 10);
-        window.addEventListener('scroll', h, { passive: true });
-        h();
-        return () => window.removeEventListener('scroll', h);
+        const onScroll = () => setScrolled(window.scrollY > 20);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
       }, []);
-      useEffect(() => {
-        document.body.style.overflow = open ? 'hidden' : '';
-        return () => { document.body.style.overflow = ''; };
-      }, [open]);
 
       const links = [
-        { href: '#how', label: 'How it works' },
-        { href: '#product', label: 'Product' },
-        { href: '#pricing', label: 'Pricing' },
-        { href: '#faq', label: 'FAQ' },
+        { h: '#how-it-works', t: 'How it works' },
+        { h: '#demo', t: 'Product' },
+        { h: '#pricing', t: 'Pricing' },
+        { h: '#faq', t: 'FAQ' },
       ];
 
       return (
-        <>
-          <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'backdrop-blur-xl bg-bg/80 border-b border-line' : ''}`}>
-            <div className="max-w-6xl mx-auto px-5 sm:px-6 h-16 flex items-center justify-between">
-              <a href="/" className="flex items-center gap-2.5 group" aria-label="DealGate home">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-2 to-brand-3 grid place-items-center shadow-lg shadow-brand/20">
-                  <svg width="15" height="15" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7l3 3 7-7" stroke="#052619" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </div>
-                <span className="font-semibold text-ink tracking-tight text-[15px]">DealGate</span>
-              </a>
-
-              <nav className="hidden md:flex items-center gap-8 text-[14px] text-muted">
-                {links.map(l => (
-                  <a key={l.href} href={l.href} className="hover:text-ink transition-colors">{l.label}</a>
-                ))}
-              </nav>
-
-              <div className="hidden md:flex items-center gap-3">
-                <a href="/login.html" className="text-[14px] text-muted hover:text-ink transition-colors">Sign in</a>
-                <a href="/onboarding.html" className="btn-brand text-[13.5px] px-4 py-2 rounded-lg">
-                  Claim your link
-                </a>
-              </div>
-
-              <button
-                className="md:hidden w-10 h-10 grid place-items-center rounded-lg border border-line hover:border-line-2 transition-colors"
-                aria-label={open ? "Close menu" : "Open menu"}
-                aria-expanded={open}
-                onClick={() => setOpen(v => !v)}
-              >
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                  {open ? (
-                    <path d="M3 3l12 12M15 3L3 15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-                  ) : (
-                    <><path d="M2 5h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M2 13h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></>
-                  )}
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled || open ? 'bg-black/90 border-b border-white/5 backdrop-blur-xl' : 'bg-transparent'}`}>
+          <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" className="flex items-center gap-2 focus-ring rounded">
+              <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center glow-green">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 3h10v10H3z" stroke="white" strokeWidth="1.8"/>
+                  <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
                 </svg>
-              </button>
-            </div>
-          </header>
-
-          <div className={`mobile-nav ${open ? 'open' : ''} md:hidden`} aria-hidden={!open}>
-            <div className="h-16 px-5 flex items-center justify-between border-b border-line">
-              <a href="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-2 to-brand-3 grid place-items-center"><svg width="15" height="15" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#052619" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
-                <span className="font-semibold text-ink tracking-tight">DealGate</span>
-              </a>
-              <button onClick={() => setOpen(false)} aria-label="Close menu" className="w-10 h-10 grid place-items-center rounded-lg border border-line">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-              </button>
-            </div>
-            <div className="p-6 flex flex-col gap-1">
+              </div>
+              <span className="text-white font-black text-xl tracking-tight">
+                Deal<span className="text-accent">Gate</span>
+              </span>
+            </a>
+            <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
               {links.map(l => (
-                <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="text-ink text-xl font-medium py-3 border-b border-line/60">
-                  {l.label}
-                </a>
+                <a key={l.h} href={l.h} className="hover:text-white transition-colors">{l.t}</a>
               ))}
-              <a href="/login.html" className="text-muted text-lg py-3 mt-4">Sign in</a>
-              <a href="/onboarding.html" className="btn-brand mt-4 py-4 rounded-xl text-base">
-                Claim your link →
+            </div>
+            <div className="flex items-center gap-3">
+              <a
+                href="onboarding.html"
+                className="hidden sm:inline-flex bg-accent hover:bg-accent-dark text-white text-sm font-black px-5 py-2.5 rounded-lg transition-all hover:scale-105 active:scale-95 glow-green"
+              >
+                Get paid before you talk →
+              </a>
+              {/* Hamburger — mobile only */}
+              <button
+                className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg text-white/80 hover:bg-white/5 focus-ring"
+                onClick={() => setOpen(o => !o)}
+                aria-label={open ? 'Close menu' : 'Open menu'}
+                aria-expanded={open}
+              >
+                {open ? (
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile menu panel */}
+          {open && (
+            <div className="md:hidden border-t border-white/5 bg-black/95 backdrop-blur-xl" style={{ animation: 'fadeIn 0.2s ease both' }}>
+              <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-1">
+                {links.map(l => (
+                  <a
+                    key={l.h}
+                    href={l.h}
+                    onClick={() => setOpen(false)}
+                    className="text-white/75 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg text-sm font-semibold transition-colors"
+                  >
+                    {l.t}
+                  </a>
+                ))}
+                <a
+                  href="onboarding.html"
+                  className="mt-2 bg-accent hover:bg-accent-dark text-white font-black px-4 py-3 rounded-lg text-center text-sm uppercase tracking-tight transition-colors"
+                >
+                  Get paid before you talk →
+                </a>
+                <a
+                  href="login.html"
+                  className="text-white/40 hover:text-white/70 px-3 py-2 rounded-lg text-xs text-center transition-colors"
+                >
+                  Already have an account? Sign in
+                </a>
+              </div>
+            </div>
+          )}
+        </nav>
+      );
+    }
+
+    /* ════════ HERO ════════ */
+    function Hero() {
+      const [mouse, setMouse] = useState({ x: 0, y: 0 });
+      const heroRef = useRef();
+      useEffect(() => {
+        const h = (e) => {
+          if (!heroRef.current) return;
+          const r = heroRef.current.getBoundingClientRect();
+          setMouse({
+            x: (e.clientX - r.left - r.width / 2) / r.width,
+            y: (e.clientY - r.top - r.height / 2) / r.height,
+          });
+        };
+        window.addEventListener('mousemove', h);
+        return () => window.removeEventListener('mousemove', h);
+      }, []);
+
+      return (
+        <section ref={heroRef} className="grain relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-28 pb-24 overflow-hidden">
+          {/* Grid bg */}
+          <div className="absolute inset-0 grid-pattern opacity-40" style={{maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'}} />
+
+          {/* Ambient emerald glow blobs */}
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              top: '30%', left: '50%',
+              transform: `translate(calc(-50% + ${mouse.x * 30}px), calc(-50% + ${mouse.y * 30}px))`,
+              width: '800px', height: '400px',
+              background: 'rgba(16,185,129,0.14)',
+              filter: 'blur(140px)',
+              transition: 'transform 0.4s cubic-bezier(0.22,1,0.36,1)',
+            }}
+          />
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              bottom: '10%', right: '10%',
+              width: '400px', height: '400px',
+              background: 'rgba(16,185,129,0.05)',
+              filter: 'blur(120px)',
+            }}
+          />
+
+          <div className="relative z-10 max-w-5xl mx-auto">
+            {/* Eyebrow */}
+            <div className="animate-fade-up inline-flex items-center gap-3 border border-accent/30 bg-accent/[0.08] backdrop-blur-sm text-white text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-8">
+              <span className="w-2 h-2 bg-accent rounded-full animate-pulse-dot" />
+              <span className="text-accent">New</span>
+              <span className="text-white/60">Trusted by 2,400+ freelancers</span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="hero-headline animate-fade-up text-[3.25rem] xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black uppercase leading-[0.9] sm:leading-[0.85] tracking-tighter mb-8 sm:mb-10" style={{animationDelay: '100ms'}}>
+              Stop Working<br />
+              <span className="shimmer-text">For Free.</span>
+            </h1>
+
+            {/* Sub — money + pain */}
+            <p className="animate-fade-up text-2xl md:text-3xl text-white font-bold max-w-3xl mx-auto leading-tight mb-5" style={{animationDelay: '200ms'}}>
+              You're losing <span className="text-accent">€500+ per week</span> on bad clients.
+            </p>
+            <p className="animate-fade-up text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed" style={{animationDelay: '280ms'}}>
+              DealGate makes clients <strong className="text-white">pay before they talk to you.</strong><br />
+              No qualification = no call. No payment = no access.
+            </p>
+
+            {/* CTAs — outcome-driven */}
+            <div className="animate-fade-up flex flex-col sm:flex-row gap-4 justify-center items-center mb-6" style={{animationDelay: '360ms'}}>
+              <a
+                href="#signup"
+                className="group bg-accent text-white font-black text-xl sm:text-2xl px-12 py-5 rounded-xl w-full sm:w-auto animate-pulse-green transition-all hover:scale-105 active:scale-95 hover:bg-accent-dark uppercase tracking-tight"
+              >
+                Get paid before you talk
+                <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
+              </a>
+              <a
+                href="#how-it-works"
+                className="text-white font-semibold text-base sm:text-lg px-8 py-4 rounded-xl border border-white/15 hover:border-white/30 hover:bg-white/5 transition-all w-full sm:w-auto"
+              >
+                See how it works
               </a>
             </div>
-          </div>
-        </>
-      );
-    }
 
-    /* ═════════════ HERO ═════════════ */
-    function Hero() {
-      return (
-        <section className="relative pt-28 sm:pt-32 pb-16 sm:pb-24 px-5 sm:px-6 overflow-hidden">
-          <div className="absolute inset-0 aurora pointer-events-none" />
-          <div className="absolute inset-x-0 top-0 h-[480px] dots pointer-events-none" />
-          <div className="relative max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-              <div className="lg:col-span-7 text-center lg:text-left">
-                <Reveal>
-                  <div className="inline-flex items-center gap-2 text-[11px] font-medium text-brand bg-brand/10 border border-brand/20 rounded-full pl-2 pr-3 py-1 mb-6">
-                    <span className="relative w-2 h-2">
-                      <span className="absolute inset-0 rounded-full bg-brand dot-pulse"></span>
-                      <span className="absolute inset-0 rounded-full bg-brand"></span>
-                    </span>
-                    <span className="tracking-wider uppercase">Live · Built for US freelancers</span>
-                  </div>
-                </Reveal>
-                <Reveal delay={80}>
-                  <h1 className="h-display text-[44px] leading-[1.02] sm:text-[60px] md:text-[72px] lg:text-[78px] text-ink-2 mb-6">
-                    Get paid <span className="h-serif-italic text-gradient-brand">before</span><br className="hidden sm:block" />
-                    the first call.
-                  </h1>
-                </Reveal>
-                <Reveal delay={160}>
-                  <p className="text-[17px] sm:text-lg text-muted max-w-[560px] lg:max-w-[520px] mx-auto lg:mx-0 leading-relaxed mb-8">
-                    Stop chasing tire-kickers. Clients prepay <span className="text-ink">$25–$100</span> to book you —
-                    answer your qualifying questions first, credit card on the table. Keep 93–99%, pay out via Stripe.
-                  </p>
-                </Reveal>
-                <Reveal delay={220}>
-                  <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 mb-8">
-                    <a href="/onboarding.html" className="btn-brand px-6 py-3.5 rounded-xl text-[15px] w-full sm:w-auto">
-                      Claim your link — it's free
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8m-3-3l3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </a>
-                    <a href="#product" className="btn-ghost px-6 py-3.5 rounded-xl text-[15px] w-full sm:w-auto">
-                      See it in action
-                    </a>
-                  </div>
-                </Reveal>
-                <Reveal delay={280}>
-                  <div className="flex items-center justify-center lg:justify-start gap-4">
-                    <div className="flex -space-x-2">
-                      {['SC','MT','PR','JK','AV'].map((i, k) => (
-                        <div key={k} className="w-7 h-7 rounded-full ring-2 ring-bg grid place-items-center text-[10px] font-semibold text-ink-2"
-                             style={{ background: `linear-gradient(135deg, hsl(${140 + k*28} 50% 45%), hsl(${160 + k*28} 50% 35%))` }}>{i}</div>
-                      ))}
-                    </div>
-                    <div className="text-xs text-muted leading-tight">
-                      <div className="flex items-center gap-1 text-brand mb-0.5"><Star size={10}/><Star size={10}/><Star size={10}/><Star size={10}/><Star size={10}/></div>
-                      <span>Trusted by 200+ freelancers across NYC, SF, Austin</span>
-                    </div>
-                  </div>
-                </Reveal>
-              </div>
-
-              <div className="lg:col-span-5">
-                <Reveal delay={180}>
-                  <HeroPreview />
-                </Reveal>
-              </div>
+            {/* Friction removers */}
+            <div className="animate-fade-up flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/50 mb-14" style={{animationDelay: '440ms'}}>
+              <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> No credit card required</span>
+              <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Setup in 2 minutes</span>
+              <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Cancel anytime</span>
             </div>
+
+            {/* Stats row */}
+            <div className="animate-fade-up grid grid-cols-3 gap-4 max-w-2xl mx-auto" style={{animationDelay: '500ms'}}>
+              {[
+                { val: 2400, suffix: '+', label: 'Active freelancers' },
+                { val: 18, suffix: 'h', label: 'Avg. saved weekly' },
+                { val: 3.2, suffix: 'x', decimals: 1, label: 'Revenue increase' },
+              ].map(s => (
+                <div key={s.label} className="text-center">
+                  <div className="text-3xl sm:text-4xl font-black text-white">
+                    <Counter to={s.val} suffix={s.suffix} decimals={s.decimals || 0} />
+                  </div>
+                  <div className="text-xs text-white/40 mt-1 uppercase tracking-wider">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/30 text-xs flex-col items-center gap-2 hidden sm:flex">
+            <span className="uppercase tracking-widest">Scroll</span>
+            <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+              <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" strokeWidth="1.5"/>
+              <circle cx="8" cy="8" r="2" fill="currentColor" style={{animation: 'scrollDot 2s ease-in-out infinite'}} />
+            </svg>
           </div>
         </section>
       );
     }
 
-    function HeroPreview() {
-      return (
-        <div className="relative">
-          <div className="absolute -inset-6 aurora-soft pointer-events-none blur-2xl" />
-          <div className="relative mac">
-            <div className="mac-bar">
-              <div className="mac-dot bg-[#FF5F57]"></div>
-              <div className="mac-dot bg-[#FEBC2E]"></div>
-              <div className="mac-dot bg-[#28C840]"></div>
-              <div className="ml-3 flex-1 text-center">
-                <div className="mono text-[11px] text-muted inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-bg2 border border-line">
-                  <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M3 4V3a2 2 0 014 0v1h1v4H2V4h1z" stroke="#10B981" strokeWidth="0.9"/></svg>
-                  godealgate.com/sarahchen
-                </div>
-              </div>
-            </div>
-            <div className="p-5 sm:p-7">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-11 h-11 rounded-full grid place-items-center text-white font-semibold text-sm"
-                     style={{ background: 'linear-gradient(135deg,#34D399,#059669)' }}>SC</div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <div className="text-ink font-semibold text-[15px] truncate">Sarah Chen</div>
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="#10B981"/><path d="M4 7l2 2 4-4" stroke="#052619" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </div>
-                  <div className="text-xs text-muted">Brand strategist · NYC</div>
-                </div>
-                <div className="text-[10px] text-muted uppercase tracking-wider">Verified</div>
-              </div>
-
-              <div className="relative rounded-xl p-4 mb-4 overflow-hidden hairline"
-                   style={{ background: 'linear-gradient(180deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02))' }}>
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-widest text-brand font-semibold mb-1">Intake fee</div>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-[32px] font-bold text-ink-2 tracking-tight leading-none">$50</span>
-                      <span className="text-muted text-xs">USD</span>
-                    </div>
-                    <div className="text-[11px] text-muted mt-1.5">Credited to your first invoice</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[10px] uppercase tracking-widest text-muted font-semibold mb-1">Response</div>
-                    <div className="text-ink text-sm font-medium">&lt; 24h</div>
-                    <div className="text-[11px] text-muted mt-1.5">or auto-refund</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2 mb-4">
-                {[
-                  "What's the project and timeline?",
-                  "What's your budget range?",
-                  "Who's the decision-maker?",
-                ].map((q, i) => (
-                  <div key={i} className="hairline rounded-lg px-3.5 py-2.5 flex items-center gap-2.5 text-[13px] text-ink/85">
-                    <span className="mono text-[10px] text-brand font-semibold">0{i+1}</span>
-                    {q}
-                  </div>
-                ))}
-              </div>
-
-              <button className="btn-brand w-full py-3 rounded-xl text-[14px]">
-                Pay $50 &amp; book Sarah
-                <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8m-3-3l3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-              <div className="flex items-center justify-center gap-1.5 text-[10.5px] text-muted mt-3">
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M3 4V3a2 2 0 014 0v1h1v4H2V4h1z" stroke="currentColor" strokeWidth="0.8"/></svg>
-                Secured by Stripe · 100% refund if Sarah declines
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    /* ═════════════ LOGO MARQUEE ═════════════ */
-    function LogoStrip() {
-      const words = [
-        "Featured in freelance circles from",
-        "Brooklyn to Palo Alto",
-        "Used by designers · devs · consultants · coaches",
-        "Stripe-verified payouts · USD",
-      ];
-      return (
-        <section className="py-12 sm:py-14 border-y border-line bg-panel/30 overflow-hidden">
-          <div className="max-w-6xl mx-auto px-5 sm:px-6">
-            <p className="text-center eyebrow mb-6">In use today</p>
-            <div className="relative no-scrollbar overflow-hidden" style={{ maskImage: 'linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)' }}>
-              <div className="flex gap-14 marquee-track whitespace-nowrap text-muted text-sm sm:text-base">
-                {[...words, ...words, ...words].map((w, i) => (
-                  <span key={i} className="flex items-center gap-3">
-                    <span className="text-brand">◆</span>
-                    {w}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    /* ═════════════ METRICS ═════════════ */
-    function Metrics() {
+    /* ════════ TRUST BAR ════════ */
+    function TrustBar() {
       const stats = [
-        { k: '$142K', v: 'prepaid through DealGate this quarter' },
-        { k: '94%',   v: 'of prepaid bookings convert to paid work' },
-        { k: '18 hrs',v: 'saved per week on unpaid discovery calls' },
+        { value: '2,400+', label: 'freelancers screening smarter' },
+        { value: '€1.2M+', label: 'in qualified fees collected' },
+        { value: '9.1 hrs', label: 'saved per freelancer per week' },
+        { value: '94%', label: 'of ghost clients filtered out' },
       ];
       return (
-        <section className="py-20 sm:py-24 px-5 sm:px-6">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid sm:grid-cols-3 gap-px bg-line rounded-2xl overflow-hidden hairline">
+        <section className="py-12 border-y border-white/5">
+          <div className="max-w-5xl mx-auto px-6">
+            <p className="text-center text-xs uppercase tracking-widest text-white/25 mb-10">By the numbers</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((s, i) => (
-                <Reveal key={i} delay={i * 90}>
-                  <div className="bg-bg p-8 sm:p-10 h-full">
-                    <div className="h-display text-4xl sm:text-5xl text-ink-2 tracking-tight mb-2">{s.k}</div>
-                    <div className="text-sm text-muted leading-relaxed">{s.v}</div>
-                  </div>
-                </Reveal>
+                <div key={i} className="text-center">
+                  <div className="text-2xl md:text-3xl font-black text-accent mb-1" style={{fontFamily: "'JetBrains Mono', monospace"}}>{s.value}</div>
+                  <div className="text-xs text-white/40 leading-snug">{s.label}</div>
+                </div>
               ))}
             </div>
           </div>
@@ -600,50 +520,67 @@
       );
     }
 
-    /* ═════════════ PRODUCT DEEP DIVE ═════════════ */
-    function Product() {
-      const [tab, setTab] = useState(0);
-      const tabs = [
-        { label: 'Client intake', sub: 'What your leads see' },
-        { label: 'Your dashboard', sub: 'What you see' },
-        { label: 'Payouts', sub: 'Where the money lands' },
+    /* ════════ COST OF DOING NOTHING ════════ */
+    function CostOfNothing() {
+      const costs = [
+        { big: 10, suffix: '+', label: 'hours wasted', sub: 'Every. Single. Week.', detail: 'On calls, quotes, and follow-ups that go nowhere.' },
+        { big: 500, suffix: '+', prefix: '€', label: 'lost income', sub: 'Per week. Gone.', detail: 'That\'s €26,000 a year walking out the door.' },
+        { big: 80, suffix: '%', label: 'of leads never convert', sub: '8 out of 10 ghost you.', detail: 'You spent real time on every one of them.' },
       ];
       return (
-        <section id="product" className="py-20 sm:py-28 px-5 sm:px-6 relative">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-28 px-6 relative overflow-hidden" style={{background: 'linear-gradient(180deg, transparent, rgba(16,185,129,0.04), transparent)'}}>
+          <div className="absolute inset-0 grid-pattern opacity-20" style={{maskImage: 'radial-gradient(ellipse at center, black 20%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 20%, transparent 70%)'}} />
+
+          <div className="relative max-w-6xl mx-auto">
             <Reveal>
-              <div className="max-w-2xl mb-10 sm:mb-14">
-                <p className="eyebrow mb-4">The product</p>
-                <h2 className="h-display text-[34px] sm:text-[44px] md:text-[52px] text-ink-2 mb-5">
-                  One link. <span className="h-serif-italic text-gradient-brand">Zero</span> unpaid calls.
+              <div className="text-center mb-16 max-w-3xl mx-auto">
+                <div className="inline-flex items-center gap-2 border border-accent/40 bg-accent/10 text-accent text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full mb-6">
+                  <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse-dot" />
+                  Brutal math
+                </div>
+                <h2 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] mb-6 uppercase">
+                  This is what bad clients<br />
+                  <span className="text-accent">are costing you.</span>
                 </h2>
-                <p className="text-muted text-[17px] leading-relaxed">
-                  Your DealGate link runs the whole intake: qualification, payment, scheduling, refunds.
-                  You only hear from clients who've already paid.
+                <p className="text-white/55 text-xl max-w-2xl mx-auto leading-relaxed">
+                  While you're writing another proposal no one will read, someone else is closing deals.
                 </p>
               </div>
             </Reveal>
 
-            <div className="mb-6 sm:mb-8 flex flex-wrap gap-2" role="tablist">
-              {tabs.map((t, i) => (
-                <button
-                  key={i}
-                  role="tab"
-                  aria-selected={tab === i}
-                  onClick={() => setTab(i)}
-                  className={`px-4 py-2.5 rounded-xl text-sm border transition-all ${tab === i ? 'bg-brand/10 border-brand/40 text-ink' : 'border-line text-muted hover:border-line-2 hover:text-ink'}`}
+            <div className="grid md:grid-cols-3 gap-5">
+              {costs.map((c, i) => (
+                <Reveal key={i} delay={i * 150}>
+                  <div className="group gradient-border rounded-2xl p-8 h-full hover:-translate-y-1 transition-all duration-300">
+                    <div className="text-white/30 text-xs uppercase tracking-widest font-black mb-4">0{i + 1} / Cost</div>
+                    <div className="text-6xl md:text-7xl font-black text-accent mb-3 text-mono leading-none">
+                      {c.prefix}<Counter to={c.big} suffix={c.suffix} />
+                    </div>
+                    <div className="text-white font-black text-xl mb-1">{c.label}</div>
+                    <div className="text-accent font-bold text-sm mb-4 uppercase tracking-wider">{c.sub}</div>
+                    <div className="pt-4 border-t border-white/5 text-white/55 text-sm leading-relaxed">{c.detail}</div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal delay={500}>
+              <div className="mt-14 text-center max-w-3xl mx-auto">
+                <p className="text-2xl sm:text-3xl font-black text-white leading-tight mb-8">
+                  Keep doing this, and you'll trade another year<br />
+                  <span className="text-accent">for pennies.</span>
+                </p>
+                <a
+                  href="#signup"
+                  className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-black text-lg px-10 py-4 rounded-xl hover:scale-105 transition-all uppercase tracking-tight"
                 >
-                  <span className="font-semibold">{t.label}</span>
-                  <span className="hidden sm:inline text-muted-2 ml-2 font-normal">{t.sub}</span>
-                </button>
-              ))}
-            </div>
-
-            <Reveal delay={80}>
-              <div className="card p-5 sm:p-8">
-                {tab === 0 && <ProductTabIntake />}
-                {tab === 1 && <ProductTabDashboard />}
-                {tab === 2 && <ProductTabPayouts />}
+                  Get paid before you talk →
+                </a>
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/40">
+                  <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> No credit card required</span>
+                  <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Setup in 2 minutes</span>
+                  <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Cancel anytime</span>
+                </div>
               </div>
             </Reveal>
           </div>
@@ -651,341 +588,904 @@
       );
     }
 
-    function ProductTabIntake() {
-      return (
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div>
-            <h3 className="h-display text-2xl sm:text-3xl text-ink-2 mb-4">The client-side flow</h3>
-            <p className="text-muted mb-5 leading-relaxed">Every lead lands on <span className="mono text-ink text-sm">godealgate.com/you</span>. They see your fee, answer your questions, pay with card or Apple Pay, and book. No back-and-forth.</p>
-            <ul className="space-y-3">
-              {[
-                'Mobile-first — 80% of clients book from phones',
-                'Apple Pay, Google Pay, and cards via Stripe',
-                'Qualification + payment in a single flow',
-                'Auto-refund if you decline the booking',
-              ].map((t, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-ink/90"><span className="mt-1"><Check/></span>{t}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="mac">
-            <div className="mac-bar"><div className="mac-dot bg-[#FF5F57]"/><div className="mac-dot bg-[#FEBC2E]"/><div className="mac-dot bg-[#28C840]"/></div>
-            <div className="p-5 space-y-3">
-              <div className="hairline rounded-lg p-3">
-                <div className="text-[10px] uppercase tracking-widest text-muted mb-1">Intake fee</div>
-                <div className="text-2xl font-bold text-ink-2">$75</div>
-              </div>
-              <div className="space-y-2">
-                {['Project + timeline', 'Budget range', 'Decision-maker'].map((q, i) => (
-                  <div key={i} className="hairline rounded-md px-3 py-2 text-xs text-ink/80"><span className="mono text-brand mr-2">0{i+1}</span>{q}</div>
-                ))}
-              </div>
-              <button className="btn-brand w-full py-2.5 rounded-lg text-xs">Pay $75 &amp; book →</button>
-            </div>
-          </div>
-        </div>
-      );
-    }
+    /* ════════ PROBLEM — with chart ════════ */
+    function Problem() {
+      const chartRef = useRef();
+      const [ref, inView] = useInView();
 
-    function ProductTabDashboard() {
-      const bookings = [
-        { name: 'Alex M.', company: 'Axis Labs', status: 'Paid',     fee: '$75', color: '#10B981' },
-        { name: 'Nina P.', company: 'Forge Co.', status: 'Awaiting', fee: '$50', color: '#F59E0B' },
-        { name: 'Kai R.',  company: 'Quell Inc.',status: 'Refunded', fee: '$50', color: '#6B7387' },
+      useEffect(() => {
+        if (!inView || !chartRef.current) return;
+        const ctx = chartRef.current.getContext('2d');
+        const gradRed = ctx.createLinearGradient(0, 0, 0, 300);
+        gradRed.addColorStop(0, 'rgba(16,185,129,0.9)');
+        gradRed.addColorStop(1, 'rgba(16,185,129,0.2)');
+        const gradGrey = ctx.createLinearGradient(0, 0, 0, 300);
+        gradGrey.addColorStop(0, 'rgba(255,255,255,0.12)');
+        gradGrey.addColorStop(1, 'rgba(255,255,255,0.02)');
+
+        const chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Proposals', 'Calls', 'Quotes', 'Follow-ups', 'Free consults'],
+            datasets: [
+              { label: 'Hours wasted / week', data: [7, 5, 3, 4, 6], backgroundColor: gradRed, borderRadius: 8, borderSkipped: false },
+              { label: 'Actually paid', data: [1, 0.5, 0.3, 0.4, 0], backgroundColor: gradGrey, borderRadius: 8, borderSkipped: false },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 1800, easing: 'easeOutCubic' },
+            plugins: {
+              legend: {
+                position: 'top',
+                align: 'end',
+                labels: { color: 'rgba(255,255,255,0.6)', font: { family: 'Inter', size: 12, weight: 600 }, usePointStyle: true, pointStyle: 'circle', padding: 16 },
+              },
+              tooltip: {
+                backgroundColor: '#000', borderColor: 'rgba(16,185,129,0.4)', borderWidth: 1,
+                titleFont: { family: 'Inter', weight: 700 }, bodyFont: { family: 'Inter' }, padding: 12,
+              },
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 11 } } },
+              y: {
+                grid: { color: 'rgba(255,255,255,0.05)' },
+                ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 11 }, callback: v => v + 'h' },
+              },
+            },
+          },
+        });
+        return () => chart.destroy();
+      }, [inView]);
+
+      const problems = [
+        'Spending hours on proposals that go nowhere',
+        'Getting ghosted after sending quotes',
+        'Jumping on calls with people who never buy',
+        'Doing free consulting for "maybe" clients',
       ];
+
       return (
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div>
-            <h3 className="h-display text-2xl sm:text-3xl text-ink-2 mb-4">Your inbox, filtered</h3>
-            <p className="text-muted mb-5 leading-relaxed">Only paid, qualified bookings show up. Accept, decline, or refund with one click. Your calendar stays clean.</p>
-            <ul className="space-y-3">
-              {[
-                'One-click accept or refund',
-                'See every answer before you reply',
-                'Export to Notion, Slack, or email',
-                'Real-time Stripe payout status',
-              ].map((t, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-ink/90"><span className="mt-1"><Check/></span>{t}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="mac">
-            <div className="mac-bar"><div className="mac-dot bg-[#FF5F57]"/><div className="mac-dot bg-[#FEBC2E]"/><div className="mac-dot bg-[#28C840]"/></div>
-            <div className="p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-ink font-semibold text-sm">Recent bookings</div>
-                <div className="text-[10px] text-muted">This week</div>
+        <section ref={ref} className="py-24 px-6 relative overflow-hidden">
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <div className="text-center mb-16 max-w-3xl mx-auto">
+                <p className="text-accent font-bold uppercase tracking-widest text-sm mb-5">The Hidden Tax</p>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight">
+                  You're not losing clients.<br />
+                  <span className="text-white/40">You're losing time</span><br />
+                  on the wrong ones.
+                </h2>
               </div>
-              <div className="space-y-2">
-                {bookings.map((b, i) => (
-                  <div key={i} className="hairline rounded-lg px-3 py-2.5 flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full grid place-items-center text-[10px] text-white font-semibold" style={{ background: `linear-gradient(135deg, hsl(${140 + i*30} 50% 45%), hsl(${170 + i*30} 50% 35%))` }}>
-                      {b.name[0]}
+            </Reveal>
+
+            <div className="grid md:grid-cols-5 gap-8 items-center">
+              {/* Chart */}
+              <Reveal delay={100} className="md:col-span-3">
+                <div className="gradient-border rounded-2xl p-6 bg-card">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-white font-bold text-lg">Where your week actually goes</h3>
+                      <p className="text-white/40 text-xs mt-1">Avg. data from 2,400 freelancers pre-DealGate</p>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-ink text-xs font-medium truncate">{b.name} · {b.company}</div>
-                      <div className="text-[10px] text-muted">{b.fee} · {b.status}</div>
+                    <div className="flex items-center gap-2 text-xs text-accent bg-accent/10 border border-accent/30 px-3 py-1.5 rounded-full font-bold">
+                      <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse-dot" />
+                      LIVE
                     </div>
-                    <div className="w-1.5 h-1.5 rounded-full" style={{ background: b.color }}></div>
                   </div>
+                  <div className="chart-container">
+                    <canvas ref={chartRef}></canvas>
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-sm">
+                    <span className="text-white/40">Total wasted</span>
+                    <span className="text-accent font-black text-xl">
+                      <Counter to={25} suffix="h" /> / week
+                    </span>
+                  </div>
+                </div>
+              </Reveal>
+
+              {/* Problems list */}
+              <div className="md:col-span-2 space-y-3">
+                {problems.map((p, i) => (
+                  <Reveal key={i} delay={200 + i * 80}>
+                    <div className="group flex items-start gap-4 bg-card border-subtle rounded-xl p-5 hover:border-accent/30 hover:bg-accent/5 transition-all">
+                      <span className="mt-0.5 flex-shrink-0 w-7 h-7 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center group-hover:bg-accent group-hover:scale-110 transition-all">
+                        <span className="text-accent text-xs font-black group-hover:text-white">✕</span>
+                      </span>
+                      <span className="text-white/75 font-medium leading-snug">{p}</span>
+                    </div>
+                  </Reveal>
                 ))}
+                <Reveal delay={600}>
+                  <div className="mt-6 bg-accent/10 border border-accent/30 rounded-xl p-5 text-center">
+                    <p className="text-accent font-black text-base uppercase tracking-wider">
+                      Every unpaid interaction<br />is costing you money.
+                    </p>
+                  </div>
+                </Reveal>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       );
     }
 
-    function ProductTabPayouts() {
-      return (
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div>
-            <h3 className="h-display text-2xl sm:text-3xl text-ink-2 mb-4">Money in 2 days</h3>
-            <p className="text-muted mb-5 leading-relaxed">Every fee is processed by Stripe. Funds land in your bank account in 2 business days by default — instant on request.</p>
-            <ul className="space-y-3">
-              {[
-                'Stripe Connect — no new merchant account',
-                'USD payouts to any US bank',
-                '1099 handling for tax season',
-                'Keep 93–99% depending on plan',
-              ].map((t, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-ink/90"><span className="mt-1"><Check/></span>{t}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="mac">
-            <div className="mac-bar"><div className="mac-dot bg-[#FF5F57]"/><div className="mac-dot bg-[#FEBC2E]"/><div className="mac-dot bg-[#28C840]"/></div>
-            <div className="p-5">
-              <div className="hairline rounded-lg p-4 mb-3" style={{ background: 'linear-gradient(180deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02))' }}>
-                <div className="text-[10px] uppercase tracking-widest text-brand mb-1">Next payout</div>
-                <div className="text-3xl font-bold text-ink-2 tracking-tight">$1,247.00</div>
-                <div className="text-[11px] text-muted mt-1">Lands in Chase · Apr 22</div>
-              </div>
-              <div className="space-y-1.5 text-[11px]">
-                {[
-                  ['Intake fees',    '+$1,325.00'],
-                  ['Platform fee (3%)','−$39.75'],
-                  ['Stripe fees',    '−$38.25'],
-                ].map((row, i) => (
-                  <div key={i} className="flex items-center justify-between px-3 py-2 hairline rounded-md text-muted">
-                    <span>{row[0]}</span>
-                    <span className={row[1].startsWith('+') ? 'text-ink font-medium' : ''}>{row[1]}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+    /* ════════ SOLUTION ════════ */
+    function Solution() {
+      const iconApply = (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" strokeWidth="1.8"/>
+          <path d="M9 3v2a1 1 0 001 1h4a1 1 0 001-1V3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+          <line x1="8" y1="11" x2="16" y2="11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+          <line x1="8" y1="15" x2="13" y2="15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+        </svg>
       );
-    }
-
-    /* ═════════════ HOW IT WORKS ═════════════ */
-    function How() {
+      const iconQualify = (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/>
+          <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.8"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+        </svg>
+      );
+      const iconPay = (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="6" width="20" height="13" rx="2" stroke="currentColor" strokeWidth="1.8"/>
+          <line x1="2" y1="10" x2="22" y2="10" stroke="currentColor" strokeWidth="1.8"/>
+          <line x1="6" y1="15" x2="10" y2="15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+        </svg>
+      );
       const steps = [
-        {
-          n: '01',
-          t: 'Claim your link',
-          d: 'Pick a username. Set your intake fee ($25–$100). Write 3 qualifying questions. You are live in under 10 minutes.',
-          icon: (<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M13 6l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>)
-        },
-        {
-          n: '02',
-          t: 'Share it everywhere',
-          d: 'Put godealgate.com/you in your bio, DMs, email signature, cold replies. Replace every "jump on a call?" with one link.',
-          icon: (<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 8l-3 2 3 2M14 8l3 2-3 2M12 4l-4 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>)
-        },
-        {
-          n: '03',
-          t: 'Get paid. Talk later.',
-          d: 'Clients qualify, pay, and book in one flow. You review, accept or refund. Money hits your bank in 2 days via Stripe.',
-          icon: (<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 7h14v8H3zM3 9h14M6 12h4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>)
-        },
+        { num: '01', label: 'Apply',   icon: iconApply },
+        { num: '02', label: 'Qualify', icon: iconQualify },
+        { num: '03', label: 'Pay',     icon: iconPay },
       ];
       return (
-        <section id="how" className="py-20 sm:py-28 px-5 sm:px-6 hairline-t">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-32 px-6 relative overflow-hidden" style={{background: 'linear-gradient(180deg, transparent 0%, rgba(16,185,129,0.03) 50%, transparent 100%)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] rounded-full pointer-events-none" style={{background: 'rgba(16,185,129,0.06)', filter: 'blur(160px)'}} />
+
+          <div className="relative max-w-5xl mx-auto text-center">
             <Reveal>
-              <div className="max-w-2xl mb-12 sm:mb-14">
-                <p className="eyebrow mb-4">How it works</p>
-                <h2 className="h-display text-[34px] sm:text-[44px] md:text-[52px] text-ink-2">
-                  Three steps. Ten minutes.<br className="hidden sm:block" />
-                  <span className="h-serif-italic text-gradient-brand">Zero</span> more unpaid calls.
-                </h2>
-              </div>
+              <p className="text-accent font-bold uppercase tracking-widest text-sm mb-6">The System</p>
+              <h2 className="text-4xl sm:text-5xl md:text-7xl font-black leading-tight mb-8">
+                DealGate fixes this<br />
+                <span className="text-accent">at the source.</span>
+              </h2>
+
+              <p className="text-white/60 text-xl max-w-2xl mx-auto mb-4 leading-relaxed">
+                Instead of chasing clients and hoping they convert,<br />
+                DealGate flips the process.
+              </p>
+              <p className="text-white/40 mb-16 text-base uppercase tracking-widest">Clients must:</p>
             </Reveal>
-            <div className="grid md:grid-cols-3 gap-5">
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-0 mb-14">
               {steps.map((s, i) => (
-                <Reveal key={s.n} delay={i * 110}>
-                  <div className="card p-7 h-full">
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="w-10 h-10 rounded-xl grid place-items-center text-brand border border-brand/30" style={{ background: 'rgba(16,185,129,0.08)' }}>
-                        {s.icon}
+                <React.Fragment key={s.num}>
+                  <Reveal delay={i * 150}>
+                    <div className="group flex flex-col items-center">
+                      <div className="relative w-32 h-32 rounded-3xl bg-card border border-accent/30 flex flex-col items-center justify-center gap-2 hover:scale-110 hover:border-accent transition-all duration-500 cursor-default text-accent" style={{boxShadow: '0 20px 60px -20px rgba(16,185,129,0.4)'}}>
+                        <div>{s.icon}</div>
+                        <span className="text-white font-black text-base tracking-wide">{s.label}</span>
+                        <span className="absolute -top-2 -right-2 text-mono text-[10px] bg-accent text-white font-black px-2 py-0.5 rounded-md">{s.num}</span>
                       </div>
-                      <span className="mono text-xs text-muted">{s.n}</span>
                     </div>
-                    <h3 className="text-ink font-semibold text-[17px] mb-2 tracking-tight">{s.t}</h3>
-                    <p className="text-muted text-[14px] leading-relaxed">{s.d}</p>
-                  </div>
-                </Reveal>
+                  </Reveal>
+                  {i < steps.length - 1 && (
+                    <div className="flex-shrink-0 flex items-center">
+                      <div className="hidden sm:block w-16 h-px bg-gradient-to-r from-accent/50 to-accent" />
+                      <svg className="hidden sm:block w-4 h-4 text-accent -ml-2" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M0 8l8-8v6h8v4h-8v6z"/>
+                      </svg>
+                      <div className="sm:hidden h-8 w-px bg-gradient-to-b from-accent/50 to-accent" />
+                    </div>
+                  )}
+                </React.Fragment>
               ))}
             </div>
+
+            <Reveal delay={500}>
+              <p className="text-white/45 text-xl italic font-light">Before they ever get your time.</p>
+            </Reveal>
           </div>
         </section>
       );
     }
 
-    /* ═════════════ FEATURES GRID ═════════════ */
-    function Features() {
-      const items = [
-        { t: 'Stripe-native payments',    d: 'Apple Pay, Google Pay, cards. No new merchant account. USD payouts in 2 days.', icon: 'card' },
-        { t: 'Anti-ghost refunds',        d: 'If you don\'t respond in your window, the client is refunded automatically.',  icon: 'shield' },
-        { t: 'Custom qualifying form',    d: 'Write your own 3–5 questions. Reject anyone who doesn\'t answer them properly.',icon: 'form' },
-        { t: 'One-click reject + refund', d: 'Not the right fit? One click sends the money back. You\'re never obligated.',  icon: 'x' },
-        { t: 'Works with your stack',     d: 'Slack and email alerts on every booking. Export to Notion or Google Sheets.',  icon: 'plug' },
-        { t: 'Own your URL',              d: 'godealgate.com/you by default. Bring your own domain on Scale plan.',          icon: 'globe' },
+    /* ════════ PRODUCT DEMO (fake dashboard) ════════ */
+    function ProductDemo() {
+      const [step, setStep] = useState(0);
+      const [ref, inView] = useInView();
+      useEffect(() => {
+        if (!inView) return;
+        const iv = setInterval(() => setStep(s => (s + 1) % 3), 3000);
+        return () => clearInterval(iv);
+      }, [inView]);
+
+      const statuses = [
+        { name: 'Marcus K.', status: 'Applied', amount: null, color: 'yellow', progress: 33 },
+        { name: 'Sarah L.', status: 'Qualified', amount: null, color: 'blue', progress: 66 },
+        { name: 'David H.', status: 'Paid', amount: '€1,250', color: 'green', progress: 100 },
       ];
-      const Icon = ({ name }) => {
-        const common = { width: 18, height: 18, viewBox: '0 0 20 20', fill: 'none', 'aria-hidden': 'true' };
-        switch (name) {
-          case 'card':   return <svg {...common}><rect x="2" y="5" width="16" height="11" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M2 9h16" stroke="currentColor" strokeWidth="1.5"/></svg>;
-          case 'shield': return <svg {...common}><path d="M10 2l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V5l7-3z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>;
-          case 'form':   return <svg {...common}><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/><path d="M6 8h8M6 11h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>;
-          case 'x':      return <svg {...common}><circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>;
-          case 'plug':   return <svg {...common}><path d="M8 3v4M12 3v4M5 7h10v4a5 5 0 01-10 0V7zM10 16v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
-          case 'globe':  return <svg {...common}><circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5"/><path d="M3 10h14M10 3c2.5 3 2.5 11 0 14M10 3c-2.5 3-2.5 11 0 14" stroke="currentColor" strokeWidth="1.5"/></svg>;
-          default: return null;
-        }
-      };
+
       return (
-        <section className="py-20 sm:py-28 px-5 sm:px-6 hairline-t">
+        <section id="demo" ref={ref} className="py-24 px-6 relative overflow-hidden">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <div className="max-w-2xl mb-12 sm:mb-14">
-                <p className="eyebrow mb-4">What you get</p>
-                <h2 className="h-display text-[34px] sm:text-[44px] md:text-[52px] text-ink-2">
-                  Everything to run a <span className="h-serif-italic text-gradient-brand">real</span> gate.
+              <div className="text-center mb-14 max-w-3xl mx-auto">
+                <p className="text-accent font-bold uppercase tracking-widest text-sm mb-4">The Product</p>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight mb-8">
+                  Your filtering machine,<br /><span className="text-accent">always on.</span>
                 </h2>
+                <p className="text-white/70 text-lg sm:text-xl font-semibold mb-3">
+                  Every lead goes through this flow:
+                </p>
+                <div className="inline-flex items-center gap-3 text-accent font-black text-xl sm:text-2xl uppercase tracking-tight mb-4">
+                  <span>Apply</span>
+                  <svg className="w-5 h-5" viewBox="0 0 16 16" fill="currentColor"><path d="M0 8l8-8v6h8v4h-8v6z"/></svg>
+                  <span>Pay</span>
+                  <svg className="w-5 h-5" viewBox="0 0 16 16" fill="currentColor"><path d="M0 8l8-8v6h8v4h-8v6z"/></svg>
+                  <span>Access</span>
+                </div>
+                <p className="text-white/55 text-base sm:text-lg">
+                  Only the serious ones make it through.
+                </p>
               </div>
             </Reveal>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {items.map((f, i) => (
-                <Reveal key={i} delay={(i % 3) * 100}>
-                  <div className="card p-6 h-full">
-                    <div className="w-9 h-9 rounded-lg bg-brand/10 border border-brand/20 grid place-items-center text-brand mb-4">
-                      <Icon name={f.icon} />
+
+            <Reveal delay={100}>
+              <div className="relative gradient-border rounded-2xl p-2 glow-green">
+                {/* Window chrome */}
+                <div className="bg-[#0a0a0a] rounded-xl overflow-hidden">
+                  <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-black/40">
+                    <div className="flex gap-1.5">
+                      <span className="w-3 h-3 rounded-full bg-white/15" />
+                      <span className="w-3 h-3 rounded-full bg-white/25" />
+                      <span className="w-3 h-3 rounded-full bg-accent/60" />
                     </div>
-                    <h3 className="text-ink font-semibold text-[15px] mb-2 tracking-tight">{f.t}</h3>
-                    <p className="text-muted text-[13.5px] leading-relaxed">{f.d}</p>
+                    <div className="flex-1 text-center text-xs text-white/40 text-mono flex items-center justify-center gap-1.5">
+                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="currentColor" strokeWidth="1.2"/><rect x="2" y="5" width="8" height="6" rx="1" stroke="currentColor" strokeWidth="1.2"/></svg>
+                      app.dealgate.io / inbox
+                    </div>
+                    <div className="flex gap-0.5 text-white/30">
+                      <span className="w-1 h-1 rounded-full bg-current" />
+                      <span className="w-1 h-1 rounded-full bg-current" />
+                      <span className="w-1 h-1 rounded-full bg-current" />
+                    </div>
                   </div>
-                </Reveal>
-              ))}
-            </div>
+
+                  <div className="grid md:grid-cols-[220px_1fr] min-h-[480px]">
+                    {/* Sidebar */}
+                    <div className="border-r border-white/5 p-4 space-y-1 bg-black/30">
+                      {['Inbox', 'Qualified', 'Paid', 'Archive', 'Settings'].map((item, i) => (
+                        <div key={item} className={`px-3 py-2 rounded-lg text-sm flex items-center justify-between ${i === 0 ? 'bg-accent/10 text-accent border border-accent/20' : 'text-white/50 hover:bg-white/5'}`}>
+                          <span className="font-semibold">{item}</span>
+                          {i === 0 && <span className="text-xs bg-accent text-white rounded-full px-2 py-0.5 text-mono font-black">3</span>}
+                          {i === 2 && <span className="text-xs text-accent-bright text-mono">€3.7k</span>}
+                        </div>
+                      ))}
+                      <div className="pt-4 mt-4 border-t border-white/5">
+                        <div className="text-[10px] uppercase tracking-widest text-white/30 px-3 mb-2">This week</div>
+                        <div className="px-3 py-2 text-xs text-white/60">
+                          <div className="flex justify-between mb-1"><span>Filtered</span><span className="text-mono font-bold text-white">47</span></div>
+                          <div className="flex justify-between mb-1"><span>Qualified</span><span className="text-mono font-bold text-white">12</span></div>
+                          <div className="flex justify-between"><span>Paid</span><span className="text-mono font-bold text-accent">8</span></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Main */}
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-5">
+                        <div>
+                          <h4 className="text-white font-black text-lg">Inbox</h4>
+                          <p className="text-white/40 text-xs">Only qualified, paying clients reach you</p>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs bg-accent/10 border border-accent/30 text-accent-bright px-3 py-1.5 rounded-full font-bold">
+                          <span className="w-1.5 h-1.5 bg-accent-bright rounded-full animate-pulse-dot" />
+                          All systems operational
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        {statuses.map((s, i) => {
+                          const active = i === step;
+                          return (
+                            <div
+                              key={s.name}
+                              className={`border rounded-xl p-4 transition-all duration-500 ${active ? 'border-accent bg-accent/5 scale-[1.02]' : 'border-white/5 bg-white/[0.02]'}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm ${active ? 'bg-accent text-white' : 'bg-white/5 text-white/40'}`}>
+                                  {s.name[0]}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-white font-bold text-sm">{s.name}</span>
+                                    <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${
+                                      s.status === 'Paid' ? 'bg-accent/20 text-accent-bright' :
+                                      s.status === 'Qualified' ? 'bg-accent/10 text-accent' :
+                                      'bg-white/[0.08] text-white/60'
+                                    }`}>
+                                      {s.status}
+                                    </span>
+                                  </div>
+                                  <div className="mt-1.5 w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                                    <div
+                                      className={`h-full rounded-full transition-all duration-1000 ${s.status === 'Paid' ? 'bg-accent-bright' : s.status === 'Qualified' ? 'bg-accent' : 'bg-white/30'}`}
+                                      style={{width: `${s.progress}%`}}
+                                    />
+                                  </div>
+                                </div>
+                                {s.amount && (
+                                  <div className="text-accent font-black text-mono text-lg">{s.amount}</div>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Live feed mini */}
+                      <div className="mt-6 pt-5 border-t border-white/5">
+                        <div className="flex items-center gap-2 text-xs text-white/40 mb-3">
+                          <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse-dot" />
+                          <span className="uppercase tracking-wider">Live activity</span>
+                        </div>
+                        <div className="text-mono text-xs space-y-1 text-white/50">
+                          <div><span className="text-accent">→</span> David H. paid €1,250 <span className="text-white/30">2s ago</span></div>
+                          <div><span className="text-white/30">→</span> Sarah L. completed qualification <span className="text-white/30">18s ago</span></div>
+                          <div><span className="text-white/30">→</span> 3 low-value leads filtered <span className="text-white/30">1m ago</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </section>
       );
     }
 
-    /* ═════════════ TESTIMONIALS ═════════════ */
-    function Voices() {
-      const quotes = [
-        { q: "I used to do 6 discovery calls a week. Three would ghost, two would haggle, one would book. Now I do 2 calls — both already paid.", n: "Marcus T.", r: "Fractional CMO · Brooklyn", avatar: 'MT' },
-        { q: "The $75 intake is the best filter I've ever had. If someone won't put $75 down, they were never going to pay my $8K retainer.",   n: "Priya R.",  r: "Brand designer · SF",       avatar: 'PR' },
-        { q: "Made back my first year of DealGate on the first booking. Stopped giving away my time the day I signed up.",                     n: "Jordan K.", r: "iOS developer · Austin",     avatar: 'JK' },
+    /* ════════ HOW IT WORKS ════════ */
+    function HowItWorks() {
+      const steps = [
+        { n: '01', title: 'Client applies', desc: 'They answer your questions before you even talk.', details: ['Custom qualification form', 'Filters junk automatically', 'You stay in control'] },
+        { n: '02', title: 'Client pays', desc: 'No payment = no access. Period.', details: ['Stripe integration built-in', 'Deposit or full payment', 'Refund terms you set'] },
+        { n: '03', title: 'You decide', desc: 'Only talk to serious buyers. Your time, your rules.', details: ['Inbox of paying clients', 'Accept, reject, escalate', 'Full history & notes'] },
       ];
       return (
-        <section className="py-20 sm:py-28 px-5 sm:px-6 bg-panel/30 hairline-t hairline-b">
+        <section id="how-it-works" className="py-24 px-6 relative">
           <div className="max-w-6xl mx-auto">
             <Reveal>
-              <div className="flex flex-wrap items-end justify-between gap-6 mb-10 sm:mb-14">
-                <div className="max-w-xl">
-                  <p className="eyebrow mb-4">Operators</p>
-                  <h2 className="h-display text-[34px] sm:text-[44px] md:text-[52px] text-ink-2">
-                    Freelancers who stopped<br className="hidden sm:block" />
-                    working for <span className="h-serif-italic text-gradient-brand">free</span>.
-                  </h2>
-                </div>
-                <div className="flex items-center gap-2 text-brand">
-                  <Star/><Star/><Star/><Star/><Star/>
-                  <span className="text-muted text-sm ml-2">4.9 avg · 200+ users</span>
-                </div>
+              <div className="text-center mb-16">
+                <p className="text-accent font-bold uppercase tracking-widest text-sm mb-4">Simple. Brutal. Effective.</p>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-black">How it works</h2>
               </div>
             </Reveal>
-            <div className="grid md:grid-cols-3 gap-5">
-              {quotes.map((t, i) => (
-                <Reveal key={i} delay={i * 110}>
-                  <div className="card p-7 h-full flex flex-col">
-                    <div className="flex items-center gap-1 text-brand mb-5">
-                      <Star/><Star/><Star/><Star/><Star/>
-                    </div>
-                    <p className="text-ink/90 text-[15px] leading-relaxed flex-1">&ldquo;{t.q}&rdquo;</p>
-                    <div className="mt-6 pt-5 border-t border-line flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full grid place-items-center text-white text-xs font-semibold"
-                           style={{ background: `linear-gradient(135deg, hsl(${140 + i*30} 50% 45%), hsl(${170 + i*30} 50% 35%))` }}>
-                        {t.avatar}
+
+            <div className="grid md:grid-cols-3 gap-6 relative">
+              {/* Connector line */}
+              <div className="hidden md:block absolute top-20 left-[16.66%] right-[16.66%] h-px" style={{background: 'linear-gradient(90deg, transparent, rgba(16,185,129,0.3), rgba(16,185,129,0.3), transparent)'}} />
+
+              {steps.map((s, i) => (
+                <Reveal key={s.n} delay={i * 150}>
+                  <div className="group relative gradient-border rounded-2xl p-8 h-full hover:-translate-y-1 transition-all duration-300">
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-accent text-white font-black text-lg flex items-center justify-center flex-shrink-0 glow-green">
+                        {s.n}
                       </div>
                       <div>
-                        <div className="text-ink text-[14px] font-semibold">{t.n}</div>
-                        <div className="text-muted text-xs">{t.r}</div>
+                        <h3 className="text-white font-black text-2xl leading-tight">{s.title}</h3>
                       </div>
                     </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    /* ═════════════ PRICING ═════════════ */
-    function Pricing() {
-      const plans = [
-        { name: 'Starter', price: 'Free',  fee: '7%', desc: 'Get your first paid client today.',     features: ['Your DealGate link', 'Unlimited bookings', 'Stripe payouts (USD)', '7% platform fee'], cta: 'Start free',  featured: false },
-        { name: 'Pro',     price: '$19',   fee: '3%', desc: 'For freelancers doing real volume.',    features: ['Everything in Starter', 'Lower 3% fee', 'Custom branding', 'Priority support'],         cta: 'Go Pro',      featured: true  },
-        { name: 'Scale',   price: '$49',   fee: '1%', desc: 'High volume. Best margin.',             features: ['Everything in Pro', 'Rock-bottom 1% fee', 'Bring your own domain', 'Advanced analytics'],cta: 'Scale up',   featured: false },
-      ];
-      return (
-        <section id="pricing" className="py-20 sm:py-28 px-5 sm:px-6">
-          <div className="max-w-6xl mx-auto">
-            <Reveal>
-              <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-14">
-                <p className="eyebrow mb-4">Pricing</p>
-                <h2 className="h-display text-[34px] sm:text-[44px] md:text-[52px] text-ink-2 mb-5">
-                  Free until you <span className="h-serif-italic text-gradient-brand">get paid</span>.
-                </h2>
-                <p className="text-muted text-[17px] leading-relaxed">
-                  Start on Free. Upgrade when a lower fee saves you more than the subscription.
-                </p>
-              </div>
-            </Reveal>
-
-            <div className="grid md:grid-cols-3 gap-5">
-              {plans.map((p, i) => (
-                <Reveal key={p.name} delay={i * 110}>
-                  <div className={`${p.featured ? 'card-featured' : 'card'} p-7 h-full flex flex-col relative rounded-2xl`}>
-                    {p.featured && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-brand bg-bg border border-brand/40 rounded-full px-3 py-1.5 shadow-lg">
-                          <svg width="10" height="10" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0l1.6 3.6 4 .4-3 2.6 1 4-3.6-2-3.6 2 1-4L.4 4l4-.4L6 0z"/></svg>
-                          Most popular
-                        </span>
-                      </div>
-                    )}
-                    <div className="mb-1 text-ink font-semibold text-[15px]">{p.name}</div>
-                    <div className="text-muted text-sm mb-6">{p.desc}</div>
-                    <div className="flex items-baseline gap-1.5 mb-1">
-                      <span className="h-display text-5xl text-ink-2">{p.price}</span>
-                      {p.price !== 'Free' && <span className="text-muted text-sm">/month</span>}
-                    </div>
-                    <div className="text-brand text-xs font-semibold mb-7 tracking-wide uppercase">{p.fee} fee per booking</div>
-                    <ul className="space-y-3 mb-8 flex-1">
-                      {p.features.map((f, j) => (
-                        <li key={j} className="flex items-start gap-2.5 text-ink/85 text-[14px]">
-                          <span className="mt-0.5"><Check/></span>{f}
+                    <p className="text-white/55 text-base leading-relaxed mb-6">{s.desc}</p>
+                    <ul className="space-y-2 pt-4 border-t border-white/5">
+                      {s.details.map((d, j) => (
+                        <li key={j} className="flex items-center gap-2 text-white/65 text-sm">
+                          <svg className="w-3.5 h-3.5 text-accent flex-shrink-0" fill="none" viewBox="0 0 14 14">
+                            <path d="M2 7l3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          {d}
                         </li>
                       ))}
                     </ul>
-                    <a href="/onboarding.html" className={`block text-center py-3 rounded-xl text-[14px] transition ${p.featured ? 'btn-brand' : 'btn-ghost'}`}>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ════════ COMPARISON ════════ */
+    function Comparison() {
+      const rows = [
+        { label: 'Unpaid proposals', before: true, after: false },
+        { label: 'Free consultation calls', before: true, after: false },
+        { label: 'Getting ghosted', before: true, after: false },
+        { label: 'Wasted follow-up emails', before: true, after: false },
+        { label: 'Qualified clients only', before: false, after: true },
+        { label: 'Payment before access', before: false, after: true },
+        { label: 'Full control of your time', before: false, after: true },
+        { label: 'Predictable revenue', before: false, after: true },
+      ];
+      return (
+        <section className="py-24 px-6" style={{background: 'rgba(255,255,255,0.015)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
+          <div className="max-w-4xl mx-auto">
+            <Reveal>
+              <div className="text-center mb-14">
+                <p className="text-accent font-bold uppercase tracking-widest text-sm mb-4">Before vs After</p>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight">
+                  Two ways to run<br />your business.
+                </h2>
+              </div>
+            </Reveal>
+
+            <Reveal delay={100}>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-card border-subtle rounded-2xl p-8 h-full">
+                  <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/5">
+                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-white/40">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.8"/>
+                        <path d="M8 15s1.5-2 4-2 4 2 4 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                        <line x1="9" y1="9" x2="9.01" y2="9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                        <line x1="15" y1="9" x2="15.01" y2="9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-white/40 text-xs uppercase tracking-widest">Without</div>
+                      <div className="text-white font-black text-lg">The old way</div>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {rows.map((r, i) => (
+                      <li key={i} className="flex items-center gap-3 text-white/70 text-sm">
+                        {r.before ? (
+                          <span className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-3 h-3 text-white/40" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+                          </span>
+                        ) : (
+                          <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-white/15 text-xs">—</span>
+                        )}
+                        <span className={r.before ? '' : 'line-through opacity-30'}>{r.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="gradient-border rounded-2xl p-8 relative overflow-hidden h-full">
+                  <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full" style={{background: 'rgba(16,185,129,0.15)', filter: 'blur(80px)'}} />
+                  <div className="relative">
+                    <div className="flex items-center gap-3 mb-6 pb-6 border-b border-accent/15">
+                      <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center glow-green">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-white">
+                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.8"/>
+                          <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="1.8"/>
+                          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="text-accent text-xs uppercase tracking-widest font-bold">With DealGate</div>
+                        <div className="text-white font-black text-lg">The new way</div>
+                      </div>
+                    </div>
+                    <ul className="space-y-3">
+                      {rows.map((r, i) => (
+                        <li key={i} className="flex items-center gap-3 text-white text-sm">
+                          {r.after ? (
+                            <span className="w-5 h-5 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
+                              <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                            </span>
+                          ) : (
+                            <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-white/15 text-xs">—</span>
+                          )}
+                          <span className={r.after ? 'font-semibold' : 'line-through opacity-30'}>{r.label}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    /* ════════ ROI CHART ════════ */
+    function ROIChart() {
+      const chartRef = useRef();
+      const [ref, inView] = useInView();
+
+      useEffect(() => {
+        if (!inView || !chartRef.current) return;
+        const ctx = chartRef.current.getContext('2d');
+        const gradA = ctx.createLinearGradient(0, 0, 0, 280);
+        gradA.addColorStop(0, 'rgba(16,185,129,0.4)');
+        gradA.addColorStop(1, 'rgba(16,185,129,0)');
+        const gradB = ctx.createLinearGradient(0, 0, 0, 280);
+        gradB.addColorStop(0, 'rgba(255,255,255,0.1)');
+        gradB.addColorStop(1, 'rgba(255,255,255,0)');
+
+        const chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+            datasets: [
+              {
+                label: 'Revenue with DealGate',
+                data: [1200, 1800, 2400, 3100, 4200, 5000, 6200, 7800],
+                borderColor: '#10B981',
+                backgroundColor: gradA,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#10B981',
+                pointBorderColor: '#000',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 8,
+              },
+              {
+                label: 'Old way',
+                data: [1200, 1250, 1180, 1300, 1220, 1340, 1280, 1350],
+                borderColor: 'rgba(255,255,255,0.4)',
+                backgroundColor: gradB,
+                borderWidth: 2,
+                borderDash: [6, 4],
+                fill: true,
+                tension: 0.4,
+                pointRadius: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 2000, easing: 'easeOutQuart' },
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { position: 'top', align: 'end', labels: { color: 'rgba(255,255,255,0.7)', font: { family: 'Inter', size: 12, weight: 600 }, usePointStyle: true, padding: 16 } },
+              tooltip: {
+                backgroundColor: '#000', borderColor: 'rgba(16,185,129,0.4)', borderWidth: 1, padding: 12,
+                callbacks: { label: (c) => `${c.dataset.label}: €${c.parsed.y.toLocaleString()}` },
+              },
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 11 } } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.5)', font: { family: 'Inter', size: 11 }, callback: v => '€' + (v / 1000) + 'k' } },
+            },
+          },
+        });
+        return () => chart.destroy();
+      }, [inView]);
+
+      return (
+        <section ref={ref} className="py-24 px-6">
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <div className="text-center mb-14">
+                <p className="text-accent font-bold uppercase tracking-widest text-sm mb-4">The Math</p>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight">
+                  What changes <span className="text-accent">instantly</span>
+                </h2>
+              </div>
+            </Reveal>
+
+            <div className="grid md:grid-cols-5 gap-6 items-stretch">
+              <Reveal delay={100} className="md:col-span-3">
+                <div className="gradient-border rounded-2xl p-6 bg-card h-full">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-white font-bold text-lg">Revenue per week</h3>
+                      <p className="text-white/40 text-xs mt-1">Based on avg. DealGate user over 8 weeks</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[10px] text-white/40 uppercase tracking-widest">Net gain</div>
+                      <div className="text-accent font-black text-xl">+<Counter to={478} suffix="%" /></div>
+                    </div>
+                  </div>
+                  <div className="chart-container">
+                    <canvas ref={chartRef}></canvas>
+                  </div>
+                </div>
+              </Reveal>
+
+              <div className="md:col-span-2 grid grid-cols-1 gap-4">
+                {[
+                  { stat: 10, suffix: '+', label: 'hours saved per week', color: '#10B981' },
+                  { stat: 0, suffix: '', label: 'ghosted quotes', color: '#10B981' },
+                  { stat: 100, suffix: '%', label: 'serious clients only', color: '#10B981' },
+                  { stat: 3.2, suffix: 'x', decimals: 1, label: 'revenue multiplier', color: '#10B981' },
+                ].map((s, i) => (
+                  <Reveal key={i} delay={200 + i * 80}>
+                    <div className="bg-card border-subtle rounded-xl p-5 hover:border-accent/30 transition-colors">
+                      <div className="text-4xl font-black text-accent mb-1 text-mono">
+                        <Counter to={s.stat} suffix={s.suffix} decimals={s.decimals || 0} />
+                      </div>
+                      <div className="text-white/50 text-sm">{s.label}</div>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            <Reveal delay={500}>
+              <ul className="mt-12 max-w-3xl mx-auto grid sm:grid-cols-2 gap-x-8 gap-y-3">
+                {['Save 10+ hours per week', 'Only talk to serious clients', 'Stop getting ghosted', 'Increase your revenue without more leads', 'Take back control of your time'].map((b, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-accent flex items-center justify-center flex-shrink-0 glow-green">
+                      <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 14 14">
+                        <path d="M2 7l3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </span>
+                    <span className="text-white/85 font-semibold text-base">{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    /* ════════ TESTIMONIAL CAROUSEL ════════ */
+    function Testimonials() {
+      const testimonials = [
+        { quote: 'This would have saved me 20+ hours last month. Now I only take calls with people who actually have budget. Game changer.', name: 'Jake Morrison', role: 'Freelance Designer', company: 'Morrison Studio', stars: 5, avatar: 'J', color: '#10B981' },
+        { quote: 'I stopped doing free calls instantly. My revenue went up 3x in 60 days without a single new lead. Insane.', name: 'Sarah Klein', role: 'Web Developer', company: 'Klein Digital', stars: 5, avatar: 'S', color: '#34D399' },
+        { quote: 'Finally a tool that filters bad clients. I used to dread my inbox. Now every email is money.', name: 'Marcus Rivera', role: 'Copywriter', company: 'Rivera Copy', stars: 5, avatar: 'M', color: '#059669' },
+        { quote: 'I was about to quit freelancing. DealGate saved my business. No more chasing, no more ghosting.', name: 'Emma Chen', role: 'Brand Strategist', company: 'Chen&Co', stars: 5, avatar: 'E', color: '#10B981' },
+        { quote: 'Clients take me seriously now. Paying upfront changes the whole dynamic. I set the terms.', name: 'Ben Cooper', role: 'UX Consultant', company: 'Cooper UX', stars: 5, avatar: 'B', color: '#34D399' },
+        { quote: 'The ROI hit in week one. Literally week one. If you charge for your time, you need this.', name: 'Priya Shah', role: 'Marketing Consultant', company: 'Shah Marketing', stars: 5, avatar: 'P', color: '#059669' },
+      ];
+
+      const [idx, setIdx] = useState(0);
+      const [ref, inView] = useInView();
+
+      useEffect(() => {
+        if (!inView) return;
+        const iv = setInterval(() => setIdx(i => (i + 1) % testimonials.length), 5000);
+        return () => clearInterval(iv);
+      }, [inView, testimonials.length]);
+
+      return (
+        <section ref={ref} className="py-24 px-6" style={{background: 'rgba(255,255,255,0.015)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <div className="text-center mb-14">
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path d="M10 1l2.9 6 6.6.6-5 4.4 1.5 6.5L10 15l-6 3.5 1.5-6.5-5-4.4L7.1 7z"/></svg>
+                  ))}
+                </div>
+                <h2 className="text-4xl sm:text-5xl font-black leading-tight">
+                  Built for freelancers who are done<br />
+                  <span className="font-serif-display text-accent-bright">with bullshit.</span>
+                </h2>
+              </div>
+            </Reveal>
+
+            {/* Main testimonial */}
+            <Reveal delay={100}>
+              <div className="max-w-3xl mx-auto mb-8 min-h-[320px] relative">
+                {testimonials.map((t, i) => (
+                  <div
+                    key={i}
+                    className={`${idx === i ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none'} transition-opacity duration-700 gradient-border rounded-2xl p-10 bg-card`}
+                  >
+                    <div className="flex gap-1 mb-5">
+                      {[...Array(t.stars)].map((_, j) => (
+                        <svg key={j} className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path d="M10 1l2.9 6 6.6.6-5 4.4 1.5 6.5L10 15l-6 3.5 1.5-6.5-5-4.4L7.1 7z"/></svg>
+                      ))}
+                    </div>
+                    <p className="text-white font-semibold text-xl md:text-2xl leading-relaxed mb-8">"{t.quote}"</p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center font-black text-lg flex-shrink-0 text-white" style={{background: t.color, boxShadow: `0 10px 30px -5px ${t.color}`}}>
+                        {t.avatar}
+                      </div>
+                      <div>
+                        <div className="text-white font-bold">{t.name}</div>
+                        <div className="text-white/50 text-sm">{t.role} · <span className="text-white/30">{t.company}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+
+            {/* Dots */}
+            <div className="flex items-center justify-center gap-2 mb-12">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIdx(i)}
+                  className={`transition-all duration-300 rounded-full ${idx === i ? 'w-8 h-2 bg-accent' : 'w-2 h-2 bg-white/20 hover:bg-white/40'}`}
+                />
+              ))}
+            </div>
+
+            {/* Small testimonials grid */}
+            <div className="grid md:grid-cols-3 gap-4">
+              {testimonials.slice(0, 3).map((t) => (
+                <Reveal key={t.name} delay={100}>
+                  <div className="bg-card border-subtle rounded-xl p-5 hover:border-white/15 transition-all h-full">
+                    <div className="flex gap-0.5 mb-3">
+                      {[...Array(5)].map((_, j) => (
+                        <svg key={j} className="w-3.5 h-3.5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path d="M10 1l2.9 6 6.6.6-5 4.4 1.5 6.5L10 15l-6 3.5 1.5-6.5-5-4.4L7.1 7z"/></svg>
+                      ))}
+                    </div>
+                    <p className="text-white/80 text-sm mb-4 leading-relaxed">"{t.quote.slice(0, 90)}..."</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-xs text-white" style={{background: t.color}}>
+                        {t.avatar}
+                      </div>
+                      <span className="text-white/60 text-xs font-semibold">{t.name}</span>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ════════ URGENCY ════════ */
+    function Urgency() {
+      return (
+        <section className="py-24 px-6 relative overflow-hidden border-y border-accent/20" style={{background: 'linear-gradient(180deg, rgba(16,185,129,0.08), rgba(0,0,0,0.9), rgba(16,185,129,0.08))'}}>
+          <div className="absolute inset-0 grid-pattern opacity-20 pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none" style={{background: 'rgba(16,185,129,0.12)', filter: 'blur(120px)'}} />
+
+          <div className="relative max-w-4xl mx-auto text-center">
+            <Reveal>
+              <div className="inline-flex items-center gap-2 border border-accent/40 bg-accent/10 text-accent text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full mb-8">
+                <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse-dot" />
+                The switch
+              </div>
+              <h2 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] mb-10 uppercase">
+                Nothing changes<br />
+                until you <span className="text-accent">change this.</span>
+              </h2>
+
+              <div className="max-w-2xl mx-auto space-y-4 mb-10 text-lg sm:text-xl leading-relaxed">
+                <p className="text-white/60">
+                  You can keep taking free calls and hoping clients convert.
+                </p>
+                <p className="text-white font-semibold">
+                  Or you can flip the system and <span className="text-accent">get paid before you invest time.</span>
+                </p>
+              </div>
+
+              <div className="inline-block border-2 border-accent/40 bg-accent/5 rounded-2xl px-8 py-5 mb-10">
+                <p className="text-accent font-black text-xl sm:text-2xl uppercase tracking-tight">
+                  Every day you wait = lost money.
+                </p>
+              </div>
+
+              <div>
+                <a
+                  href="#signup"
+                  className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-black text-xl px-12 py-5 rounded-xl hover:scale-105 transition-all uppercase tracking-tight"
+                >
+                  Get paid before you talk →
+                </a>
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/50">
+                  <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> No credit card required</span>
+                  <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Setup in 2 minutes</span>
+                  <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Cancel anytime</span>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      );
+    }
+
+    /* ════════ PRICING ════════ */
+    function Pricing() {
+      const plans = [
+        {
+          name: 'Starter',
+          label: 'Start filtering clients',
+          price: 0,
+          priceSuffix: 'Free',
+          roi: 'No card. No risk. No excuses.',
+          desc: 'Get your first paid client without paying a cent.',
+          features: ['Unlimited filtering links', 'Basic form builder', '7% fee per payment'],
+          cta: 'Start free — get your first paid client',
+          featured: false,
+        },
+        {
+          name: 'Pro',
+          label: 'Get serious clients',
+          price: 19,
+          roi: 'One paid call covers 12 months',
+          desc: 'For freelancers who are done leaving money on the table.',
+          features: ['Everything in Starter', 'Lower fee — only 3%', 'Custom branding', 'Priority support'],
+          cta: 'Upgrade and keep more of your money',
+          featured: true,
+        },
+        {
+          name: 'Scale',
+          label: 'For high-volume freelancers',
+          price: 49,
+          roi: 'Keep 99% of every payment',
+          desc: 'Maximum volume. Minimum friction. Best margins.',
+          features: ['Everything in Pro', 'Rock-bottom 1% fee', 'Advanced analytics', 'Custom domain'],
+          cta: 'Maximize your revenue',
+          featured: false,
+        },
+      ];
+      return (
+        <section id="pricing" className="py-24 px-6">
+          <div className="max-w-6xl mx-auto">
+            <Reveal>
+              <div className="text-center mb-14">
+                <p className="text-accent font-bold uppercase tracking-widest text-sm mb-4">Simple Pricing</p>
+                <h2 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] mb-6 uppercase">
+                  Pay less than you lose<br />in a <span className="text-accent">single bad lead.</span>
+                </h2>
+                <p className="text-white text-xl sm:text-2xl font-black max-w-2xl mx-auto leading-tight">
+                  If this saves you 1 bad call,<br />
+                  <span className="text-accent">it already paid for itself.</span>
+                </p>
+                <p className="text-white/40 text-sm mt-5">Free forever · No credit card required · Cancel anytime</p>
+              </div>
+            </Reveal>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {plans.map((p, i) => (
+                <Reveal key={p.name} delay={i * 120}>
+                  <div className={`relative h-full rounded-2xl p-8 transition-all flex flex-col ${p.featured ? 'gradient-border glow-green md:-translate-y-1 bg-[#0a0a0a]' : 'bg-card border-subtle hover:border-white/15'}`}>
+                    {p.featured && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-black uppercase tracking-wider px-4 py-1 rounded-full">
+                        Most popular
+                      </div>
+                    )}
+                    <div className="mb-6">
+                      <h3 className="text-white font-black text-xl mb-1">{p.name}</h3>
+                      <div className="text-accent font-bold text-sm uppercase tracking-wider mb-2">{p.label}</div>
+                      <p className="text-white/45 text-sm">{p.desc}</p>
+                    </div>
+                    <div className="mb-6 pb-6 border-b border-white/5">
+                      <div className="flex items-baseline gap-1">
+                        {p.price === 0 ? (
+                          <>
+                            <span className="text-5xl font-black text-white">Free</span>
+                            <span className="text-white/40 text-base ml-1">forever</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="text-5xl font-black text-white">€{p.price}</span>
+                            <span className="text-white/40 text-base">/mo</span>
+                          </>
+                        )}
+                      </div>
+                      <div className={`mt-2 text-xs font-bold uppercase tracking-wider ${p.featured ? 'text-accent' : 'text-white/50'}`}>
+                        {p.roi}
+                      </div>
+                    </div>
+                    <ul className="space-y-3 mb-8 flex-1">
+                      {p.features.map((f, j) => (
+                        <li key={j} className="flex items-start gap-3 text-white/75 text-sm">
+                          <svg className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 14 14">
+                            <path d="M2 7l3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href="#signup"
+                      className={`block text-center font-black py-3.5 rounded-xl transition-all ${p.featured ? 'bg-accent text-white hover:bg-accent-dark' : 'bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20'}`}
+                    >
                       {p.cta} →
                     </a>
                   </div>
@@ -993,12 +1493,21 @@
               ))}
             </div>
 
-            <Reveal delay={300}>
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs text-muted">
-                <span className="flex items-center gap-1.5"><Check size={12}/> No credit card required</span>
-                <span className="flex items-center gap-1.5"><Check size={12}/> Cancel any time</span>
-                <span className="flex items-center gap-1.5"><Check size={12}/> 30-day money-back on paid plans</span>
-                <span className="flex items-center gap-1.5"><Check size={12}/> USD · Stripe-secured</span>
+            <Reveal delay={350}>
+              <div className="mt-12 text-center">
+                <p className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight uppercase tracking-tight">
+                  You only pay more<br />
+                  when you <span className="text-accent">make more.</span>
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={450}>
+              <div className="mt-10 text-center text-white/40 text-sm flex flex-col sm:flex-row items-center justify-center gap-6">
+                <span className="flex items-center gap-2"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Free forever on Starter</span>
+                <span className="flex items-center gap-2"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> No credit card required</span>
+                <span className="flex items-center gap-2"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Cancel anytime</span>
+                <span className="flex items-center gap-2"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> 30-day money-back guarantee</span>
               </div>
             </Reveal>
           </div>
@@ -1006,48 +1515,34 @@
       );
     }
 
-    /* ═════════════ FAQ ═════════════ */
+    /* ════════ FAQ ════════ */
     function FAQ() {
       const items = [
-        { q: "What if a client pays and I don't want to work with them?",
-          a: "Reject the booking with one click. Stripe auto-refunds per your policy. You're never forced to take a project you don't want." },
-        { q: "What if I pay and the freelancer never shows up?",
-          a: "Every intake fee is held in Stripe. If the freelancer doesn't respond within their stated window (default: 48 hours), you get a full automatic refund." },
-        { q: "How fast do I actually get paid out?",
-          a: "Stripe payouts hit your bank in 2 business days by default — instant on request for an extra 1% Stripe fee. No manual invoicing, no chasing." },
-        { q: "Do I need existing leads to use this?",
-          a: "Yes. DealGate filters and converts the leads you already get. If you're not getting inbound, focus on that first — we're not a lead-gen tool." },
-        { q: "Will clients actually pay an intake fee?",
-          a: "Serious ones, yes. Tire-kickers won't. That's the entire point. Users report 94% of prepaid bookings convert to paid projects." },
-        { q: "How is this different from Calendly or Stripe on its own?",
-          a: "Calendly schedules. Stripe collects. Neither combines qualifying questions, a paywalled booking flow, anti-ghost refunds, and reject-with-one-click in a single link. We do." },
-        { q: "Is it really free?",
-          a: "Free plan is free forever — you only pay the 7% platform fee when you get paid. Pro and Scale are paid only if you want lower fees and extra features." },
-        { q: "Can I cancel?",
-          a: "One click, no questions. Free plan has no commitment; paid plans include a 30-day money-back guarantee." },
+        { q: 'How does DealGate actually stop bad clients?', a: 'Every client must complete a qualification form AND make a payment before they can access your calendar or inbox. If they\'re not serious, they drop off at step one. You never hear from them.' },
+        { q: 'What if a client pays but I don\'t want to work with them?', a: 'You set your own refund terms. Reject any client with one click — they get auto-refunded per your policy. You\'re always in control.' },
+        { q: 'Do I need to already have leads?', a: 'Yes. DealGate is a filtering and conversion system, not a lead-gen tool. If you already get leads but waste time on bad ones, this solves it.' },
+        { q: 'How long does setup take?', a: 'Under 10 minutes. Plug in Stripe, write your qualification questions, embed the DealGate link anywhere (your website, DMs, email signature) and you\'re live.' },
+        { q: 'Is this really worth €19/month?', a: 'A single unpaid 30-min call already costs you more than a year of DealGate Pro. Users save 18 hours / week on average and triple their revenue in 60 days. And Starter is free forever. The math is brutal in your favor.' },
+        { q: 'What if I need to cancel?', a: 'One click, no questions asked, no long-term contracts. 30-day money-back guarantee on all plans.' },
       ];
       return (
-        <section id="faq" className="py-20 sm:py-28 px-5 sm:px-6 hairline-t">
+        <section id="faq" className="py-24 px-6" style={{background: 'rgba(255,255,255,0.015)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
           <div className="max-w-3xl mx-auto">
             <Reveal>
-              <div className="text-center mb-12">
-                <p className="eyebrow mb-4">FAQ</p>
-                <h2 className="h-display text-[34px] sm:text-[44px] md:text-[52px] text-ink-2">
-                  The <span className="h-serif-italic text-gradient-brand">real</span> questions.
-                </h2>
+              <div className="text-center mb-14">
+                <p className="text-accent font-bold uppercase tracking-widest text-sm mb-4">Questions</p>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight">Before you ask.</h2>
               </div>
             </Reveal>
             <div className="space-y-3">
-              {items.map((it, i) => (
-                <Reveal key={i} delay={i * 55}>
-                  <details className="card rounded-xl overflow-hidden">
-                    <summary className="cursor-pointer p-5 sm:p-6 flex items-center justify-between gap-4">
-                      <span className="text-ink font-medium text-[15px] sm:text-[16px]">{it.q}</span>
-                      <span className="faq-plus w-7 h-7 rounded-full border border-line grid place-items-center text-muted text-sm transition-transform flex-shrink-0">+</span>
+              {items.map((item, i) => (
+                <Reveal key={i} delay={i * 80}>
+                  <details className="group bg-card border-subtle rounded-xl overflow-hidden hover:border-white/15 transition-all">
+                    <summary className="cursor-pointer list-none p-6 flex items-center justify-between gap-4">
+                      <span className="text-white font-bold text-base md:text-lg">{item.q}</span>
+                      <span className="faq-icon flex-shrink-0 w-8 h-8 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-bold transition-transform duration-300">+</span>
                     </summary>
-                    <div className="faq-body">
-                      <div className="px-5 sm:px-6 pb-5 sm:pb-6 text-muted text-[14px] leading-relaxed">{it.a}</div>
-                    </div>
+                    <div className="px-6 pb-6 text-white/60 leading-relaxed">{item.a}</div>
                   </details>
                 </Reveal>
               ))}
@@ -1057,117 +1552,243 @@
       );
     }
 
-    /* ═════════════ FINAL CTA ═════════════ */
-    function CTA() {
+    /* ════════ REALITY CHECK ════════ */
+    function RealityCheck() {
       return (
-        <section className="py-24 sm:py-32 px-5 sm:px-6 relative overflow-hidden hairline-t">
-          <div className="absolute inset-0 aurora pointer-events-none" />
-          <div className="absolute inset-0 dots opacity-50 pointer-events-none" />
-          <div className="relative max-w-3xl mx-auto text-center">
+        <section className="py-28 px-6 relative overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full pointer-events-none" style={{background: 'rgba(16,185,129,0.08)', filter: 'blur(140px)'}} />
+          <div className="relative max-w-4xl mx-auto text-center">
             <Reveal>
-              <h2 className="h-display text-[40px] sm:text-[56px] md:text-[64px] text-ink-2 mb-6 leading-[1.02]">
-                Stop giving away<br className="hidden sm:block" />
-                your <span className="h-serif-italic text-gradient-brand">time</span>.
-              </h2>
-            </Reveal>
-            <Reveal delay={100}>
-              <p className="text-muted text-[17px] mb-8 max-w-xl mx-auto leading-relaxed">
-                Claim your link in ten minutes. Share it with your next lead. Get paid before you talk.
-              </p>
-            </Reveal>
-            <Reveal delay={180}>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href="/onboarding.html" className="btn-brand px-7 py-4 rounded-xl text-[15px] w-full sm:w-auto">
-                  Claim your DealGate link
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8m-3-3l3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </a>
-                <a href="/login.html" className="btn-ghost px-7 py-4 rounded-xl text-[15px] w-full sm:w-auto">Sign in</a>
+              <div className="inline-flex items-center gap-2 border border-accent/40 bg-accent/10 text-accent text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full mb-8">
+                Reality check
               </div>
-            </Reveal>
-            <Reveal delay={240}>
-              <p className="text-muted text-xs mt-6">
-                Free forever on Starter · No card required · Setup in 10 min
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] mb-8">
+                Most freelancers stay stuck<br />
+                because they keep accepting<br />
+                <span className="text-white/30 line-through">free calls.</span>
+              </h2>
+              <p className="text-2xl sm:text-3xl font-black text-white leading-tight mb-10">
+                The moment you switch —<br />
+                <span className="text-accent">everything changes.</span>
               </p>
+              <a
+                href="#signup"
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-black text-xl px-12 py-5 rounded-xl hover:scale-105 transition-all uppercase tracking-tight"
+              >
+                Get paid before you talk →
+              </a>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/40">
+                <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> No credit card required</span>
+                <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Setup in 2 minutes</span>
+                <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Cancel anytime</span>
+              </div>
             </Reveal>
           </div>
         </section>
       );
     }
 
-    /* ═════════════ FOOTER ═════════════ */
-    function Footer() {
-      const col = (heading, links) => (
-        <div>
-          <div className="eyebrow !text-muted mb-4">{heading}</div>
-          <ul className="space-y-2.5 text-sm">
-            {links.map((l, i) => (
-              <li key={i}><a href={l.href} className="text-ink/70 hover:text-ink transition-colors">{l.label}</a></li>
-            ))}
-          </ul>
-        </div>
-      );
+    /* ════════ FINAL CTA ════════ */
+    function FinalCTA() {
       return (
-        <footer className="hairline-t">
-          <div className="max-w-6xl mx-auto px-5 sm:px-6 py-14 sm:py-16 grid grid-cols-2 md:grid-cols-5 gap-10">
-            <div className="col-span-2 md:col-span-2">
-              <a href="/" className="flex items-center gap-2.5 mb-5">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-2 to-brand-3 grid place-items-center">
-                  <svg width="15" height="15" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#052619" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </div>
-                <span className="text-ink font-semibold tracking-tight">DealGate</span>
-              </a>
-              <p className="text-muted text-sm leading-relaxed max-w-sm">
-                Get paid before the first call. Built for US freelancers who are done working for free.
-              </p>
-              <div className="mt-5 flex items-center gap-3 text-muted">
-                <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-ink transition-colors">
-                  <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true"><path d="M14.258 1.5h2.52L11.265 7.79 17.75 16.5h-5.08l-3.98-5.208-4.556 5.208H1.614l5.893-6.73L1.25 1.5h5.208L10.06 6.26 14.258 1.5zM13.375 15h1.395L5.675 2.93H4.18L13.375 15z"/></svg>
-                </a>
-                <a href="https://github.com/coeneeltink-code/dealgate" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="hover:text-ink transition-colors">
-                  <svg width="17" height="17" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true"><path d="M9 .5C4.3.5.5 4.3.5 9c0 3.76 2.43 6.95 5.81 8.08.42.08.57-.18.57-.41v-1.4c-2.36.51-2.86-1.14-2.86-1.14-.39-1-.95-1.26-.95-1.26-.77-.53.06-.52.06-.52.86.06 1.31.88 1.31.88.76 1.3 1.99.93 2.47.71.08-.55.3-.93.54-1.14-1.88-.21-3.86-.94-3.86-4.18 0-.93.33-1.68.87-2.28-.09-.21-.38-1.08.08-2.25 0 0 .71-.23 2.32.87.67-.19 1.39-.28 2.11-.28s1.44.09 2.11.28c1.61-1.1 2.32-.87 2.32-.87.46 1.17.17 2.04.08 2.25.54.6.87 1.35.87 2.28 0 3.25-1.98 3.97-3.87 4.18.31.27.58.79.58 1.6v2.37c0 .23.15.5.58.41A8.51 8.51 0 0017.5 9c0-4.7-3.8-8.5-8.5-8.5z"/></svg>
-                </a>
+        <section id="signup" className="py-32 px-6 relative overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] rounded-full pointer-events-none" style={{background: 'rgba(16,185,129,0.14)', filter: 'blur(160px)'}} />
+          <div className="absolute inset-0 grid-pattern opacity-30" style={{maskImage: 'radial-gradient(circle at center, black, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 70%)'}} />
+
+          <div className="relative z-10 max-w-3xl mx-auto text-center">
+            <Reveal>
+              <div className="inline-flex items-center gap-2 border border-accent/40 bg-accent/10 text-accent text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full mb-8">
+                <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse-dot" />
+                Only 37 of 100 seats left this week
               </div>
-            </div>
-            {col('Product',  [{ label: 'How it works', href: '#how' }, { label: 'Product',  href: '#product' }, { label: 'Pricing', href: '#pricing' }, { label: 'FAQ', href: '#faq' }])}
-            {col('Account',  [{ label: 'Claim your link', href: '/onboarding.html' }, { label: 'Sign in', href: '/login.html' }])}
-            {col('Legal',    [{ label: 'Privacy', href: '/privacy.html' }, { label: 'Terms', href: '/terms.html' }])}
+              <h2 className="text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-[0.92] sm:leading-[0.9] mb-8 uppercase tracking-tight">
+                Serious clients<br />
+                <span className="text-accent">pay first.</span>
+              </h2>
+              <p className="text-2xl sm:text-3xl text-white font-bold mb-4 max-w-2xl mx-auto leading-tight">
+                If they don't — they were never going to buy anyway.
+              </p>
+              <p className="text-lg text-white/50 mb-12 max-w-xl mx-auto">
+                Stop giving your time away. Start getting paid for calls today.
+              </p>
+              <a
+                href="onboarding.html"
+                className="group inline-flex items-center gap-3 bg-accent text-white font-black text-xl sm:text-2xl md:text-3xl px-10 sm:px-14 py-5 sm:py-6 rounded-2xl animate-pulse-green hover:scale-105 active:scale-95 hover:bg-accent-dark transition-all uppercase tracking-tight focus-ring"
+              >
+                Get paid before you talk
+                <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+              </a>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/50">
+                <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> No credit card required</span>
+                <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Setup in 2 minutes</span>
+                <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Cancel anytime</span>
+                <span className="flex items-center gap-1.5"><svg className="w-3 h-3 text-accent flex-shrink-0" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> 30-day money-back</span>
+              </div>
+            </Reveal>
           </div>
-          <div className="hairline-t">
-            <div className="max-w-6xl mx-auto px-5 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
-              <span>© 2026 DealGate · Delaware, USA. All rights reserved.</span>
-              <span className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand dot-pulse"></span>
-                Operational · Stripe-secured
-              </span>
+        </section>
+      );
+    }
+
+    /* ════════ FOOTER ════════ */
+    function Footer() {
+      return (
+        <footer className="py-14 px-6 border-t border-white/5">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-8 mb-10">
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <path d="M3 3h10v10H3z" stroke="white" strokeWidth="1.8"/>
+                      <path d="M7 6v4M9 6v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <span className="text-white font-black text-lg">Deal<span className="text-accent">Gate</span></span>
+                </div>
+                <p className="text-white/40 text-sm leading-relaxed">The system that makes clients pay before they get your time.</p>
+              </div>
+              {[
+                { title: 'Product', links: [{t:'Features',h:'#how-it-works'},{t:'Pricing',h:'#pricing'},{t:'Demo',h:'#demo'},{t:'FAQ',h:'#faq'}] },
+                { title: 'Account', links: [{t:'Sign in',h:'login.html'},{t:'Get started',h:'onboarding.html'},{t:'Dashboard',h:'dashboard.html'},{t:'Preview intake',h:'client.html'}] },
+                { title: 'Legal',   links: [{t:'Privacy',h:'privacy.html'},{t:'Terms',h:'terms.html'},{t:'Refunds',h:'terms.html#fees'},{t:'Contact',h:'mailto:hello@dealgate.app'}] },
+              ].map((col) => (
+                <div key={col.title}>
+                  <h4 className="text-white font-black text-sm uppercase tracking-widest mb-4">{col.title}</h4>
+                  <ul className="space-y-2">
+                    {col.links.map(l => (
+                      <li key={l.t}><a href={l.h} className="text-white/50 hover:text-accent text-sm transition-colors focus-ring rounded">{l.t}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-white/30 text-sm">
+              <span>© 2026 DealGate. All rights reserved.</span>
+              <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse-dot" />All systems operational</span>
             </div>
           </div>
         </footer>
       );
     }
 
-    /* ═════════════ APP ═════════════ */
+    /* ════════ LIVE NOTIFICATIONS ════════ */
+    function LiveFeed() {
+      const feed = [
+        { name: 'David H.', action: 'just paid €1,250', time: '2m ago' },
+        { name: 'Maria F.', action: 'qualified and paid €890', time: '5m ago' },
+        { name: 'Alex K.', action: 'filtered 4 bad leads', time: '8m ago' },
+        { name: 'Lena M.', action: 'just paid €2,100', time: '12m ago' },
+        { name: 'Yuki T.', action: 'signed up for Pro', time: '15m ago' },
+      ];
+      const [idx, setIdx] = useState(0);
+      const [visible, setVisible] = useState(false);
+      const [raised, setRaised] = useState(false);
+
+      useEffect(() => {
+        const t = setTimeout(() => setVisible(true), 4000);
+        const h = () => setRaised(window.scrollY > 1800);
+        h();
+        window.addEventListener('scroll', h, { passive: true });
+        return () => { clearTimeout(t); window.removeEventListener('scroll', h); };
+      }, []);
+
+      useEffect(() => {
+        if (!visible) return;
+        const iv = setInterval(() => {
+          setVisible(false);
+          setTimeout(() => {
+            setIdx(i => (i + 1) % feed.length);
+            setVisible(true);
+          }, 400);
+        }, 6000);
+        return () => clearInterval(iv);
+      }, [visible, feed.length]);
+
+      if (!visible) return null;
+      const item = feed[idx];
+
+      return (
+        <div
+          className="hidden sm:flex fixed left-6 z-40 bg-[#0a0a0a] border border-accent/30 rounded-xl px-4 py-3 items-center gap-3 max-w-xs transition-all duration-500"
+          style={{bottom: raised ? '96px' : '24px', boxShadow: '0 20px 60px -15px rgba(16,185,129,0.3)', animation: 'slideInRight 0.5s cubic-bezier(0.22,1,0.36,1)'}}
+        >
+          <div className="w-9 h-9 rounded-full bg-accent/15 border border-accent/30 flex items-center justify-center flex-shrink-0">
+            <span className="text-accent text-xs font-black">{item.name[0]}</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-white text-sm font-bold truncate">{item.name}</div>
+            <div className="text-white/50 text-xs truncate">{item.action}</div>
+          </div>
+          <div className="text-white/25 text-[10px] text-mono flex-shrink-0">{item.time}</div>
+        </div>
+      );
+    }
+
+    /* ════════ STICKY CTA BAR ════════ */
+    function StickyBar() {
+      const [show, setShow] = useState(false);
+      useEffect(() => {
+        const h = () => setShow(window.scrollY > 1800);
+        h(); // guard initial paint — if user reloads mid-page, don't flash in
+        window.addEventListener('scroll', h, { passive: true });
+        return () => window.removeEventListener('scroll', h);
+      }, []);
+
+      return (
+        <div
+          className={`sticky-bar fixed bottom-0 left-0 right-0 z-50 transition-transform duration-500 ${show ? 'translate-y-0' : 'translate-y-full'}`}
+          style={{background: 'linear-gradient(to top, #000 70%, rgba(0,0,0,0.85))', borderTop: '1px solid rgba(16,185,129,0.2)', backdropFilter: 'blur(12px)'}}
+        >
+          <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+            <div className="hidden sm:block">
+              <div className="text-white font-black text-sm">You just lost another hour.</div>
+              <div className="text-white/50 text-xs">That's €75 to €200 — gone. Stop the bleeding.</div>
+            </div>
+            <a
+              href="#signup"
+              className="bg-accent hover:bg-accent-dark text-white font-black px-6 py-3 rounded-xl transition-all hover:scale-105 text-sm sm:ml-auto uppercase tracking-tight"
+            >
+              Get paid before you talk →
+            </a>
+          </div>
+        </div>
+      );
+    }
+
+    /* ════════ APP ════════ */
     function App() {
       return (
         <>
-          <Nav />
+          <ScrollProgress />
+          <Navbar />
           <main>
             <Hero />
-            <LogoStrip />
-            <Metrics />
-            <Product />
-            <How />
-            <Features />
-            <Voices />
+            <TrustBar />
+            <CostOfNothing />
+            <Problem />
+            <Solution />
+            <ProductDemo />
+            <HowItWorks />
+            <Comparison />
+            <ROIChart />
+            <Testimonials />
+            <Urgency />
             <Pricing />
             <FAQ />
-            <CTA />
+            <RealityCheck />
+            <FinalCTA />
           </main>
           <Footer />
+          <LiveFeed />
+          <StickyBar />
         </>
       );
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
 </body>
 </html>
+

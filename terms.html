@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -6,188 +6,158 @@
   <title>Terms of Service — DealGate</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { accent: '#10B981', 'accent-dark': '#059669', 'accent-bright': '#34D399' }, fontFamily: { sans: ['Inter', 'sans-serif'] } } }
+    }
+  </script>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      background: #0A0B10;
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      margin: 0;
-      line-height: 1.7;
-    }
-    a { color: #10B981; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    header {
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .logo-text { font-weight: 900; font-size: 20px; color: #fff; letter-spacing: -0.03em; }
-    .logo-text span { color: #10B981; }
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 60px 24px 100px;
-    }
-    .page-title {
-      font-size: 40px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      margin: 0 0 8px;
-    }
-    .last-updated {
-      color: rgba(255,255,255,0.4);
-      font-size: 14px;
-      margin-bottom: 48px;
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+    .prose h2 { font-size: 1.5rem; font-weight: 800; color: #fff; margin: 3rem 0 1rem; letter-spacing: -0.02em; scroll-margin-top: 100px; }
+    .prose h2:first-child { margin-top: 0; }
+    .prose h3 { font-size: 1.0625rem; font-weight: 700; color: rgba(255,255,255,0.85); margin: 1.75rem 0 0.65rem; }
+    .prose p  { font-size: 1rem; color: rgba(255,255,255,0.55); line-height: 1.75; margin: 0 0 1.1rem; }
+    .prose ul { padding-left: 1.35rem; margin: 0 0 1.1rem; }
+    .prose ul li { font-size: 1rem; color: rgba(255,255,255,0.55); line-height: 1.75; margin-bottom: 0.4rem; list-style: disc; }
+    .prose a  { color: #10B981; text-decoration: underline; text-underline-offset: 2px; }
+    .prose a:hover { color: #34D399; }
+    .prose strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+
+    .toc a {
       display: block;
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.45);
+      padding: 0.4rem 0.75rem;
+      border-left: 2px solid rgba(255,255,255,0.06);
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      line-height: 1.4;
     }
-    h2 {
-      font-size: 20px;
-      font-weight: 800;
-      color: #fff;
-      margin: 40px 0 12px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 36px;
+    .toc a:hover { color: #fff; border-left-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.04); }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid rgba(16,185,129,0.7);
+      outline-offset: 2px;
+      border-radius: 4px;
     }
-    p, li {
-      color: rgba(255,255,255,0.65);
-      font-size: 15px;
-      margin: 0 0 16px;
-    }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 8px; }
-    .highlight-box {
-      margin: 24px 0;
-      padding: 20px 24px;
-      border-radius: 12px;
-      background: rgba(16,185,129,0.05);
-      border: 1px solid rgba(16,185,129,0.2);
-    }
-    .highlight-box p { margin: 0; color: rgba(255,255,255,0.8); }
-    footer {
-      text-align: center;
-      padding: 32px;
-      color: rgba(255,255,255,0.25);
-      font-size: 13px;
-      border-top: 1px solid rgba(255,255,255,0.05);
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
   </style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2310B981'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-weight='900' font-size='18' fill='white'>D</text></svg>" />
 </head>
 <body>
-  <header>
-    <a href="/" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
-      <div style="width:32px;height:32px;border-radius:8px;background:#10B981;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 3h10v10H3z" stroke="white" stroke-width="1.8"/>
-          <path d="M7 6v4M9 6v4" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="logo-text">Deal<span>Gate</span></span>
-    </a>
-  </header>
-
-  <main>
-    <h1 class="page-title">Terms of Service</h1>
-    <span class="last-updated">Last updated: April 20, 2026</span>
-
-    <p>These Terms of Service ("Terms") govern your access to and use of DealGate, operated by DealGate ("we," "us," or "our"). By creating an account or using the service, you agree to these Terms. If you do not agree, do not use DealGate.</p>
-
-    <h2>1. The Service</h2>
-    <p>DealGate provides a platform that allows freelancers ("Freelancers") to create intake forms that require potential clients ("Clients") to answer qualification questions and pay an intake fee before gaining access to the Freelancer's time. We are a software platform only — we are not a party to any agreement between Freelancers and Clients.</p>
-
-    <h2>2. Eligibility</h2>
-    <p>You must be at least 18 years old and a legal resident of a country where the service is available to use DealGate. By creating an account, you represent and warrant that you meet these requirements.</p>
-
-    <h2>3. Accounts</h2>
-    <ul>
-      <li>You are responsible for maintaining the confidentiality of your password and for all activity under your account.</li>
-      <li>You must provide accurate and complete information when creating your account.</li>
-      <li>You may not use another person's account or share your account credentials.</li>
-      <li>Notify us immediately of any unauthorized use of your account.</li>
-    </ul>
-
-    <h2>4. Freelancer Responsibilities</h2>
-    <p>As a Freelancer using DealGate, you agree to:</p>
-    <ul>
-      <li>Only charge intake fees for services you genuinely intend to provide.</li>
-      <li>Respond to Client submissions in a timely manner.</li>
-      <li>Honor your stated refund policy (see Section 6 below).</li>
-      <li>Comply with all applicable laws, including those governing services you offer.</li>
-      <li>Not use DealGate to collect money for fraudulent, illegal, or misleading services.</li>
-    </ul>
-
-    <h2>5. Client Responsibilities</h2>
-    <p>As a Client using a DealGate intake page, you agree to:</p>
-    <ul>
-      <li>Provide truthful and accurate information in your intake submission.</li>
-      <li>Not submit intake forms for purposes of fraud, spam, or harassment.</li>
-      <li>Understand that submitting an intake form and paying a fee does not guarantee a service agreement — the Freelancer retains the right to decline.</li>
-    </ul>
-
-    <h2 id="refunds">6. Payments and Refunds</h2>
-    <div class="highlight-box">
-      <p><strong>Intake fees are non-refundable by default</strong> once a Freelancer has reviewed your submission, unless the Freelancer expressly offers a refund or is required to do so by applicable law.</p>
+  <!-- Nav -->
+  <nav class="sticky top-0 z-50 px-6 py-4 border-b border-white/5" style="background: rgba(0,0,0,0.85); backdrop-filter: blur(16px);">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <a href="index.html" class="font-black text-xl text-white" style="letter-spacing: -0.02em;">Deal<span style="color:#10B981">Gate</span></a>
+      <a href="index.html" class="text-sm text-white/30 hover:text-white/60 transition-colors">← Back to home</a>
     </div>
-    <p>The following refund rules apply:</p>
-    <ul>
-      <li><strong>If a Freelancer rejects your application:</strong> You are entitled to a full refund of the intake fee. The Freelancer must process this refund within 5 business days.</li>
-      <li><strong>If you cancel before submission review:</strong> Contact the Freelancer directly. Refunds at this stage are at the Freelancer's discretion.</li>
-      <li><strong>DealGate's platform fee</strong> (7% on Starter, 3% on Pro) is non-refundable once a payment is processed.</li>
-      <li>Chargebacks initiated without first contacting the Freelancer may result in account suspension.</li>
-    </ul>
-    <p>Payment processing is handled by Stripe. By making or receiving payments through DealGate, you also agree to <a href="https://stripe.com/legal/ssa" target="_blank" rel="noopener">Stripe's Terms of Service</a>.</p>
+  </nav>
 
-    <h2>7. Fees and Pricing</h2>
-    <ul>
-      <li><strong>Starter (Free):</strong> DealGate charges 7% of each intake payment received through the platform.</li>
-      <li><strong>Pro ($19/month):</strong> DealGate charges 3% of each intake payment.</li>
-      <li><strong>Scale ($49/month):</strong> DealGate charges 1% of each intake payment.</li>
-    </ul>
-    <p>Prices are in USD. We reserve the right to change pricing with 30 days' notice to active subscribers.</p>
+  <!-- Content -->
+  <main class="max-w-6xl mx-auto px-6 py-12 lg:py-16">
+    <div class="mb-10 lg:mb-14">
+      <p class="text-xs uppercase tracking-widest text-accent/70 font-semibold mb-3">Legal</p>
+      <h1 class="text-4xl sm:text-5xl font-black text-white mb-4" style="letter-spacing: -0.03em;">Terms of Service</h1>
+      <p class="text-white/35 text-sm">Last updated: April 23, 2026</p>
+    </div>
 
-    <h2>8. Prohibited Uses</h2>
-    <p>You may not use DealGate to:</p>
-    <ul>
-      <li>Collect money for services you do not intend to provide.</li>
-      <li>Impersonate another person or entity.</li>
-      <li>Engage in any unlawful, fraudulent, or harmful activity.</li>
-      <li>Send spam or unsolicited communications.</li>
-      <li>Attempt to circumvent our platform fee.</li>
-      <li>Scrape, reverse-engineer, or otherwise extract data from DealGate.</li>
-    </ul>
+    <div class="lg:grid lg:grid-cols-[220px_1fr] lg:gap-12 xl:gap-16">
+      <!-- TOC -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-24">
+          <p class="text-[10px] uppercase tracking-widest text-white/30 font-semibold mb-3 px-3">On this page</p>
+          <nav class="toc flex flex-col gap-0.5">
+            <a href="#description">1. Description of Service</a>
+            <a href="#accounts">2. Freelancer Accounts</a>
+            <a href="#fees">3. Intake Fees and Payments</a>
+            <a href="#leads">4. Lead Submissions</a>
+            <a href="#prohibited">5. Prohibited Use</a>
+            <a href="#ip">6. Intellectual Property</a>
+            <a href="#disclaimers">7. Disclaimers</a>
+            <a href="#liability">8. Limitation of Liability</a>
+            <a href="#law">9. Governing Law</a>
+            <a href="#changes">10. Changes to Terms</a>
+            <a href="#contact">11. Contact</a>
+          </nav>
+        </div>
+      </aside>
 
-    <h2>9. Intellectual Property</h2>
-    <p>DealGate and its content, features, and functionality are owned by us and protected by US and international copyright, trademark, and other intellectual property laws. You retain ownership of any content you create (such as your questions and profile), but you grant us a limited license to display and store that content to operate the service.</p>
+      <div class="prose max-w-3xl">
+        <p>These Terms of Service ("Terms") govern your use of DealGate ("Service", "we", "our", "us") accessible at <a href="https://dealgate.app">dealgate.app</a>. By creating an account or submitting an intake form, you agree to these Terms.</p>
 
-    <h2>10. Disclaimer of Warranties</h2>
-    <p>DealGate is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not warrant that the service will be uninterrupted, error-free, or free of viruses or other harmful components. We disclaim all warranties to the fullest extent permitted by law.</p>
+        <h2 id="description">1. Description of Service</h2>
+        <p>DealGate provides a platform that allows freelancers and consultants ("Freelancers") to create qualifying intake pages. Prospective clients ("Leads") pay a fee to submit project applications. DealGate facilitates the intake process and payment collection — it does not itself provide any freelance services.</p>
 
-    <h2>11. Limitation of Liability</h2>
-    <p>To the fullest extent permitted by applicable law, DealGate shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, arising out of your use of or inability to use the service. Our total liability to you for any claim arising out of or relating to these Terms shall not exceed the greater of (a) $100 or (b) the amounts you paid to DealGate in the 12 months prior to the claim.</p>
+        <h2 id="accounts">2. Freelancer Accounts</h2>
+        <ul>
+          <li>You must be at least 18 years old to create an account.</li>
+          <li>You are responsible for maintaining the security of your account credentials.</li>
+          <li>You may not create misleading intake pages or misrepresent your services.</li>
+          <li>You are responsible for fulfilling any commitment implied by accepting a lead's application.</li>
+          <li>DealGate reserves the right to suspend accounts that violate these Terms.</li>
+        </ul>
 
-    <h2>12. Indemnification</h2>
-    <p>You agree to indemnify and hold DealGate and its officers, directors, employees, and agents harmless from any claims, damages, losses, or expenses (including attorneys' fees) arising out of your use of the service, your violation of these Terms, or your violation of any third-party rights.</p>
+        <h2 id="fees">3. Intake Fees and Payments</h2>
+        <h3>Fee structure</h3>
+        <p>Freelancers set their own intake fee (minimum €5). DealGate charges a platform fee on each successful payment:</p>
+        <ul>
+          <li><strong>Starter (free plan):</strong> 7% platform fee per intake payment</li>
+          <li><strong>Pro (€19/month):</strong> 3% platform fee per intake payment</li>
+          <li><strong>Scale (€49/month):</strong> 1% platform fee per intake payment</li>
+        </ul>
+        <p>Payments are processed by Stripe. Funds are paid out to your connected Stripe account on their standard payout schedule.</p>
 
-    <h2>13. Termination</h2>
-    <p>We may suspend or terminate your account at any time for violation of these Terms or for any other reason with or without notice. You may cancel your account at any time. Upon termination, your right to use the service will immediately cease. Sections 10, 11, 12, and 14 survive termination.</p>
+        <h3>Refunds to Leads</h3>
+        <p>If a Freelancer determines a Lead is not a good fit and initiates a rejection within 48 hours of receiving the application, a full refund is issued to the Lead. Freelancers who consistently fail to process timely refunds may be suspended. DealGate does not retain the platform fee on refunded transactions.</p>
 
-    <h2>14. Governing Law and Dispute Resolution</h2>
-    <p>These Terms are governed by the laws of the State of Delaware, United States, without regard to its conflict of law provisions. Any dispute arising out of these Terms or the service shall be resolved through binding arbitration administered by the American Arbitration Association under its Commercial Arbitration Rules, except that either party may seek injunctive relief in court. You waive any right to participate in a class action lawsuit or class-wide arbitration.</p>
+        <h2 id="leads">4. Lead Submissions</h2>
+        <p>By submitting an intake form and paying the fee, Leads:</p>
+        <ul>
+          <li>Acknowledge the fee qualifies their application — it does not guarantee any work engagement</li>
+          <li>Consent to their answers being shared with the receiving Freelancer</li>
+          <li>Agree that refund eligibility is determined by the Freelancer's rejection decision, not by project outcome</li>
+        </ul>
 
-    <h2>15. Changes to Terms</h2>
-    <p>We may update these Terms at any time. Material changes will be communicated via email or a notice on the website. Your continued use of DealGate after such changes constitutes your acceptance of the new Terms.</p>
+        <h2 id="prohibited">5. Prohibited Use</h2>
+        <p>You may not use DealGate to:</p>
+        <ul>
+          <li>Collect intake fees with no intention of reviewing applications</li>
+          <li>Engage in fraudulent or deceptive practices</li>
+          <li>Violate any applicable law or regulation</li>
+          <li>Spam, harass, or abuse leads or other users</li>
+          <li>Circumvent our platform fees by directing leads to pay outside DealGate</li>
+        </ul>
 
-    <h2>16. Contact</h2>
-    <p>Questions about these Terms? Contact us at <a href="mailto:legal@godealgate.com">legal@godealgate.com</a>.</p>
+        <h2 id="ip">6. Intellectual Property</h2>
+        <p>DealGate and its design, code, and brand assets are owned by DealGate. You retain ownership of any content you create (questions, descriptions, intake answers). You grant DealGate a limited license to display and transmit your content as needed to operate the Service.</p>
+
+        <h2 id="disclaimers">7. Disclaimers</h2>
+        <p>THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. DEALGATE DOES NOT GUARANTEE ANY SPECIFIC BUSINESS OUTCOME, NUMBER OF LEADS, OR REVENUE. WE ARE NOT RESPONSIBLE FOR THE ACTIONS OF FREELANCERS OR LEADS USING THE PLATFORM.</p>
+
+        <h2 id="liability">8. Limitation of Liability</h2>
+        <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, DEALGATE'S TOTAL LIABILITY FOR ANY CLAIM ARISING OUT OF THESE TERMS SHALL NOT EXCEED THE GREATER OF (A) THE TOTAL FEES PAID BY YOU TO DEALGATE IN THE PRIOR 3 MONTHS, OR (B) €50.</p>
+
+        <h2 id="law">9. Governing Law</h2>
+        <p>These Terms are governed by the laws of the Netherlands. Any disputes shall be resolved in the competent courts of Amsterdam, Netherlands.</p>
+
+        <h2 id="changes">10. Changes to Terms</h2>
+        <p>We may update these Terms from time to time. We will notify account holders by email at least 14 days before material changes take effect. Continued use of the Service after the effective date constitutes acceptance of the updated Terms.</p>
+
+        <h2 id="contact">11. Contact</h2>
+        <p>Questions about these Terms? Email <a href="mailto:legal@dealgate.app">legal@dealgate.app</a>.</p>
+      </div>
+    </div>
   </main>
 
-  <footer>
-    <a href="/">← Back to DealGate</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy Policy</a>
-    <p style="margin: 8px 0 0;">© 2026 DealGate. All rights reserved.</p>
+  <footer class="border-t border-white/5 py-8 px-6 text-center">
+    <p class="text-xs text-white/15">© 2026 DealGate · <a href="privacy.html" class="hover:text-white/30 transition-colors">Privacy</a> · <a href="terms.html" class="hover:text-white/30 transition-colors">Terms</a></p>
   </footer>
 </body>
 </html>
